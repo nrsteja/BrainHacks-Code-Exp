@@ -16,8 +16,9 @@ and checking if some version (in my case 10.2.3) is there.<br>
 5. Go to your app store and download the Expo Go app on your phone.
 6. Create an Expo account.
 7. Start the Development Server:<br>
-```npm expo start```
+```npx expo start```
 8. Scan the QR code on your phone with the Expo Go app.
+9. If anything doesn't work, ask ChatGPT, check expo docs or msg in group. If none work. Pray to God and try again 👍
 
 ### Additional Notes
 Ensure both your phone and laptop are connected to the same Wi-Fi network.<br>
