@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Login, Signup, Landing } from './app/index'; // 
+import { createStackNavigator } from '@react-navigation/stack';
+import { Login, Signup, Landing } from './app/index'; 
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
@@ -20,14 +20,14 @@ export default function App() {
           name="Login"
           component={Login}
           options={{
-            headerShown: false
+            headerShown: true
           }}
         />
         <Stack.Screen
           name="Signup"
           component={Signup}
           options={{
-            headerShown: false
+            headerShown: true
           }}
         />
       </Stack.Navigator>
