@@ -1,8 +1,8 @@
 import { View, Text, Pressable, Image } from 'react-native'
 import React from 'react'
 import { LinearGradient } from "expo-linear-gradient";
-import COLORS from '../constants/colors';
-import Button from '../general components/Button';
+import COLORS from './constants/colors';
+import Button from './general components/Button';
 import { useNavigation } from '@react-navigation/native';
 
 const Landing = () => {
@@ -17,7 +17,7 @@ const Landing = () => {
             <View style={{ flex: 1 }}>
                 <View>
                     <Image
-                        source={require("../../assets/adaptive-icon.png")}
+                        source={require("../assets/adaptive-icon.png")}
                         style={{
                             height: 100,
                             width: 100,
@@ -33,7 +33,7 @@ const Landing = () => {
                     />
 
                     <Image
-                        source={require("../../assets/adaptive-icon.png")}
+                        source={require("../assets/adaptive-icon.png")}
                         style={{
                             height: 100,
                             width: 100,
@@ -50,7 +50,7 @@ const Landing = () => {
                     />
 
                     <Image
-                        source={require("../../assets/adaptive-icon.png")}
+                        source={require("../assets/adaptive-icon.png")}
                         style={{
                             width: 100,
                             height: 100,
@@ -67,7 +67,7 @@ const Landing = () => {
                     />
 
                     <Image
-                        source={require("../../assets/adaptive-icon.png")}
+                        source={require("../assets/adaptive-icon.png")}
                         style={{
                             height: 200,
                             width: 200,

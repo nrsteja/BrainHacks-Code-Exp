@@ -1,11 +1,10 @@
-import Login from "./login/Login";
-import Welcome from "./landing/Landing";
-import Signup from "./signup/Signup";
-import Landing from "./landing/Landing"
+import Login from "./Login";
+import Signup from "./Signup";
+import Landing from "./Landing"
 
 export {
     Login,
-    Welcome,
     Signup,
     Landing
 }
+
