@@ -1,17 +1,17 @@
-import { View, Text, Image, Pressable, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image , Pressable, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context";
-import COLORS from './constants/colors';
+import COLORS from '../constants/colors';
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox"
-import Button from './general components/Button';
+import Button from '../general components/Button';
 import { useNavigation } from '@react-navigation/native';
 
-
-const Signup = () => {
+const Login = () => {
     const [isPasswordShown, setIsPasswordShown] = useState(true);
     const [isChecked, setIsChecked] = useState(false);
     const navigation = useNavigation();
+    
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
             <View style={{ flex: 1, marginHorizontal: 22 }}>
@@ -22,13 +22,13 @@ const Signup = () => {
                         marginVertical: 12,
                         color: COLORS.black
                     }}>
-                        Create Account
+                        Hi Welcome Back ! 👋
                     </Text>
 
                     <Text style={{
                         fontSize: 16,
                         color: COLORS.black
-                    }}>Connect with us today!</Text>
+                    }}>Hello again you have been missed!</Text>
                 </View>
 
                 <View style={{ marginBottom: 12 }}>
@@ -54,47 +54,6 @@ const Signup = () => {
                             keyboardType='email-address'
                             style={{
                                 width: "100%"
-                            }}
-                        />
-                    </View>
-                </View>
-
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={{
-                        fontSize: 16,
-                        fontWeight: 400,
-                        marginVertical: 8
-                    }}>Mobile Number</Text>
-
-                    <View style={{
-                        width: "100%",
-                        height: 48,
-                        borderColor: COLORS.black,
-                        borderWidth: 1,
-                        borderRadius: 8,
-                        alignItems: "center",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        paddingLeft: 22
-                    }}>
-                        <TextInput
-                            placeholder='+65'
-                            placeholderTextColor={COLORS.black}
-                            keyboardType='numeric'
-                            style={{
-                                width: "12%",
-                                borderRightWidth: 1,
-                                borderLeftColor: COLORS.grey,
-                                height: "100%"
-                            }}
-                        />
-
-                        <TextInput
-                            placeholder='Enter your phone number'
-                            placeholderTextColor={COLORS.black}
-                            keyboardType='numeric'
-                            style={{
-                                width: "80%"
                             }}
                         />
                     </View>
@@ -134,7 +93,7 @@ const Signup = () => {
                             }}
                         >
                             {
-                                isPasswordShown == true ? (
+                                isPasswordShown == false ? (
                                     <Ionicons name="eye-off" size={24} color={COLORS.black} />
                                 ) : (
                                     <Ionicons name="eye" size={24} color={COLORS.black} />
@@ -156,11 +115,11 @@ const Signup = () => {
                         color={isChecked ? COLORS.primary : undefined}
                     />
 
-                    <Text>I agree to the terms and conditions</Text>
+                    <Text>Remember Me</Text>
                 </View>
 
                 <Button
-                    title="Sign Up"
+                    title="Login"
                     filled
                     style={{
                         marginTop: 18,
@@ -177,7 +136,7 @@ const Signup = () => {
                             marginHorizontal: 10
                         }}
                     />
-                    <Text style={{ fontSize: 14 }}>Or Sign up with</Text>
+                    <Text style={{ fontSize: 14 }}>Or Login with</Text>
                     <View
                         style={{
                             flex: 1,
@@ -207,7 +166,7 @@ const Signup = () => {
                         }}
                     >
                         <Image
-                            source={require("../assets/adaptive-icon.png")}
+                            source={require("../../assets/adaptive-icon.png")}
                             style={{
                                 height: 36,
                                 width: 36,
@@ -234,7 +193,7 @@ const Signup = () => {
                         }}
                     >
                         <Image
-                            source={require("../assets/adaptive-icon.png")}
+                            source={require("../../assets/adaptive-icon.png")}
                             style={{
                                 height: 36,
                                 width: 36,
@@ -252,16 +211,19 @@ const Signup = () => {
                     justifyContent: "center",
                     marginVertical: 22
                 }}>
-                    <Text style={{ fontSize: 16, color: COLORS.black }}>Already have an account</Text>
+                    <Text style={{ fontSize: 16, color: COLORS.black }}>Don't have an account? </Text>
                     <Pressable
-                        onPress={() => navigation.navigate("Login")}
+                        onPress={() => {
+                            console.log("Button pressed");
+                            navigation.navigate("Signup")
+                        }}
                     >
                         <Text style={{
                             fontSize: 16,
                             color: COLORS.primary,
                             fontWeight: "bold",
                             marginLeft: 6
-                        }}>Login</Text>
+                        }}>Register</Text>
                     </Pressable>
                 </View>
             </View>
@@ -269,4 +231,4 @@ const Signup = () => {
     )
 }
 
-export default Signup
+export default Login
