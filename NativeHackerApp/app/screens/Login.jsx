@@ -11,28 +11,28 @@ import { FontAwesome } from '@expo/vector-icons';
 const Login = () => {
     const [isPasswordShown, setIsPasswordShown] = useState(true);
     const [isChecked, setIsChecked] = useState(false);
-    const [email, setEmail] = useState('');
+    const [loginInput, setLoginInput] = useState('');
     const [password, setPassword] = useState('');
-    const [emailError, setEmailError] = useState('');
+    const [loginError, setLoginError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [passwordStrength, setPasswordStrength] = useState(0);
     const [isLoginDisabled, setIsLoginDisabled] = useState(true);
-    const emailErrorAnim = useRef(new Animated.Value(0)).current;
+    const loginErrorAnim = useRef(new Animated.Value(0)).current;
     const passwordErrorAnim = useRef(new Animated.Value(0)).current;
 
     const navigation = useNavigation();
 
     useEffect(() => {
-        setIsLoginDisabled(!(email && password && !emailError && !passwordError));
-    }, [email, password, emailError, passwordError]);
+        setIsLoginDisabled(!(loginInput && password && !loginError && !passwordError));
+    }, [loginInput, password, loginError, passwordError]);
 
     useEffect(() => {
-        Animated.timing(emailErrorAnim, {
-            toValue: emailError ? 1 : 0,
+        Animated.timing(loginErrorAnim, {
+            toValue: loginError ? 1 : 0,
             duration: 300,
             useNativeDriver: true
         }).start();
-    }, [emailError]);
+    }, [loginError]);
 
     useEffect(() => {
         Animated.timing(passwordErrorAnim, {
@@ -45,6 +45,11 @@ const Login = () => {
     const validateEmail = (email) => {
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return regex.test(email);
+    };
+
+    const validateUsername = (username) => {
+        const regex = /^[a-zA-Z0-9_]+$/;
+        return regex.test(username);
     };
 
     const validatePassword = (password) => {
@@ -66,14 +71,14 @@ const Login = () => {
         return strength === 5;
     };
 
-    const handleEmailChange = (email) => {
-        setEmail(email);
-        if (email.length === 0) {
-            setEmailError('');
-        } else if (!validateEmail(email)) {
-            setEmailError('Please enter a valid email address.');
+    const handleLoginInputChange = (input) => {
+        setLoginInput(input);
+        if (input.length === 0) {
+            setLoginError('');
+        } else if (!validateEmail(input) && !validateUsername(input)) {
+            setLoginError('Please enter a valid email address or username.');
         } else {
-            setEmailError('');
+            setLoginError('');
         }
     };
 
@@ -90,8 +95,8 @@ const Login = () => {
     };
 
     const handleLogin = () => {
-        if (!email || !password || emailError || passwordError) {
-            Alert.alert('Invalid Input', 'Please fill in both email and password fields correctly before proceeding.');
+        if (!loginInput || !password || loginError || passwordError) {
+            Alert.alert('Invalid Input', 'Please fill in both login and password fields correctly before proceeding.');
         } else {
             // Proceed with login
             Alert.alert('Login Successful', 'You have successfully logged in!');
@@ -137,12 +142,12 @@ const Login = () => {
                         fontSize: 16,
                         fontWeight: '400',
                         marginVertical: 8
-                    }}>Email address</Text>
+                    }}>Email address or Username</Text>
 
                     <View style={{
                         width: "100%",
                         height: 48,
-                        borderColor: emailError ? 'red' : COLORS.black,
+                        borderColor: loginError ? 'red' : COLORS.black,
                         borderWidth: 1,
                         borderRadius: 8,
                         flexDirection: "row",
@@ -150,22 +155,21 @@ const Login = () => {
                         paddingLeft: 22
                     }}>
                         <TextInput
-                            placeholder='Enter your email address'
+                            placeholder='Enter your email address or username'
                             placeholderTextColor={COLORS.black}
-                            keyboardType='email-address'
                             style={{
                                 width: "90%"
                             }}
-                            value={email}
-                            onChangeText={handleEmailChange}
+                            value={loginInput}
+                            onChangeText={handleLoginInputChange}
                         />
-                        {email.length > 0 && !emailError && (
+                        {loginInput.length > 0 && !loginError && (
                             <FontAwesome name="check-circle" size={24} color="green" />
                         )}
                     </View>
-                    {emailError ? (
-                        <Animated.Text style={{ color: 'red', opacity: emailErrorAnim }}>
-                            {emailError}
+                    {loginError ? (
+                        <Animated.Text style={{ color: 'red', opacity: loginErrorAnim }}>
+                            {loginError}
                         </Animated.Text>
                     ) : null}
                 </View>
@@ -359,4 +363,3 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
-
