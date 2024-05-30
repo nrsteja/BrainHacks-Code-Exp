@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import Landing from "../screens/Landing";
 import  Login  from "../screens/Login";
 import Signup from "../screens/Signup";
+import Search from "../screens/Search";
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,13 @@ export const HomeStack = () => {
             <Stack.Screen
             name="Signup"
             component={Signup}
+            options={{
+                headerShown: true
+            }}
+            />
+            <Stack.Screen
+            name="Search"
+            component={Search}
             options={{
                 headerShown: true
             }}
