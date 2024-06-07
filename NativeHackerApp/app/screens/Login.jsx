@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Dimensions } from "react-native";
+import { Dimensions, SafeAreaView, Platform } from "react-native";
 import * as React from "react";
 import {
   View,
@@ -11,8 +11,9 @@ import {
   StyleSheet,
 } from "react-native";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+console.log(windowHeight);
 
 const InputField = ({ label, placeholder, secureTextEntry }) => (
   <View style={styles.inputFieldContainer}>
@@ -68,42 +69,45 @@ const SignUpPrompt = ({ navigation }) => (
 );
 
 function Login() {
-    console.log(windowHeight)
   const navigation = useNavigation();
   return (
-    <ImageBackground
-      source={{
-        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/838485a2e58427926bfd76783e93dcecc690e4e96073aa11272a2c82be1b4d5b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-      }}
-      style={{flex: 1}}
-    >
-      <View style={styles.logoContainer}>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/2f297d4157515fd7ed15788f8b23881d06f2f39d15b5fb7ae8e736caf9d91c9c?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.logoImage}
-        />
-      </View>
-    <View style={styles.container}>
-        <View style={styles.formContainer}>
-        <InputField
-            label="Email or phone number"
-            placeholder="Email or phone number"
-            secureTextEntry={false}
-        />
-        <InputField
-            label="Enter password"
-            placeholder="Enter password"
-            secureTextEntry={true}
-        />
-        <RememberMe />
-        <SignInButton text="Sign in" />
+    <SafeAreaView style={{ flex: 1, borderWidth: 5, borderColor: "red" }}>
+      <ImageBackground
+        source={{
+          uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/838485a2e58427926bfd76783e93dcecc690e4e96073aa11272a2c82be1b4d5b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+        }}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.logoContainer}>
+          <Image
+            source={{
+              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/2f297d4157515fd7ed15788f8b23881d06f2f39d15b5fb7ae8e736caf9d91c9c?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+            }}
+            style={styles.logoImage}
+          />
         </View>
-        <GoogleSignIn />
-        <SignUpPrompt navigation={navigation} />
-    </View>
-    </ImageBackground>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.formContainer}>
+            <InputField
+              label="Email or phone number"
+              placeholder="Email or phone number"
+              secureTextEntry={false}
+            />
+            <InputField
+              label="Enter password"
+              placeholder="Enter password"
+              secureTextEntry={true}
+            />
+            <RememberMe />
+            <SignInButton text="Sign in" />
+          </View>
+          <View style={{ flex: 0.3 }}>
+            <GoogleSignIn />
+            <SignUpPrompt navigation={navigation} />
+          </View>
+        </SafeAreaView>
+      </ImageBackground>
+    </SafeAreaView>
   );
 }
 
@@ -117,22 +121,28 @@ const styles = StyleSheet.create({
     width: "90%",
     height: "50%",
     resizeMode: "contain",
-    marginBottom: "2%"
+    marginBottom: "2%",
   },
   container: {
     flex: 0.6,
     alignItems: "center",
     paddingHorizontal: 16,
+    borderWidth: 5,
+    justifyContent: "space-between",
   },
   formContainer: {
+    flex: 0.7,
     width: "100%",
     paddingBottom: "5%",
     paddingHorizontal: "5%",
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 8,
+    borderWidth: 5,
+    borderColor: "red",
   },
   inputFieldContainer: {
     marginTop: 12,
+    borderWidth: 2,
   },
   srOnly: {
     position: "absolute",
@@ -155,6 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 12,
+    borderWidth: 5,
   },
   rememberMeOption: {
     flexDirection: "row",
@@ -170,9 +181,7 @@ const styles = StyleSheet.create({
   signInButton: {
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 10,
-    marginTop: 24,
+    marginTop: "5%",
     backgroundColor: "#2563eb",
     borderRadius: 8,
   },
@@ -183,9 +192,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    marginTop: 48,
+    paddingHorizontal: "5%",
+    paddingVertical: "2.5%",
     backgroundColor: "#27272a",
     borderRadius: 8,
   },
@@ -198,17 +206,22 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   signUpPromptContainer: {
+    marginTop: "2%",
+
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 24,
-    marginBottom: 80,
+    borderWidth: 5,
+    borderColor: "red",
   },
   signUpPromptText: {
     color: "#4b5563",
+    justifyContent: "center",
+    borderWidth: 2,
   },
   signUpPromptLink: {
-    marginLeft: 4,
     color: "#000",
+    justifyContent: "center",
+    borderWidth: 2,
   },
 });
 
