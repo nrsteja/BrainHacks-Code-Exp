@@ -1,365 +1,215 @@
-import { View, Text, Image, Pressable, TextInput, TouchableOpacity, Alert, Animated, StyleSheet } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView } from "react-native-safe-area-context";
-import COLORS from '../constants/colors';
-import { Ionicons } from "@expo/vector-icons";
-import Checkbox from "expo-checkbox";
-import Button from '../general components/Button';
-import { useNavigation } from '@react-navigation/native';
-import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { Dimensions } from "react-native";
+import * as React from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  StyleSheet,
+} from "react-native";
 
-const Login = () => {
-    const [isPasswordShown, setIsPasswordShown] = useState(true);
-    const [isChecked, setIsChecked] = useState(false);
-    const [loginInput, setLoginInput] = useState('');
-    const [password, setPassword] = useState('');
-    const [loginError, setLoginError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [passwordStrength, setPasswordStrength] = useState(0);
-    const [isLoginDisabled, setIsLoginDisabled] = useState(true);
-    const loginErrorAnim = useRef(new Animated.Value(0)).current;
-    const passwordErrorAnim = useRef(new Animated.Value(0)).current;
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
-    const navigation = useNavigation();
+const InputField = ({ label, placeholder, secureTextEntry }) => (
+  <View style={styles.inputFieldContainer}>
+    <Text style={styles.srOnly}>{label}</Text>
+    <TextInput
+      placeholder={placeholder}
+      secureTextEntry={secureTextEntry}
+      accessibilityLabel={label}
+      style={styles.textInput}
+    />
+  </View>
+);
 
-    useEffect(() => {
-        setIsLoginDisabled(!(loginInput && password && !loginError && !passwordError));
-    }, [loginInput, password, loginError, passwordError]);
+const RememberMe = () => (
+  <View style={styles.rememberMeContainer}>
+    <View style={styles.rememberMeOption}>
+      <View style={styles.rememberMeCheckbox} />
+      <Text>Remember me</Text>
+    </View>
+    <Text>Forgot password?</Text>
+  </View>
+);
 
-    useEffect(() => {
-        Animated.timing(loginErrorAnim, {
-            toValue: loginError ? 1 : 0,
-            duration: 300,
-            useNativeDriver: true
-        }).start();
-    }, [loginError]);
+const SignInButton = ({ text }) => (
+  <TouchableOpacity style={styles.signInButton}>
+    <Text style={styles.signInButtonText}>{text}</Text>
+  </TouchableOpacity>
+);
 
-    useEffect(() => {
-        Animated.timing(passwordErrorAnim, {
-            toValue: passwordError ? 1 : 0,
-            duration: 300,
-            useNativeDriver: true
-        }).start();
-    }, [passwordError]);
+const GoogleSignIn = () => (
+  <View style={styles.googleSignInContainer}>
+    <Image
+      source={{
+        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/065217c8a0d16a6ca1e660ef70df9999d9c1260c65643450f0cb4521b735f00b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+      }}
+      style={styles.googleSignInImage}
+    />
+    <Text style={styles.googleSignInText}>Or sign in with Google</Text>
+  </View>
+);
 
-    const validateEmail = (email) => {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return regex.test(email);
-    };
+const SignUpPrompt = ({ navigation }) => (
+  <View style={styles.signUpPromptContainer}>
+    <Text style={styles.signUpPromptText}>Don't have an account?</Text>
 
-    const validateUsername = (username) => {
-        const regex = /^[a-zA-Z0-9_]+$/;
-        return regex.test(username);
-    };
+    <Text
+      onPress={() => navigation.navigate("Signup")}
+      style={styles.signUpPromptLink}
+    >
+      Sign up now
+    </Text>
+  </View>
+);
 
-    const validatePassword = (password) => {
-        const hasUpperCase = /[A-Z]/.test(password);
-        const hasLowerCase = /[a-z]/.test(password);
-        const hasNumber = /\d/.test(password);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-        const isLongEnough = password.length >= 8;
-
-        let strength = 0;
-        if (hasUpperCase) strength++;
-        if (hasLowerCase) strength++;
-        if (hasNumber) strength++;
-        if (hasSpecialChar) strength++;
-        if (isLongEnough) strength++;
-
-        setPasswordStrength(strength);
-
-        return strength === 5;
-    };
-
-    const handleLoginInputChange = (input) => {
-        setLoginInput(input);
-        if (input.length === 0) {
-            setLoginError('');
-        } else if (!validateEmail(input) && !validateUsername(input)) {
-            setLoginError('Please enter a valid email address or username.');
-        } else {
-            setLoginError('');
-        }
-    };
-
-    const handlePasswordChange = (password) => {
-        setPassword(password);
-        if (password.length === 0) {
-            setPasswordStrength(0);
-            setPasswordError('');
-        } else if (!validatePassword(password)) {
-            setPasswordError('Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.');
-        } else {
-            setPasswordError('');
-        }
-    };
-
-    const handleLogin = () => {
-        if (!loginInput || !password || loginError || passwordError) {
-            Alert.alert('Invalid Input', 'Please fill in both login and password fields correctly before proceeding.');
-        } else {
-            // Proceed with login
-            Alert.alert('Login Successful', 'You have successfully logged in!');
-        }
-    };
-    
-    const getPasswordStrengthColor = () => {
-        switch (passwordStrength) {
-            case 1:
-            case 2:
-                return 'red';
-            case 3:
-            case 4:
-                return 'orange';
-            case 5:
-                return 'green';
-            default:
-                return 'gray';
-        }
-    };
-
-    return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-            <View style={{ flex: 1, marginHorizontal: 22 }}>
-                <View style={{ marginVertical: 22 }}>
-                    <Text style={{
-                        fontSize: 22,
-                        fontWeight: 'bold',
-                        marginVertical: 12,
-                        color: COLORS.black
-                    }}>
-                        Hi Welcome Back ! 👋
-                    </Text>
-
-                    <Text style={{
-                        fontSize: 16,
-                        color: COLORS.black
-                    }}>Hello again you have been missed!</Text>
-                </View>
-
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={{
-                        fontSize: 16,
-                        fontWeight: '400',
-                        marginVertical: 8
-                    }}>Email address or Username</Text>
-
-                    <View style={{
-                        width: "100%",
-                        height: 48,
-                        borderColor: loginError ? 'red' : COLORS.black,
-                        borderWidth: 1,
-                        borderRadius: 8,
-                        flexDirection: "row",
-                        alignItems: "center",
-                        paddingLeft: 22
-                    }}>
-                        <TextInput
-                            placeholder='Enter your email address or username'
-                            placeholderTextColor={COLORS.black}
-                            style={{
-                                width: "90%"
-                            }}
-                            value={loginInput}
-                            onChangeText={handleLoginInputChange}
-                        />
-                        {loginInput.length > 0 && !loginError && (
-                            <FontAwesome name="check-circle" size={24} color="green" />
-                        )}
-                    </View>
-                    {loginError ? (
-                        <Animated.Text style={{ color: 'red', opacity: loginErrorAnim }}>
-                            {loginError}
-                        </Animated.Text>
-                    ) : null}
-                </View>
-
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={{
-                        fontSize: 16,
-                        fontWeight: '400',
-                        marginVertical: 8
-                    }}>Password</Text>
-
-                    <View style={{
-                        width: "100%",
-                        height: 48,
-                        borderColor: passwordError ? 'red' : COLORS.black,
-                        borderWidth: 1,
-                        borderRadius: 8,
-                        flexDirection: "row",
-                        alignItems: "center",
-                        paddingLeft: 22
-                    }}>
-                        <TextInput
-                            placeholder='Enter your password'
-                            placeholderTextColor={COLORS.black}
-                            secureTextEntry={isPasswordShown}
-                            style={{
-                                width: "85%"
-                            }}
-                            value={password}
-                            onChangeText={handlePasswordChange}
-                        />
-                        <TouchableOpacity
-                            onPress={() => setIsPasswordShown(!isPasswordShown)}
-                            style={{
-                                marginRight: 12
-                            }}
-                        >
-                            {
-                                isPasswordShown ? (
-                                    <Ionicons name="eye-off" size={24} color={COLORS.black} />
-                                ) : (
-                                    <Ionicons name="eye" size={24} color={COLORS.black} />
-                                )
-                            }
-                        </TouchableOpacity>
-                    </View>
-                    <View style={[styles.strengthBar, { backgroundColor: getPasswordStrengthColor(), width: `${(passwordStrength / 5) * 100}%` }]} />
-                    {passwordError ? (
-                        <Animated.Text style={{ color: 'red', opacity: passwordErrorAnim }}>
-                            {passwordError}
-                        </Animated.Text>
-                    ) : null}
-                </View>
-
-                <View style={{
-                    flexDirection: 'row',
-                    marginVertical: 6
-                }}>
-                    <Checkbox
-                        style={{ marginRight: 8 }}
-                        value={isChecked}
-                        onValueChange={setIsChecked}
-                        color={isChecked ? COLORS.primary : undefined}
-                    />
-
-                    <Text>Remember Me</Text>
-                </View>
-
-                <Button
-                    title="Login"
-                    filled
-                    style={{
-                        marginTop: 18,
-                        marginBottom: 4,
-                    }}
-                    onPress={handleLogin}
-                    disabled={isLoginDisabled}
-                />
-
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
-                    <View
-                        style={{
-                            flex: 1,
-                            height: 1,
-                            backgroundColor: COLORS.grey,
-                            marginHorizontal: 10
-                        }}
-                    />
-                    <Text style={{ fontSize: 14 }}>Or Login with</Text>
-                    <View
-                        style={{
-                            flex: 1,
-                            height: 1,
-                            backgroundColor: COLORS.grey,
-                            marginHorizontal: 10
-                        }}
-                    />
-                </View>
-
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center'
-                }}>
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: COLORS.grey,
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
-                        <Image
-                            source={require("../../assets/adaptive-icon.png")}
-                            style={{
-                                height: 36,
-                                width: 36,
-                                marginRight: 8
-                            }}
-                            resizeMode='contain'
-                        />
-
-                        <Text>Facebook</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => console.log("Pressed")}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            height: 52,
-                            borderWidth: 1,
-                            borderColor: COLORS.grey,
-                            marginRight: 4,
-                            borderRadius: 10
-                        }}
-                    >
-                        <Image
-                            source={require("../../assets/adaptive-icon.png")}
-                            style={{
-                                height: 36,
-                                width: 36,
-                                marginRight: 8
-                            }}
-                            resizeMode='contain'
-                        />
-
-                        <Text>Google</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    marginVertical: 22
-                }}>
-                    <Text style={{ fontSize: 16, color: COLORS.black }}>Don't have an account? </Text>
-                    <Pressable
-                        onPress={() => {
-                            console.log("Button pressed");
-                            navigation.navigate("Search")
-                        }}
-                    >
-                        <Text style={{
-                            fontSize: 16,
-                            color: COLORS.primary,
-                            fontWeight: "bold",
-                            marginLeft: 6
-                        }}>Register</Text>
-                    </Pressable>
-                </View>
-            </View>
-        </SafeAreaView>
-    );
-};
+function Login() {
+    console.log(windowHeight)
+  const navigation = useNavigation();
+  return (
+    <ImageBackground
+      source={{
+        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/838485a2e58427926bfd76783e93dcecc690e4e96073aa11272a2c82be1b4d5b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+      }}
+      style={{flex: 1}}
+    >
+      <View style={styles.logoContainer}>
+        <Image
+          source={{
+            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/2f297d4157515fd7ed15788f8b23881d06f2f39d15b5fb7ae8e736caf9d91c9c?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+          }}
+          style={styles.logoImage}
+        />
+      </View>
+    <View style={styles.container}>
+        <View style={styles.formContainer}>
+        <InputField
+            label="Email or phone number"
+            placeholder="Email or phone number"
+            secureTextEntry={false}
+        />
+        <InputField
+            label="Enter password"
+            placeholder="Enter password"
+            secureTextEntry={true}
+        />
+        <RememberMe />
+        <SignInButton text="Sign in" />
+        </View>
+        <GoogleSignIn />
+        <SignUpPrompt navigation={navigation} />
+    </View>
+    </ImageBackground>
+  );
+}
 
 const styles = StyleSheet.create({
-    strengthBar: {
-        height: 4,
-        borderRadius: 4,
-        marginTop: 4,
-        backgroundColor: 'gray'
-    }
+  logoContainer: {
+    flex: 0.4,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  logoImage: {
+    width: "90%",
+    height: "50%",
+    resizeMode: "contain",
+    marginBottom: "2%"
+  },
+  container: {
+    flex: 0.6,
+    alignItems: "center",
+    paddingHorizontal: 16,
+  },
+  formContainer: {
+    width: "100%",
+    paddingBottom: "5%",
+    paddingHorizontal: "5%",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 8,
+  },
+  inputFieldContainer: {
+    marginTop: 12,
+  },
+  srOnly: {
+    position: "absolute",
+    left: -9999,
+  },
+  textInput: {
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    lineHeight: 20,
+    borderRadius: 8,
+    borderWidth: 1,
+    backgroundColor: "#f4f4f5",
+    borderColor: "#d1d5db",
+    color: "#6b7280",
+  },
+  rememberMeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 12,
+  },
+  rememberMeOption: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  rememberMeCheckbox: {
+    width: 24,
+    height: 24,
+    backgroundColor: "#6b7280",
+    borderRadius: 12,
+    marginRight: 8,
+  },
+  signInButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+    marginTop: 24,
+    backgroundColor: "#2563eb",
+    borderRadius: 8,
+  },
+  signInButtonText: {
+    color: "#fff",
+  },
+  googleSignInContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    marginTop: 48,
+    backgroundColor: "#27272a",
+    borderRadius: 8,
+  },
+  googleSignInImage: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+  },
+  googleSignInText: {
+    color: "#fff",
+  },
+  signUpPromptContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 24,
+    marginBottom: 80,
+  },
+  signUpPromptText: {
+    color: "#4b5563",
+  },
+  signUpPromptLink: {
+    marginLeft: 4,
+    color: "#000",
+  },
 });
 
 export default Login;
