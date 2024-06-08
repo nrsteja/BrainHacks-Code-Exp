@@ -149,7 +149,7 @@ const Landing = () => {
             >
               Already have an account ?
             </Text>
-            {/* <Pressable onPress={() => navigation.navigate("Login")}>
+            <Pressable onPress={() => navigation.navigate("Login")}>
               <Text
                 style={{
                   fontSize: 16,
@@ -185,8 +185,8 @@ const Landing = () => {
               >
                 Itenary
               </Text>
-            </Pressable> */}
-            {/* <Pressable onPress={() => navigation.navigate("Maps")}>
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate("Maps")}>
               <Text
                 style={{
                   fontSize: 16,
@@ -197,7 +197,7 @@ const Landing = () => {
               >
                 Maps
               </Text>
-            </Pressable> */}
+            </Pressable>
             <Pressable onPress={() => navigation.navigate("Account")}>
               <Text
                 style={{
@@ -208,42 +208,6 @@ const Landing = () => {
                 }}
               >
                 Account
-              </Text>
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate("Search")}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: COLORS.white,
-                  fontWeight: "bold",
-                  marginLeft: 4,
-                }}
-              >
-                Search
-              </Text>
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate("EditPage")}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: COLORS.white,
-                  fontWeight: "bold",
-                  marginLeft: 4,
-                }}
-              >
-                Edit
-              </Text>
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate("Profile")}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: COLORS.white,
-                  fontWeight: "bold",
-                  marginLeft: 4,
-                }}
-              >
-                Profile
               </Text>
             </Pressable>
           </View>
