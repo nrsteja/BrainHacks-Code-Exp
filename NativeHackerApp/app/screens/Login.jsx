@@ -13,7 +13,6 @@ import {
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-console.log(windowHeight);
 
 const InputField = ({ label, placeholder, secureTextEntry }) => (
   <View style={styles.inputFieldContainer}>
@@ -37,8 +36,8 @@ const RememberMe = () => (
   </View>
 );
 
-const SignInButton = ({ text }) => (
-  <TouchableOpacity style={styles.signInButton}>
+const SignInButton = ({ text, onPress }) => (
+  <TouchableOpacity style={styles.signInButton} onPress = {onPress}>
     <Text style={styles.signInButtonText}>{text}</Text>
   </TouchableOpacity>
 );
@@ -99,7 +98,7 @@ function Login() {
               secureTextEntry={true}
             />
             <RememberMe />
-            <SignInButton text="Sign in" />
+            <SignInButton text="Sign in" onPress={() => {navigation.replace('HomeStack')}}/>
           </View>
           <View style={{ flex: 0.3 }}>
             <GoogleSignIn />

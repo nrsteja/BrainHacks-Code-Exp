@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-function Itenary() {
+function Itinerary() {
   const handleEditPress = () => {
     console.log("Edit button pressed");
   };
@@ -193,4 +193,4 @@ function Itenary() {
   );
 }
 
-export default Itenary;
+export default Itinerary;
