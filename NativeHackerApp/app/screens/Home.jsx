@@ -9,7 +9,7 @@ import {
   Platform,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+import CheckBox from '@react-native-community/checkbox';
 
 const getFontFamily = () => {
   if (Platform.OS === "ios") {
@@ -92,15 +92,15 @@ const MoneySaved = ({ amount }) => (
 
 const Item = ({ itemName, daysLeft, used }) => (
   <View>
-    <View style={{ flexDirection: "row" }}>
+    <View style={{ flexDirection: "row", justifyContent: "center"}}>
       <View style={{ flex: 0.6 }}>
         <Text style={styles.itemsFont}>{itemName}</Text>
       </View>
       <View style={{ flex: 0.2, alignItems: "center" }}>
         <Text style={styles.itemsFont}>{daysLeft}</Text>
       </View>
-      <View style={{ flex: 0.2, alignItems: "flex-end" }}>
-        <BouncyCheckbox size={20} />
+      <View style={{ flex: 0.2, alignItems: "flex-end"}}>
+        <Text style = {styles.itemsFont}>Y/N</Text>
       </View>
     </View>
   </View>
