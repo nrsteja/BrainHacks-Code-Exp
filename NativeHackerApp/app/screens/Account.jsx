@@ -218,7 +218,9 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
     justifyContent: "center",
     //borderWidth: 5,
-    marginTop: "3%",
+    // marginTop: "1.5%",
+    // marginBottom: "1.5%",
+    marginVertical: "2%",
   },
   sectionText: {
     marginTop: "5%",
@@ -227,6 +229,7 @@ const styles = StyleSheet.create({
     color: "#a1a1aa",
     width: "100%",
     //borderWidth: 5,
+    marginVertical: "2%",
   },
   flexCol: {
     width: "100%",
@@ -240,6 +243,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     //marginTop: 16,
+    //borderWidth: 5,
   },
   toggleItemContainer: {
     flexDirection: "row",

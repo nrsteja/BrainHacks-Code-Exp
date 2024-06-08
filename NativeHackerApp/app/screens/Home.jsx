@@ -1,23 +1,42 @@
 import * as React from "react";
-import { View, Text, TouchableOpacity, Image, SafeAreaView, FlatList, CheckBox, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+  FlatList,
+  CheckBox,
+  ScrollView,
+  Platform,
+} from "react-native";
 import { StyleSheet } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+
+const getFontFamily = () => {
+  if (Platform.OS === "ios") {
+    return "Avenir-Book";
+  } else if (Platform.OS === "android") {
+    return "sans-serif";
+  }
+  return "System";
+};
 
 const ITEMS = [
   {
     itemName: "White Bread",
     daysLeft: 3,
-    used: true
+    used: true,
   },
   {
     itemName: "Spinach",
     daysLeft: 1,
-    used: true
+    used: true,
   },
   {
     itemName: "Milk - Gardenia",
     daysLeft: 4,
-    used: true
+    used: true,
   },
 ];
 
@@ -26,61 +45,63 @@ const PROMOS = [
     name: "FairPrice",
     location: "Kampung Admiralty",
     itemsOnSale: 11,
-    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/233402a655fce3616d5404a84b9c5cfa3816ca29d7f7e9f57002b53e34d3e79f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
+    image:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/233402a655fce3616d5404a84b9c5cfa3816ca29d7f7e9f57002b53e34d3e79f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
     name: "ColdStorage",
     location: "Causeway Point",
     itemsOnSale: 2,
-    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/c03b51cecc85bf286bcb805b286071226ee009e347f7e995a30b085156157c0e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
+    image:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/c03b51cecc85bf286bcb805b286071226ee009e347f7e995a30b085156157c0e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
     name: "Giant",
     location: "Admiralty MRT",
     itemsOnSale: 4,
-    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
+    image:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
     name: "Prime",
     location: "NTU",
     itemsOnSale: 2,
-    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
-  }
+    image:
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+  },
 ];
 
-const FoodSaved = ({amount}) => (
+const FoodSaved = ({ amount }) => (
   <View style={styles.savingsBox}>
     <Text style={styles.savingsText}>{amount} kg</Text>
     <Text style={styles.savingsLabel}>of food saved </Text>
   </View>
 );
 
-const MoneySaved = ({amount}) => (
+const MoneySaved = ({ amount }) => (
   <View style={styles.savingsBox}>
     <Text style={styles.savingsText}>$ {amount}</Text>
     <Text style={styles.savingsLabel}>of money saved</Text>
   </View>
 );
 
-const Item = ({itemName, daysLeft, used}) => (
+const Item = ({ itemName, daysLeft, used }) => (
   <View>
-    <View style = {{flexDirection: "row"}}>
-      <View style = {{flex: 0.6}}>
-        <Text style = {styles.expiryFont}>{itemName}</Text>
+    <View style={{ flexDirection: "row" }}>
+      <View style={{ flex: 0.6 }}>
+        <Text style={styles.expiryFont}>{itemName}</Text>
       </View>
-      <View style = {{flex: 0.2, alignItems: "center"}}>
-        <Text style = {styles.expiryFont}>{daysLeft}</Text>
+      <View style={{ flex: 0.2, alignItems: "center" }}>
+        <Text style={styles.expiryFont}>{daysLeft}</Text>
       </View>
-      <View style = {{flex: 0.2, alignItems: "flex-end"}}>
-        <BouncyCheckbox
-          size={20}
-        />
+      <View style={{ flex: 0.2, alignItems: "flex-end" }}>
+        <BouncyCheckbox size={20} />
       </View>
     </View>
   </View>
-)
+);
 
-const Promo = ({name, location, itemsOnSale, image}) => (
+const Promo = ({ name, location, itemsOnSale, image }) => (
   <TouchableOpacity
     style={styles.promotionBox}
     onPress={() => handlePromotionPress("Fairprice at Kampung Admiralty")}
@@ -97,7 +118,7 @@ const Promo = ({name, location, itemsOnSale, image}) => (
       <Text style={styles.promotionItems}>Items On Sale: {itemsOnSale}</Text>
     </View>
   </TouchableOpacity>
-)
+);
 
 function Home() {
   const handleTrackerPress = () => {
@@ -116,28 +137,34 @@ function Home() {
       <View style={styles.welcomeContainer}>
         <Text style={styles.welcomeText}>Welcome Santosh,</Text>
         <View style={styles.savingsContainer}>
-          <FoodSaved amount = "3.3"/>
-          <MoneySaved amount = "30"/>
+          <FoodSaved amount="3.3" />
+          <MoneySaved amount="30" />
         </View>
         <Text style={styles.expiringText}>Food Expiring Soon:</Text>
         <View>
-          <View style = {{flexDirection: "row"}}>
-            <View style = {{flex: 0.6}}>
-              <Text style = {styles.expiryFont}>Item</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 0.6 }}>
+              <Text style={styles.expiryFont}>Item</Text>
             </View>
-            <View style = {{flex: 0.2}}>
-              <Text style = {styles.expiryFont}>Days Left</Text>
+            <View style={{ flex: 0.2 }}>
+              <Text style={styles.expiryFont}>Days Left</Text>
             </View>
-            <View style = {{flex: 0.2, alignItems: "flex-end"}}>
-              <Text style = {styles.expiryFont}>Used</Text>
+            <View style={{ flex: 0.2, alignItems: "flex-end" }}>
+              <Text style={styles.expiryFont}>Used</Text>
             </View>
           </View>
         </View>
         <View>
           <FlatList
             data={ITEMS}
-            renderItem={({item}) => <Item itemName={item.itemName} daysLeft={item.daysLeft} used = {item.used} />}
-            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <Item
+                itemName={item.itemName}
+                daysLeft={item.daysLeft}
+                used={item.used}
+              />
+            )}
+            keyExtractor={(item) => item.id}
           />
         </View>
         <TouchableOpacity onPress={handleTrackerPress}>
@@ -147,8 +174,15 @@ function Home() {
         <View>
           <FlatList
             data={PROMOS}
-            renderItem={({item}) => <Promo name = {item.name} location = {item.location} itemsOnSale = {item.itemsOnSale} image = {item.image} />}
-            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <Promo
+                name={item.name}
+                location={item.location}
+                itemsOnSale={item.itemsOnSale}
+                image={item.image}
+              />
+            )}
+            keyExtractor={(item) => item.id}
           />
         </View>
       </View>
@@ -303,10 +337,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   expiryFont: {
-    fontFamily: "Avenir-Book",
+    fontFamily: getFontFamily(),
     fontSize: 18,
     fontWeight: "bold",
-  }
+  },
 });
 
 export default Home;
