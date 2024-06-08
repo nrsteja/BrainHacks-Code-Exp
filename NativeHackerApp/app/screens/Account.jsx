@@ -13,9 +13,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../general components/header";
 
 const { width, height } = Dimensions.get("window");
-const switchWidth = width * 0.15; // 15% of the screen width
-const switchHeight = switchWidth / 2; // maintain aspect ratio
-const sliderSize = switchHeight - 4; // slider size a bit smaller than the switch height
 
 const ProfileCard = ({ imageUrl, name, daysSaved }) => (
   <View style={styles.profileContainer}>
@@ -69,7 +66,7 @@ function Account() {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View style={styles.scrollViewContainer}>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <ProfileCard
           imageUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/7611a6a8b21db1ffd7d72b26deed298c206723f270e908d33d06ecc90f247e9a?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
           name="Kaliraj Santosh"
@@ -83,33 +80,30 @@ function Account() {
             onPress={() => Alert.alert("Account Settings clicked")}
           />
           <Text style={styles.sectionText}>Account Settings</Text>
-          <ScrollView contentContainerStyle={styles.flexCol}>
-            <TouchableOpacity
-              onPress={handleEditProfile}
-              style={styles.flexColItem}
-            >
-              <Text style={styles.settingItemText}>Edit profile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleChangePassword}
-              style={styles.flexColItem}
-            >
-              <Text style={styles.settingItemText}>Change password</Text>
-            </TouchableOpacity>
-
-            <ToggleItem
-              label="Dark mode"
-              onToggle={handleDarkModeToggle}
-              value={isDarkMode}
-            />
-            <ToggleItem
-              label="Push notifications"
-              onToggle={handlePushNotificationsToggle}
-              value={isPushNotifications}
-            />
-          </ScrollView>
+          <TouchableOpacity
+            onPress={handleEditProfile}
+            style={styles.flexColItem}
+          >
+            <Text style={styles.settingItemText}>Edit profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleChangePassword}
+            style={styles.flexColItem}
+          >
+            <Text style={styles.settingItemText}>Change password</Text>
+          </TouchableOpacity>
+          <ToggleItem
+            label="Dark mode"
+            onToggle={handleDarkModeToggle}
+            value={isDarkMode}
+          />
+          <ToggleItem
+            label="Push notifications"
+            onToggle={handlePushNotificationsToggle}
+            value={isPushNotifications}
+          />
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -132,13 +126,13 @@ const styles = StyleSheet.create({
   profileContainer: {
     width: "100%",
     alignItems: "center",
-    //borderWidth: 5,
+    marginBottom: 20,
   },
   profileName: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#065f46",
-    marginVertical: "2%",
+    marginVertical: 8,
   },
   daysSavedContainer: {
     justifyContent: "center",
@@ -147,7 +141,7 @@ const styles = StyleSheet.create({
     width: width * 0.5,
     borderRadius: width * 0.25,
     backgroundColor: "#ffdd57",
-    marginTop: "2%",
+    marginTop: 8,
   },
   profileImage: {
     ...StyleSheet.absoluteFillObject,
@@ -159,8 +153,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   subtitle: {
-    marginTop: "1%",
-    alignItems: "center",
+    marginTop: 8,
     fontSize: 20,
     fontWeight: "bold",
     color: "#000",
@@ -169,13 +162,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#065f46",
-    marginTop: "5%",
-    marginBottom: "2%",
-    width: "100%",
-    marginLeft: "5%",
+    marginTop: 20,
+    marginBottom: 12,
+    width: "90%",
   },
   settingsContainer: {
-    width: "98%",
+    width: "90%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 2, height: 2 },
@@ -190,8 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    marginTop: "5%",
-    marginLeft: "5%",
+    paddingVertical: 10,
   },
   settingIcon: {
     width: 40,
@@ -200,50 +191,39 @@ const styles = StyleSheet.create({
   settingItemText: {
     fontSize: 20,
     color: "#000",
-    marginLeft: "5%",
-    justifyContent: "center",
-    //borderWidth: 5,
-    // marginTop: "1.5%",
-    // marginBottom: "1.5%",
-    marginVertical: "2%",
+    marginLeft: 10,
+    flex: 1,
   },
   sectionText: {
-    marginTop: "5%",
-    marginLeft: "5%",
+    marginTop: 20,
     fontSize: 18,
     color: "#a1a1aa",
     width: "100%",
-    //borderWidth: 5,
-    marginVertical: "2%",
+    marginLeft: 10,
   },
   flexCol: {
     width: "100%",
-    //borderWidth: 5,
-    //marginTop: 16,
   },
   flexColItem: {
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    //marginTop: 16,
-    //borderWidth: 5,
+    paddingVertical: 10,
   },
   toggleItemContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
-    //borderWidth: 5,
+    paddingVertical: 10,
   },
   switch: {
     position: "relative",
-    display: "inline-block",
     width: 60,
     height: 32,
     backgroundColor: "#ccc",
     borderRadius: 34 / 2,
-    transition: ".4s",
     padding: 2,
   },
   switchOn: {

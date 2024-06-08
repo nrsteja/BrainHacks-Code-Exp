@@ -7,8 +7,8 @@ import {
   SafeAreaView,
   FlatList,
   Platform,
+  StyleSheet,
 } from "react-native";
-import { StyleSheet } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const getFontFamily = () => {
@@ -79,7 +79,7 @@ const PROMOS = [
 const FoodSaved = ({ amount }) => (
   <View style={styles.savingsBox}>
     <Text style={styles.savingsText}>{amount} kg</Text>
-    <Text style={styles.savingsLabel}>of food saved </Text>
+    <Text style={styles.savingsLabel}>of food saved</Text>
   </View>
 );
 
@@ -211,7 +211,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     width: "100%",
     backgroundColor: "#619f75",
-    flex: 0.05
   },
   headerText: {
     fontSize: 24,
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   welcomeContainer: {
-    flex: 0.95,
+    flex: 1,
     paddingHorizontal: 16,
     marginTop: 8,
   },
@@ -234,7 +233,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 8,
-    flex: 0.
   },
   savingsBox: {
     flex: 1,
@@ -242,92 +240,65 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     backgroundColor: "#619f75",
     marginHorizontal: 4,
+    borderRadius: 10,
   },
   savingsText: {
     fontSize: 32,
     fontWeight: "600",
     color: "white",
+    textAlign: "center",
   },
   savingsLabel: {
     marginTop: 8,
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 16,
     color: "white",
+    textAlign: "center",
   },
   expiringText: {
-    marginTop: 16,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "green",
+    color: "#72a086",
+    textAlign: "left",
+    marginTop: 20,
   },
-  expiringContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 8,
-  },
-  expiringItems: {
-    flex: 1,
-    alignItems: "flex-start",
-  },
-  expiringTitle: {
+  expiryFont: {
     fontSize: 16,
     fontWeight: "bold",
   },
-  expiringName: {
-    marginTop: 4,
+  itemsFont: {
     fontSize: 16,
-  },
-  daysContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  expiringDays: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  daysCount: {
-    marginTop: 16,
-    fontSize: 16,
-  },
-  expiringUsed: {
-    flexDirection: "column",
-    alignItems: "center",
-    fontWeight: "bold",
-  },
-  usedBox: {
-    marginTop: 8,
-    width: 20,
-    height: 20,
-    borderColor: "grey",
-    borderWidth: 3,
   },
   trackerText: {
-    marginTop: 24,
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "grey",
+    marginTop: 12,
+    fontSize: 16,
+    color: "green",
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
   promotionsText: {
-    marginTop: 24,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "green",
+    color: "#72a086",
+    textAlign: "left",
+    marginTop: 20,
   },
   promotionBox: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 8,
-    marginVertical: 8,
-    borderWidth: 2,
-    borderColor: "grey",
+    marginBottom: 16,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+    borderRadius: 8,
   },
   promotionImage: {
-    width: 106,
-    aspectRatio: 1.2,
+    width: 60,
+    height: 60,
+    marginRight: 8,
+    borderRadius: 4,
   },
   promotionDetails: {
     flex: 1,
-    marginLeft: 8,
   },
   promotionTitle: {
     fontSize: 16,
@@ -335,28 +306,12 @@ const styles = StyleSheet.create({
   },
   promotionSubtitle: {
     fontSize: 14,
+    color: "#555",
   },
   promotionItems: {
-    marginTop: 8,
-    fontSize: 14,
+    fontSize: 12,
+    color: "#999",
   },
-  promotionBanner: {
-    marginTop: 8,
-    width: "100%",
-    aspectRatio: 4.55,
-    borderColor: "grey",
-    borderWidth: 2,
-  },
-  expiryFont: {
-    fontFamily: getFontFamily(),
-    fontSize: 18,
-    fontWeight: "800",
-  },
-  itemsFont: {
-    fontFamily: getFontFamily(),
-    fontSize: 18,
-    fontWeight: "100",
-  }
 });
 
 export default Home;
