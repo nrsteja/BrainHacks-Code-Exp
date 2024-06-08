@@ -17,14 +17,14 @@ import Header from "../general components/header";
 import Filter from "../general components/Filter";
 
 const hardcodedItems = [
-  { name: "White Bread", dateBought: "1", daysLeft: "3 days" },
-  { name: "Eggs", dateBought: "12", daysLeft: "10 days" },
-  { name: "Almonds", dateBought: "1", daysLeft: "2 weeks" },
-  { name: "Spinach", dateBought: "1", daysLeft: "5 days" },
-  { name: "Cabbage", dateBought: "2", daysLeft: "5 days" },
-  { name: "Bananas", dateBought: "6", daysLeft: "2 days" },
-  { name: "Fresh Orange Juice", dateBought: "2", daysLeft: "14 days" },
-  { name: "Milk", dateBought: "3", daysLeft: "7 days" },
+  { name: "White Bread", dateBought: 1, daysLeft: "3 days" },
+  { name: "Eggs", dateBought: 12, daysLeft: "10 days" },
+  { name: "Almonds", dateBought: 1, daysLeft: "2 weeks" },
+  { name: "Spinach", dateBought: 1, daysLeft: "5 days" },
+  { name: "Cabbage", dateBought: 2, daysLeft: "5 days" },
+  { name: "Bananas", dateBought: 6, daysLeft: "2 days" },
+  { name: "Fresh Orange Juice", dateBought: 2, daysLeft: "14 days" },
+  { name: "Milk", dateBought: 3, daysLeft: "7 days" },
 ];
 
 const hardcodedFilters = [
@@ -34,22 +34,34 @@ const hardcodedFilters = [
 ];
 
 function Itinerary() {
-  const [items] = useState(hardcodedItems);
+  const [items, setItems] = useState(hardcodedItems);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [editMode, setEditMode] = useState(false);
+  const [markedForDeletion, setMarkedForDeletion] = useState([]);
+  const [editedItems, setEditedItems] = useState([...hardcodedItems]);
 
   const handleEditPress = () => {
     setEditMode(!editMode);
+    setMarkedForDeletion([]); // Reset the marked for deletion list when toggling edit mode
+    setEditedItems([...items]); // Set edited items to current items when entering edit mode
   };
 
   const handleSavePress = () => {
     // Perform save operation
+    const newItems = editedItems.filter(
+      (item, index) => !markedForDeletion.includes(index)
+    );
+    setItems(newItems);
     setEditMode(false);
+    setMarkedForDeletion([]); // Clear marked items after saving
+    setEditedItems(newItems); // Update edited items to the new saved items
   };
 
   const handleCancelPress = () => {
     setEditMode(false);
+    setMarkedForDeletion([]); // Clear marked items on cancel
+    setEditedItems([...items]); // Reset edited items on cancel
   };
 
   const handleAddPress = async () => {
@@ -82,12 +94,35 @@ function Itinerary() {
     }
   };
 
+  const handleDeletePress = (index) => {
+    if (markedForDeletion.includes(index)) {
+      setMarkedForDeletion(markedForDeletion.filter((i) => i !== index));
+    } else {
+      setMarkedForDeletion([...markedForDeletion, index]);
+    }
+  };
+
+  const handleIncreaseQuantity = (index) => {
+    const newItems = [...editedItems];
+    newItems[index].dateBought += 1;
+    setEditedItems(newItems);
+  };
+
+  const handleDecreaseQuantity = (index) => {
+    const newItems = [...editedItems];
+    if (newItems[index].dateBought > 1) {
+      newItems[index].dateBought -= 1;
+      setEditedItems(newItems);
+    }
+  };
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: "white",
       width: "100%",
       alignSelf: "center",
+      paddingBottom: 100, // Ensure there is space for the footer
     },
     searchContainer: {
       flexDirection: "row",
@@ -125,10 +160,12 @@ function Itinerary() {
     },
     flexRow: {
       flexDirection: "row",
+      alignItems: "center",
     },
     itemFlex: {
       flex: 1,
       paddingVertical: 5,
+      alignItems: "center",
     },
     boughtText: {
       fontSize: 18,
@@ -141,9 +178,18 @@ function Itinerary() {
       marginVertical: "5%",
     },
     footer: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
+      paddingHorizontal: 20,
+      paddingBottom: 20,
+      zIndex: 10,
+      backgroundColor: "transparent",
+      bottom: "11%",
     },
     editButton: {
       justifyContent: "center",
@@ -172,22 +218,55 @@ function Itinerary() {
     },
     editButtonsContainer: {
       width: "50%",
+      flexDirection: "row",
       position: "absolute",
-      top: -40,
-      flexDirection: "column",
-      alignItems: "center",
+      bottom: "90%",
       zIndex: 1,
     },
     saveButton: {
       paddingVertical: "4%",
       backgroundColor: "blue",
-      left: "-27%",
+      marginHorizontal: 10,
+      left: "40%",
     },
     cancelButton: {
       paddingHorizontal: "10%",
       backgroundColor: "red",
+      marginHorizontal: 10,
+      bottom: "-30%",
       right: "-32%",
-      bottom: "-25%",
+    },
+    deleteIcon: {
+      color: "red",
+    },
+    dullText: {
+      color: "grey",
+    },
+    quantityButtons: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    quantityButton: {
+      marginHorizontal: 5,
+      paddingVertical: 5,
+      paddingHorizontal: 10,
+      borderRadius: 5,
+    },
+    quantityButtonText: {
+      fontSize: 18,
+    },
+    quantityButtonIncrease: {
+      backgroundColor: "green",
+    },
+    quantityButtonDecrease: {
+      backgroundColor: "red",
+    },
+    quantityButtonTextIncrease: {
+      color: "white",
+    },
+    quantityButtonTextDecrease: {
+      color: "white",
     },
   });
 
@@ -197,8 +276,8 @@ function Itinerary() {
       <View style={styles.searchContainer}>
         <Text style={styles.searchText}>Search for your grocery</Text>
         <Image
-          style={{ width: 36, height: 36 }}
-          source={{ uri: "https://via.placeholder.com/36" }}
+          style={{ width: 32, height: 32, marginRight: 10 }}
+          source={require("./../../assets/search-icon.png")}
         />
       </View>
       <Filter
@@ -227,21 +306,71 @@ function Itinerary() {
             <Text style={styles.itemsHeaderText}>Expiry</Text>
           </View>
         </View>
-        {items.map((item, index) => (
+        {editedItems.map((item, index) => (
           <View key={index} style={styles.flexRow}>
             <View style={styles.itemFlex}>
-              <Text style={styles.itemText}>{item.name}</Text>
+              <Text
+                style={[
+                  styles.itemText,
+                  markedForDeletion.includes(index) && styles.dullText,
+                ]}
+              >
+                {item.name}
+              </Text>
             </View>
             <View style={styles.itemFlex}>
-              <Text style={styles.boughtText}>{item.dateBought}</Text>
+              {editMode ? (
+                <View style={styles.quantityButtons}>
+                  <TouchableOpacity
+                    style={[
+                      styles.quantityButton,
+                      styles.quantityButtonDecrease,
+                    ]}
+                    onPress={() => handleDecreaseQuantity(index)}
+                  >
+                    <Text style={styles.quantityButtonTextDecrease}>-</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.boughtText}>{item.dateBought}</Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.quantityButton,
+                      styles.quantityButtonIncrease,
+                    ]}
+                    onPress={() => handleIncreaseQuantity(index)}
+                  >
+                    <Text style={styles.quantityButtonTextIncrease}>+</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <Text style={styles.boughtText}>{item.dateBought}</Text>
+              )}
             </View>
             <View style={styles.itemFlex}>
-              <Text style={styles.expiringText}>{item.daysLeft}</Text>
+              <Text
+                style={[
+                  styles.expiringText,
+                  markedForDeletion.includes(index) && styles.dullText,
+                ]}
+              >
+                {item.daysLeft}
+              </Text>
             </View>
+            {editMode && (
+              <TouchableOpacity onPress={() => handleDeletePress(index)}>
+                <FontAwesome
+                  name="trash"
+                  size={24}
+                  style={[
+                    styles.deleteIcon,
+                    markedForDeletion.includes(index) && styles.dullText,
+                  ]}
+                />
+              </TouchableOpacity>
+            )}
           </View>
         ))}
       </ScrollView>
-      <View style={styles.footer}>
+      <SafeAreaView style={styles.footer}>
         {editMode && (
           <View style={styles.editButtonsContainer}>
             <TouchableOpacity
@@ -264,7 +393,7 @@ function Itinerary() {
         <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
           <FontAwesome name="camera" size={30} color="white" />
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     </SafeAreaView>
   );
 }
