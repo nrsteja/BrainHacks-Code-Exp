@@ -21,7 +21,7 @@ const ProfileCard = ({ imageUrl, name, daysSaved }) => (
       <Image source={{ uri: imageUrl }} style={styles.profileImage} />
       <Text style={styles.daysSavedText}>{daysSaved}</Text>
     </View>
-    <Text style={styles.subtitle}>Days of earth you have saved</Text>
+    <Text style={styles.subtitle}>Days of Earth You Have Saved</Text>
   </View>
 );
 
