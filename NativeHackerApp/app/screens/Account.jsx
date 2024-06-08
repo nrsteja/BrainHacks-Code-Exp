@@ -10,17 +10,12 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Header from "../general components/header";
 
 const { width, height } = Dimensions.get("window");
 const switchWidth = width * 0.15; // 15% of the screen width
 const switchHeight = switchWidth / 2; // maintain aspect ratio
 const sliderSize = switchHeight - 4; // slider size a bit smaller than the switch height
-
-const Header = ({ title }) => (
-  <View style={styles.header}>
-    <Text style={styles.headerText}>{title}</Text>
-  </View>
-);
 
 const ProfileCard = ({ imageUrl, name, daysSaved }) => (
   <View style={styles.profileContainer}>
@@ -73,8 +68,8 @@ function Account() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header />
       <View style={styles.scrollViewContainer}>
-        <Header title="GroceryGrabber" />
         <ProfileCard
           imageUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/7611a6a8b21db1ffd7d72b26deed298c206723f270e908d33d06ecc90f247e9a?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
           name="Kaliraj Santosh"
@@ -125,24 +120,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   scrollViewContainer: {
-    flexGrow: 1,
     alignItems: "center",
     width: "100%",
   },
   header: {
-    flex: 0.25,
-    //paddingVertical: "1%",
+    padding: "5%",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
-    height: "100%",
     backgroundColor: "green",
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
-    textAlign: "center",
   },
   profileContainer: {
     width: "100%",
@@ -153,6 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#065f46",
+    marginVertical: "2%",
   },
   daysSavedContainer: {
     justifyContent: "center",
@@ -189,15 +175,13 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
   },
   settingsContainer: {
-    flex: 1,
-    width: "100%",
+    width: "98%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2.5,
     elevation: 5,
-    marginLeft: "2%",
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 10,
