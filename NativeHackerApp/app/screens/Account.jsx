@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   header: {
-    flex: 0.3,
+    flex: 1,
+    paddingVertical: "1%",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
