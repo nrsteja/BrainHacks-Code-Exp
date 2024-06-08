@@ -73,7 +73,7 @@ function Account() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <View style={styles.scrollViewContainer}>
         <Header title="GroceryGrabber" />
         <ProfileCard
           imageUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/7611a6a8b21db1ffd7d72b26deed298c206723f270e908d33d06ecc90f247e9a?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
@@ -88,7 +88,7 @@ function Account() {
             onPress={() => Alert.alert("Account Settings clicked")}
           />
           <Text style={styles.sectionText}>Account Settings</Text>
-          <View style={styles.flexCol}>
+          <ScrollView contentContainerStyle={styles.flexCol}>
             <TouchableOpacity
               onPress={handleEditProfile}
               style={styles.flexColItem}
@@ -112,9 +112,9 @@ function Account() {
               onToggle={handlePushNotificationsToggle}
               value={isPushNotifications}
             />
-          </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -130,8 +130,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   header: {
-    flex: 1,
-    paddingVertical: "1%",
+    flex: 0.25,
+    //paddingVertical: "1%",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -234,7 +234,6 @@ const styles = StyleSheet.create({
   },
   flexCol: {
     width: "100%",
-    alignItems: "center",
     //borderWidth: 5,
     //marginTop: 16,
   },

@@ -88,7 +88,7 @@ function Itinerary() {
       alignSelf: "center",
     },
     header: {
-      flex: 0.1,
+      flex: 0.15,
       justifyContent: "center",
       alignItems: "center",
       //paddingHorizontal: 16,

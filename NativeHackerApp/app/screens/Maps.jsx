@@ -45,39 +45,10 @@ const Header = () => {
   );
 };
 
-const Banner = () => {
-  return (
-    <Image
-      source={{
-        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/941da09cdf5ef04a588f9da105c8829771f11a81688db2fd0bcf49e665b8d691?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-      }}
-      style={styles.bannerImage}
-    />
-  );
-};
-
-const BottomBar = () => {
-  return (
-    <View style={styles.bottomBar}>
-      <TouchableOpacity onPress={handleHomePress} style={styles.iconButton}>
-        <Text style={styles.iconText}>home</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleSearchPress} style={styles.iconButton}>
-        <Text style={styles.iconText}>search</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleProfilePress} style={styles.iconButton}>
-        <Text style={styles.iconText}>person</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const MyComponent = () => {
+const Maps = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <Banner />
-      <BottomBar />
     </SafeAreaView>
   );
 };
@@ -86,12 +57,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    maxWidth: 480,
     alignSelf: "center",
   },
   headerContainer: {
+    flex: 1,
     position: "relative",
-    paddingBottom: 20,
   },
   headerImage: {
     width: "100%",
@@ -103,9 +73,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: "1%",
     width: "100%",
-    backgroundColor: "rgba(128, 128, 128, 0.5)",
+    backgroundColor: "green",
   },
   headerTitle: {
     fontSize: 24,
@@ -154,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyComponent;
+export default Maps;
