@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   View,
   Text,
@@ -8,34 +8,35 @@ import {
   FlatList,
   Platform,
   StyleSheet,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import navigation
+} from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import CheckBox from '@react-native-community/checkbox';
 
 const getFontFamily = () => {
-  if (Platform.OS === 'ios') {
-    return 'Avenir-Book';
-  } else if (Platform.OS === 'android') {
-    return 'sans-serif';
+  if (Platform.OS === "ios") {
+    return "Avenir-Book";
+  } else if (Platform.OS === "android") {
+    return "sans-serif";
   }
-  return 'System';
+  return "System";
 };
 
 const ITEMS = [
   {
     id: '1',
-    itemName: 'White Bread',
+    itemName: "White Bread",
     daysLeft: 3,
     used: true,
   },
   {
     id: '2',
-    itemName: 'Spinach',
+    itemName: "Spinach",
     daysLeft: 1,
     used: true,
   },
   {
     id: '3',
-    itemName: 'Milk - Gardenia',
+    itemName: "Milk - Gardenia",
     daysLeft: 4,
     used: true,
   },
@@ -44,35 +45,35 @@ const ITEMS = [
 const PROMOS = [
   {
     id: '1',
-    name: 'FairPrice',
-    location: 'Kampung Admiralty',
+    name: "FairPrice",
+    location: "Kampung Admiralty",
     itemsOnSale: 11,
     image:
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/233402a655fce3616d5404a84b9c5cfa3816ca29d7f7e9f57002b53e34d3e79f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&',
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/233402a655fce3616d5404a84b9c5cfa3816ca29d7f7e9f57002b53e34d3e79f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
     id: '2',
-    name: 'ColdStorage',
-    location: 'Causeway Point',
+    name: "ColdStorage",
+    location: "Causeway Point",
     itemsOnSale: 2,
     image:
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/c03b51cecc85bf286bcb805b286071226ee009e347f7e995a30b085156157c0e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&',
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/c03b51cecc85bf286bcb805b286071226ee009e347f7e995a30b085156157c0e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
     id: '3',
-    name: 'Giant',
-    location: 'Admiralty MRT',
+    name: "Giant",
+    location: "Admiralty MRT",
     itemsOnSale: 4,
     image:
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&',
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
     id: '4',
-    name: 'Prime',
-    location: 'NTU',
+    name: "Prime",
+    location: "NTU",
     itemsOnSale: 2,
     image:
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&',
+      "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
 ];
 
@@ -92,15 +93,15 @@ const MoneySaved = ({ amount }) => (
 
 const Item = ({ itemName, daysLeft, used }) => (
   <View>
-    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+    <View style={{ flexDirection: "row", justifyContent: "center"}}>
       <View style={{ flex: 0.6 }}>
         <Text style={styles.itemsFont}>{itemName}</Text>
       </View>
-      <View style={{ flex: 0.2, alignItems: 'center' }}>
+      <View style={{ flex: 0.2, alignItems: "center" }}>
         <Text style={styles.itemsFont}>{daysLeft}</Text>
       </View>
-      <View style={{ flex: 0.2, alignItems: 'flex-end' }}>
-        <Text style={styles.itemsFont}>Y/N</Text>
+      <View style={{ flex: 0.2, alignItems: "flex-end"}}>
+        <Text style = {styles.itemsFont}>Y/N</Text>
       </View>
     </View>
   </View>
@@ -126,14 +127,12 @@ const Promo = ({ name, location, itemsOnSale, image }) => (
 );
 
 function Home() {
-  const navigation = useNavigation(); // Get navigation object
-
   const handleTrackerPress = () => {
-    navigation.navigate('CameraScreen'); // Navigate to CameraScreen
+    console.log("Navigating to GroceryTracker");
   };
 
   const handlePromotionPress = (title) => {
-    console.log('Viewing promotion:', title);
+    console.log("Viewing promotion:", title);
   };
 
   return (
@@ -149,14 +148,14 @@ function Home() {
         </View>
         <Text style={styles.expiringText}>Food Expiring Soon:</Text>
         <View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 0.6 }}>
               <Text style={styles.expiryFont}>Item</Text>
             </View>
             <View style={{ flex: 0.2 }}>
               <Text style={styles.expiryFont}>Days Left</Text>
             </View>
-            <View style={{ flex: 0.2, alignItems: 'flex-end' }}>
+            <View style={{ flex: 0.2, alignItems: "flex-end" }}>
               <Text style={styles.expiryFont}>Used</Text>
             </View>
           </View>
@@ -202,63 +201,70 @@ function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
+    width: "100%",
     maxWidth: 480,
-    backgroundColor: 'white',
-    alignSelf: 'center',
+    backgroundColor: "white",
+    alignSelf: "center",
   },
   header: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingVertical: 16,
-    width: '100%',
-    backgroundColor: '#619f75',
+    width: "100%",
+    backgroundColor: "#619f75",
   },
   headerText: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
   },
   welcomeContainer: {
-    paddingHorizontal: 24,
+    flex: 1,
+    paddingHorizontal: 16,
+    marginTop: 8,
   },
   welcomeText: {
-    fontSize: 24,
-    fontFamily: getFontFamily(),
-    color: '#333',
-    textAlign: 'left',
-    marginVertical: 16,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "green",
+    textAlign: "center",
   },
   savingsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
   },
   savingsBox: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: 8,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderRadius: 8,
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 12,
+    backgroundColor: "#619f75",
+    marginHorizontal: 4,
+    borderRadius: 10,
   },
   savingsText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontWeight: "600",
+    color: "white",
+    textAlign: "center",
   },
   savingsLabel: {
-    fontSize: 14,
-    color: '#777',
+    marginTop: 8,
+    fontSize: 16,
+    color: "white",
+    textAlign: "center",
   },
   expiringText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#72a086',
-    textAlign: 'left',
+    fontWeight: "bold",
+    color: "#72a086",
+    textAlign: "left",
     marginTop: 20,
   },
   expiryFont: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   itemsFont: {
     fontSize: 16,
@@ -266,24 +272,24 @@ const styles = StyleSheet.create({
   trackerText: {
     marginTop: 12,
     fontSize: 16,
-    color: 'green',
-    textAlign: 'center',
-    textDecorationLine: 'underline',
+    color: "green",
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
   promotionsText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#72a086',
-    textAlign: 'left',
+    fontWeight: "bold",
+    color: "#72a086",
+    textAlign: "left",
     marginTop: 20,
   },
   promotionBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 16,
     padding: 8,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
     borderRadius: 8,
   },
   promotionImage: {
@@ -297,15 +303,15 @@ const styles = StyleSheet.create({
   },
   promotionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   promotionSubtitle: {
     fontSize: 14,
-    color: '#555',
+    color: "#555",
   },
   promotionItems: {
     fontSize: 12,
-    color: '#999',
+    color: "#999",
   },
 });
 
