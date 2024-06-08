@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, SafeAreaView } from "react-native";
 import { StyleSheet } from "react-native";
 
 function Home() {
@@ -12,7 +12,7 @@ function Home() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>GroceryGrabber</Text>
       </View>
@@ -126,7 +126,7 @@ function Home() {
         }}
         style={styles.promotionBanner}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

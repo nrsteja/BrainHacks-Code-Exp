@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Image, Text, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
 
 function Itinerary() {
   const handleEditPress = () => {
@@ -127,7 +127,7 @@ function Itinerary() {
   });
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>GroceryGrabber</Text>
       </View>
@@ -189,7 +189,7 @@ function Itinerary() {
         style={{ alignSelf: "stretch", height: 500 }}
         source={{ uri: "https://via.placeholder.com/1440x656" }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

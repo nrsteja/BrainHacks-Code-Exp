@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  SafeAreaView,
 } from "react-native";
 
 function handleFilterPress() {
@@ -73,11 +74,11 @@ const BottomBar = () => {
 
 const MyComponent = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header />
       <Banner />
       <BottomBar />
-    </View>
+    </SafeAreaView>
   );
 };
 

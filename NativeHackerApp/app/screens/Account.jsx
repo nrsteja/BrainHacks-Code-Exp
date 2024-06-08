@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
+  SafeAreaView,
 } from "react-native";
 
 const styles = StyleSheet.create({
@@ -159,7 +160,7 @@ function Account() {
     Alert.alert("Push notifications toggled");
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title="GroceryGrabber" />
       <ProfileCard
         imageUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/7611a6a8b21db1ffd7d72b26deed298c206723f270e908d33d06ecc90f247e9a?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
@@ -225,7 +226,7 @@ function Account() {
         <Text>Dark mode</Text>
         <ToggleButton label="Toggle Dark mode" onPress={handleDarkModeToggle} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
