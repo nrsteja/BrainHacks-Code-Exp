@@ -6,8 +6,6 @@ import {
   Image,
   SafeAreaView,
   FlatList,
-  CheckBox,
-  ScrollView,
   Platform,
 } from "react-native";
 import { StyleSheet } from "react-native";
@@ -24,16 +22,19 @@ const getFontFamily = () => {
 
 const ITEMS = [
   {
+    id: '1',
     itemName: "White Bread",
     daysLeft: 3,
     used: true,
   },
   {
+    id: '2',
     itemName: "Spinach",
     daysLeft: 1,
     used: true,
   },
   {
+    id: '3',
     itemName: "Milk - Gardenia",
     daysLeft: 4,
     used: true,
@@ -42,6 +43,7 @@ const ITEMS = [
 
 const PROMOS = [
   {
+    id: '1',
     name: "FairPrice",
     location: "Kampung Admiralty",
     itemsOnSale: 11,
@@ -49,6 +51,7 @@ const PROMOS = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/233402a655fce3616d5404a84b9c5cfa3816ca29d7f7e9f57002b53e34d3e79f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
+    id: '2',
     name: "ColdStorage",
     location: "Causeway Point",
     itemsOnSale: 2,
@@ -56,6 +59,7 @@ const PROMOS = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/c03b51cecc85bf286bcb805b286071226ee009e347f7e995a30b085156157c0e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
+    id: '3',
     name: "Giant",
     location: "Admiralty MRT",
     itemsOnSale: 4,
@@ -63,6 +67,7 @@ const PROMOS = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
+    id: '4',
     name: "Prime",
     location: "NTU",
     itemsOnSale: 2,
@@ -104,7 +109,7 @@ const Item = ({ itemName, daysLeft, used }) => (
 const Promo = ({ name, location, itemsOnSale, image }) => (
   <TouchableOpacity
     style={styles.promotionBox}
-    onPress={() => handlePromotionPress("Fairprice at Kampung Admiralty")}
+    onPress={() => handlePromotionPress(name)}
   >
     <Image
       source={{
@@ -154,7 +159,7 @@ function Home() {
             </View>
           </View>
         </View>
-        <View>
+        <View style={{ flex: 0.2 }}>
           <FlatList
             data={ITEMS}
             renderItem={({ item }) => (
@@ -172,7 +177,7 @@ function Home() {
           <Text style={styles.trackerText}>Go to GroceryTracker &gt;&gt;</Text>
         </TouchableOpacity>
         <Text style={styles.promotionsText}>Promotions:</Text>
-        <View>
+        <View style={{ flex: 0.7 }}>
           <FlatList
             data={PROMOS}
             renderItem={({ item }) => (
@@ -206,6 +211,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     width: "100%",
     backgroundColor: "#619f75",
+    flex: 0.05
   },
   headerText: {
     fontSize: 24,
@@ -214,7 +220,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   welcomeContainer: {
-    flex: 1,
+    flex: 0.95,
     paddingHorizontal: 16,
     marginTop: 8,
   },
@@ -228,6 +234,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 8,
+    flex: 0.
   },
   savingsBox: {
     flex: 1,
@@ -251,8 +258,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 20,
     fontWeight: "bold",
-    fontWeight: "800",
-    color: "#619f75",
+    color: "green",
   },
   expiringContainer: {
     flexDirection: "row",
