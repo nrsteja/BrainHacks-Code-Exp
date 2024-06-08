@@ -1,20 +1,89 @@
-import * as React from "react";
-import { View, Image, Text, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Alert,
+} from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import { Camera } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
+
+const hardcodedItems = [
+  { name: "White Bread", dateBought: "1", daysLeft: "3 days" },
+  { name: "Eggs", dateBought: "12", daysLeft: "10 days" },
+  { name: "Almonds", dateBought: "1", daysLeft: "2 weeks" },
+  { name: "Spinach", dateBought: "1", daysLeft: "5 days" },
+  { name: "Cabbage", dateBought: "2", daysLeft: "5 days" },
+  { name: "Bananas", dateBought: "6", daysLeft: "2 days" },
+  { name: "Fresh Orange Juice", dateBought: "2", daysLeft: "14 days" },
+  { name: "Milk", dateBought: "3", daysLeft: "7 days" },
+];
+
+const hardcodedFilters = [
+  { label: "All", value: "all" },
+  { label: "Expiring Soon", value: "expiringSoon" },
+  { label: "Fresh", value: "fresh" },
+];
 
 function Itinerary() {
+  const [items] = useState(hardcodedItems);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [editMode, setEditMode] = useState(false);
+
   const handleEditPress = () => {
-    console.log("Edit button pressed");
+    setEditMode(!editMode);
   };
 
-  const handleAddPress = () => {
-    console.log("Add button pressed");
+  const handleSavePress = () => {
+    // Perform save operation
+    setEditMode(false);
+  };
+
+  const handleCancelPress = () => {
+    setEditMode(false);
+  };
+
+  const handleAddPress = async () => {
+    const { status } = await Camera.requestPermissionsAsync();
+    if (status === "granted") {
+      Alert.alert(
+        "Add Item",
+        "Choose an option",
+        [
+          {
+            text: "Camera",
+            onPress: async () => {
+              const image = await ImagePicker.launchCameraAsync();
+              console.log("Image captured", image);
+            },
+          },
+          {
+            text: "Gallery",
+            onPress: async () => {
+              const image = await ImagePicker.launchImageLibraryAsync();
+              console.log("Image selected from gallery", image);
+            },
+          },
+          { text: "Cancel", style: "cancel" },
+        ],
+        { cancelable: true }
+      );
+    } else {
+      Alert.alert("Permission Denied", "Camera permission is required!");
+    }
   };
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: "white",
-      maxWidth: 480,
+      width: "100%",
       alignSelf: "center",
     },
     header: {
@@ -22,7 +91,7 @@ function Itinerary() {
       alignItems: "center",
       paddingHorizontal: 16,
       paddingVertical: 4,
-      backgroundColor: "gray",
+      backgroundColor: "green",
       textAlign: "center",
     },
     headerText: {
@@ -36,11 +105,11 @@ function Itinerary() {
       alignItems: "center",
       paddingHorizontal: 12,
       paddingVertical: 8,
+      width: "100%",
       marginTop: 12,
-      backgroundColor: "gray",
-      borderRadius: 15,
+      backgroundColor: "green",
       alignSelf: "center",
-      maxWidth: 323,
+      maxWidth: "80%",
     },
     searchText: {
       fontSize: 18,
@@ -53,7 +122,7 @@ function Itinerary() {
       paddingHorizontal: 16,
       paddingVertical: 8,
       marginTop: 12,
-      backgroundColor: "gray",
+      backgroundColor: "green",
       borderRadius: 15,
       alignSelf: "center",
     },
@@ -64,17 +133,19 @@ function Itinerary() {
     },
     listContainer: {
       paddingHorizontal: 10,
-      paddingVertical: 12,
       width: "100%",
     },
     itemsHeaderText: {
       fontSize: 20,
       fontWeight: "bold",
       color: "green",
+      marginVertical: "5%",
+      textAlign: "center",
     },
     itemText: {
       fontSize: 18,
-      marginTop: 12,
+      marginVertical: "5%",
+      textAlign: "center",
     },
     flexRow: {
       flexDirection: "row",
@@ -86,24 +157,23 @@ function Itinerary() {
     boughtText: {
       fontSize: 18,
       textAlign: "center",
-      marginTop: 12,
+      marginVertical: "5%",
     },
     expiringText: {
       fontSize: 18,
       textAlign: "center",
-      marginTop: 12,
+      marginVertical: "5%",
     },
     footer: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginTop: 60,
       alignItems: "center",
     },
     editButton: {
       justifyContent: "center",
       paddingHorizontal: 32,
       paddingVertical: 16,
-      backgroundColor: "gray",
+      backgroundColor: "green",
       borderRadius: 15,
     },
     editButtonText: {
@@ -114,7 +184,7 @@ function Itinerary() {
     addButton: {
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "gray",
+      backgroundColor: "green",
       borderRadius: 35,
       height: 70,
       width: 70,
@@ -123,6 +193,23 @@ function Itinerary() {
       fontSize: 30,
       color: "white",
       textAlign: "center",
+    },
+    editButtonsContainer: {
+      position: "absolute",
+      top: -60,
+      left: 0,
+      flexDirection: "column",
+      alignItems: "center",
+      zIndex: 1,
+      //borderWidth: 5,
+    },
+    saveButton: {
+      backgroundColor: "blue",
+      left: "-5%",
+    },
+    cancelButton: {
+      backgroundColor: "red",
+      left: "85%",
     },
   });
 
@@ -138,57 +225,77 @@ function Itinerary() {
           source={{ uri: "https://via.placeholder.com/36" }}
         />
       </View>
-      <TouchableOpacity style={styles.filterButton}>
+      <TouchableOpacity
+        style={styles.filterButton}
+        onPress={() => setIsDropdownOpen(!isDropdownOpen)}
+      >
         <Text style={styles.filterText}>Filters</Text>
-        <Text style={styles.filterText}>expand_more</Text>
+        <FontAwesome
+          name={isDropdownOpen ? "chevron-up" : "chevron-down"}
+          size={16}
+          color="white"
+        />
       </TouchableOpacity>
-      <View style={styles.listContainer}>
-        <Text style={styles.itemsHeaderText}>Items in your house:</Text>
+      {isDropdownOpen && (
+        <DropDownPicker
+          open={isDropdownOpen}
+          items={hardcodedFilters}
+          setOpen={setIsDropdownOpen}
+          value={selectedFilter}
+          setValue={setSelectedFilter}
+          onSelectItem={(item) => console.log(item)}
+        />
+      )}
+      <ScrollView style={styles.listContainer}>
         <View style={styles.flexRow}>
           <View style={styles.itemFlex}>
-            <Text style={styles.itemText}>White Bread</Text>
-            <Text style={styles.itemText}>Eggs x12</Text>
-            <Text style={styles.itemText}>Almonds</Text>
-            <Text style={styles.itemText}>Spinach</Text>
-            <Text style={styles.itemText}>Cabbage x2</Text>
-            <Text style={styles.itemText}>Bananas x6</Text>
-            <Text style={styles.itemText}>Fresh Orange Juice</Text>
-            <Text style={styles.itemText}>Milk x3</Text>
+            <Text style={styles.itemsHeaderText}>Item</Text>
           </View>
           <View style={styles.itemFlex}>
-            <Text style={styles.boughtText}>12/03</Text>
-            <Text style={styles.boughtText}>11/03</Text>
-            <Text style={styles.boughtText}>12/03</Text>
-            <Text style={styles.boughtText}>12/03</Text>
-            <Text style={styles.boughtText}>12/03</Text>
-            <Text style={styles.boughtText}>12/03</Text>
-            <Text style={styles.boughtText}>12/03</Text>
-            <Text style={styles.boughtText}>12/03</Text>
+            <Text style={styles.itemsHeaderText}>Quantity</Text>
           </View>
           <View style={styles.itemFlex}>
-            <Text style={styles.expiringText}>3 days</Text>
-            <Text style={styles.expiringText}>10 days</Text>
-            <Text style={styles.expiringText}>2 weeks</Text>
-            <Text style={styles.expiringText}>5 days</Text>
-            <Text style={styles.expiringText}>5 days</Text>
-            <Text style={styles.expiringText}>2 days</Text>
-            <Text style={styles.expiringText}>14 days</Text>
-            <Text style={styles.expiringText}>7 days</Text>
+            <Text style={styles.itemsHeaderText}>Expiry</Text>
           </View>
         </View>
-      </View>
+        {items.map((item, index) => (
+          <View key={index} style={styles.flexRow}>
+            <View style={styles.itemFlex}>
+              <Text style={styles.itemText}>{item.name}</Text>
+            </View>
+            <View style={styles.itemFlex}>
+              <Text style={styles.boughtText}>{item.dateBought}</Text>
+            </View>
+            <View style={styles.itemFlex}>
+              <Text style={styles.expiringText}>{item.daysLeft}</Text>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
       <View style={styles.footer}>
+        {editMode && (
+          <View style={styles.editButtonsContainer}>
+            <TouchableOpacity
+              style={[styles.editButton, styles.saveButton]}
+              onPress={handleSavePress}
+            >
+              <Text style={styles.editButtonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.editButton, styles.cancelButton]}
+              onPress={handleCancelPress}
+            >
+              <Text style={styles.editButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
-          <Text style={styles.editButtonText}>Edit</Text>
+          <Text style={styles.editButtonText}>{"Edit"}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-          <Text style={styles.addButtonText}>+</Text>
+          <FontAwesome name="camera" size={30} color="white" />
         </TouchableOpacity>
       </View>
-      <Image
-        style={{ alignSelf: "stretch", height: 500 }}
-        source={{ uri: "https://via.placeholder.com/1440x656" }}
-      />
     </SafeAreaView>
   );
 }
