@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,15 @@ import {
   Alert,
   SafeAreaView,
 } from "react-native";
+import Header from "../general components/header";
+import Filter from "../general components/Filter";
+import DropDownPicker from "react-native-dropdown-picker";
+
+const hardcodedFilters = [
+  { label: "All", value: "all" },
+  { label: "Radius", value: "radius" },
+  { label: "Shops", value: "shops" },
+];
 
 function handleFilterPress() {
   Alert.alert("Filters button pressed!");
@@ -25,17 +34,34 @@ function handleProfilePress() {
   Alert.alert("Profile button pressed!");
 }
 
-const Header = () => {
+const Maps2 = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("all");
   return (
     <View style={styles.headerContainer}>
+      <Header />
+      <Filter
+        isDropdownOpen={isDropdownOpen}
+        setIsDropdownOpen={setIsDropdownOpen}
+      />
+      {isDropdownOpen && (
+        <DropDownPicker
+          open={isDropdownOpen}
+          items={hardcodedFilters}
+          setOpen={setIsDropdownOpen}
+          value={selectedFilter}
+          setValue={setSelectedFilter}
+          onSelectItem={(item) => console.log(item)}
+        />
+      )}
       <Image
         source={{
           uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/4fa9f970bf792cd3caa8aac404b0d28afd2a78e3e26a7e0863f936e307aad46e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
         }}
         style={styles.headerImage}
       />
-      <View style={styles.headerTitleContainer}>
-        <Text style={styles.headerTitle}>GroceryGrabber</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>GroceryGrabber</Text>
       </View>
       <TouchableOpacity onPress={handleFilterPress} style={styles.filterButton}>
         <Text style={styles.filterText}>Filters</Text>
@@ -48,7 +74,7 @@ const Header = () => {
 const Maps = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
+      <Maps2 />
     </SafeAreaView>
   );
 };
@@ -86,13 +112,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginTop: 12,
-    backgroundColor: "rgba(128, 128, 128, 0.8)",
+    //paddingHorizontal: 16,
+    //paddingVertical: 8,
+    //marginTop: 12,
+    backgroundColor: "green",
     borderRadius: 30,
     alignSelf: "center",
-    marginBottom: 476,
+    //marginBottom: 476,
   },
   filterText: {
     fontSize: 16,

@@ -13,6 +13,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
+import Header from "../general components/header";
+import Filter from "../general components/Filter";
 
 const hardcodedItems = [
   { name: "White Bread", dateBought: "1", daysLeft: "3 days" },
@@ -87,53 +89,22 @@ function Itinerary() {
       width: "100%",
       alignSelf: "center",
     },
-    header: {
-      flex: 0.15,
-      justifyContent: "center",
-      alignItems: "center",
-      //paddingHorizontal: 16,
-      //paddingVertical: 4,
-      backgroundColor: "green",
-      textAlign: "center",
-    },
-    headerText: {
-      fontSize: 24,
-      fontWeight: "bold",
-      color: "white",
-    },
     searchContainer: {
-      flex: 0.1,
-      borderWidth: 5,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingHorizontal: 12,
-      paddingVertical: 8,
+      padding: "2%",
+      marginTop: "5%",
+      marginVertical: "1.5%",
       width: "100%",
-      marginTop: 12,
       backgroundColor: "green",
       alignSelf: "center",
       maxWidth: "80%",
+      borderRadius: "50%",
     },
     searchText: {
       fontSize: 18,
       color: "white",
-    },
-    filterButton: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      marginTop: 12,
-      backgroundColor: "green",
-      borderRadius: 15,
-      alignSelf: "center",
-    },
-    filterText: {
-      fontSize: 16,
-      color: "white",
-      textAlign: "center",
     },
     listContainer: {
       flex: 0.8,
@@ -176,10 +147,10 @@ function Itinerary() {
     },
     editButton: {
       justifyContent: "center",
-      paddingHorizontal: 32,
-      paddingVertical: 16,
+      paddingHorizontal: "8%",
+      paddingVertical: "3%",
       backgroundColor: "green",
-      borderRadius: 15,
+      borderRadius: "50%",
     },
     editButtonText: {
       fontSize: 20,
@@ -200,29 +171,29 @@ function Itinerary() {
       textAlign: "center",
     },
     editButtonsContainer: {
+      width: "50%",
       position: "absolute",
-      top: -60,
-      left: 0,
+      top: -40,
       flexDirection: "column",
       alignItems: "center",
       zIndex: 1,
-      //borderWidth: 5,
     },
     saveButton: {
+      paddingVertical: "4%",
       backgroundColor: "blue",
-      left: "-5%",
+      left: "-27%",
     },
     cancelButton: {
+      paddingHorizontal: "10%",
       backgroundColor: "red",
-      left: "85%",
+      right: "-32%",
+      bottom: "-25%",
     },
   });
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>GroceryGrabber</Text>
-      </View>
+      <Header />
       <View style={styles.searchContainer}>
         <Text style={styles.searchText}>Search for your grocery</Text>
         <Image
@@ -230,17 +201,10 @@ function Itinerary() {
           source={{ uri: "https://via.placeholder.com/36" }}
         />
       </View>
-      <TouchableOpacity
-        style={styles.filterButton}
-        onPress={() => setIsDropdownOpen(!isDropdownOpen)}
-      >
-        <Text style={styles.filterText}>Filters</Text>
-        <FontAwesome
-          name={isDropdownOpen ? "chevron-up" : "chevron-down"}
-          size={16}
-          color="white"
-        />
-      </TouchableOpacity>
+      <Filter
+        isDropdownOpen={isDropdownOpen}
+        setIsDropdownOpen={setIsDropdownOpen}
+      />
       {isDropdownOpen && (
         <DropDownPicker
           open={isDropdownOpen}
