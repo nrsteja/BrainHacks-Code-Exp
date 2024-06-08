@@ -89,10 +89,10 @@ const Item = ({ itemName, daysLeft, used }) => (
   <View>
     <View style={{ flexDirection: "row" }}>
       <View style={{ flex: 0.6 }}>
-        <Text style={styles.expiryFont}>{itemName}</Text>
+        <Text style={styles.itemsFont}>{itemName}</Text>
       </View>
       <View style={{ flex: 0.2, alignItems: "center" }}>
-        <Text style={styles.expiryFont}>{daysLeft}</Text>
+        <Text style={styles.itemsFont}>{daysLeft}</Text>
       </View>
       <View style={{ flex: 0.2, alignItems: "flex-end" }}>
         <BouncyCheckbox size={20} />
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 16,
     width: "100%",
-    backgroundColor: "grey",
+    backgroundColor: "#619f75",
   },
   headerText: {
     fontSize: 24,
@@ -233,23 +233,26 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 12,
-    backgroundColor: "grey",
+    backgroundColor: "#619f75",
     marginHorizontal: 4,
   },
   savingsText: {
     fontSize: 32,
+    fontWeight: "600",
     color: "white",
   },
   savingsLabel: {
     marginTop: 8,
     fontSize: 18,
+    fontWeight: "600",
     color: "white",
   },
   expiringText: {
     marginTop: 16,
     fontSize: 20,
     fontWeight: "bold",
-    color: "green",
+    fontWeight: "800",
+    color: "#619f75",
   },
   expiringContainer: {
     flexDirection: "row",
@@ -341,8 +344,13 @@ const styles = StyleSheet.create({
   expiryFont: {
     fontFamily: getFontFamily(),
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "800",
   },
+  itemsFont: {
+    fontFamily: getFontFamily(),
+    fontSize: 18,
+    fontWeight: "100",
+  }
 });
 
 export default Home;
