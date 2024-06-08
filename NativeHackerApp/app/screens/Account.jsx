@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../general components/header";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const ProfileCard = ({ imageUrl, name, daysSaved }) => (
   <View style={styles.profileContainer}>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
   },
   profileContainer: {
-    width: "100%",
+    width: "90%",
     alignItems: "center",
     marginBottom: 20,
   },
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#065f46",
     marginVertical: 8,
+    textAlign: "center",
   },
   daysSavedContainer: {
     justifyContent: "center",
@@ -157,6 +158,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#000",
+    textAlign: "center",
   },
   settingsTitle: {
     fontSize: 24,
@@ -165,6 +167,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 12,
     width: "90%",
+    textAlign: "center",
   },
   settingsContainer: {
     width: "90%",
@@ -177,6 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 10,
+    marginBottom: 20, // add margin to prevent overlap
   },
   settingItem: {
     flexDirection: "row",

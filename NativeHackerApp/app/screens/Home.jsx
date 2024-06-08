@@ -9,6 +9,7 @@ import {
   Platform,
   StyleSheet,
 } from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckBox from '@react-native-community/checkbox';
 
 const getFontFamily = () => {
