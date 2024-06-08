@@ -12,6 +12,7 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const hardcodedItems = [
   { name: "White Bread", dateBought: "1", daysLeft: "3 days" },
@@ -87,10 +88,11 @@ function Itinerary() {
       alignSelf: "center",
     },
     header: {
+      flex: 0.1,
       justifyContent: "center",
       alignItems: "center",
-      paddingHorizontal: 16,
-      paddingVertical: 4,
+      //paddingHorizontal: 16,
+      //paddingVertical: 4,
       backgroundColor: "green",
       textAlign: "center",
     },
@@ -100,6 +102,8 @@ function Itinerary() {
       color: "white",
     },
     searchContainer: {
+      flex: 0.1,
+      borderWidth: 5,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
@@ -132,6 +136,7 @@ function Itinerary() {
       textAlign: "center",
     },
     listContainer: {
+      flex: 0.8,
       paddingHorizontal: 10,
       width: "100%",
     },
