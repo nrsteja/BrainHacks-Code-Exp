@@ -14,10 +14,10 @@ const styles = StyleSheet.create({
     padding: "5%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "green",
+    backgroundColor: "#619f75",
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     color: "white",
   },
