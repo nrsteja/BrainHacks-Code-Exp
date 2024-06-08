@@ -12,7 +12,7 @@ const Landing = () => {
       style={{
         flex: 1,
       }}
-      colors={[COLORS.secondary, COLORS.primary]}
+      colors={[COLORS.green, COLORS.dark_green]}
     >
       <View style={{ flex: 1 }}>
         <View>

@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import Header from "../general components/header";
-
+import COLORS from "../constants/colors"
 
 
 const FilterButton = ({ onPress }) => (
@@ -81,7 +81,7 @@ const MyComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
     maxWidth: 480,
     alignSelf: "center",
   },
@@ -90,12 +90,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 16,
     width: "100%",
-    backgroundColor: "#619f75",
+    backgroundColor: COLORS.green,
   },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
+    color: COLORS.white,
     textAlign: "center",
   },
   locationContainer: {
@@ -105,14 +105,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     marginTop: 12,
-    backgroundColor: "gray",
+    backgroundColor: COLORS.grey,
     borderRadius: 24,
     maxWidth: 323,
     alignSelf: "center",
   },
   locationText: {
     fontSize: 16,
-    color: "white",
+    color: COLORS.white,
   },
   locationIcon: {
     width: 36,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   navButton: {
-    backgroundColor: "gray",
+    backgroundColor: COLORS.grey,
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 24,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     fontSize: 14,
-    color: "white",
+    color: COLORS.white,
   },
   filterButtonContainer: {
     flexDirection: "row",
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 8,
     marginTop: 8,
-    backgroundColor: "gray",
+    backgroundColor: COLORS.grey,
     borderRadius: 30,
   },
   filterButtonTextContainer: {
@@ -155,14 +155,14 @@ const styles = StyleSheet.create({
   },
   filterButtonText: {
     fontSize: 16,
-    color: "white",
+    color: COLORS.white,
   },
   filterButtonIconContainer: {
     alignItems: "center",
   },
   filterButtonIcon: {
     fontSize: 14,
-    color: "#D1D5DB",
+    color: COLORS.grey,
   },
   resultsContainer: {
     paddingHorizontal: 16,
@@ -171,12 +171,12 @@ const styles = StyleSheet.create({
   resultsTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#038400",
+    color: COLORS.dark_green,
   },
   groceryItemContainer: {
     flexDirection: "row",
     borderWidth: 2,
-    borderColor: "gray",
+    borderColor: COLORS.grey,
     paddingVertical: 8,
     marginTop: 10,
   },
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     paddingVertical: 16,
-    backgroundColor: "gray",
+    backgroundColor: COLORS.grey,
     width: "100%",
   },
   navBarButton: {
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   },
   navBarButtonText: {
     fontSize: 16,
-    color: "white",
+    color: COLORS.white,
   },
 });
 

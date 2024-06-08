@@ -10,6 +10,7 @@ import {
   ImageBackground,
   StyleSheet,
 } from "react-native";
+import COLORS from "../constants/colors"
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -150,9 +151,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     borderRadius: 8,
-    backgroundColor: "#f4f4f5",
-    borderColor: "#d1d5db",
-    color: "#6b7280",
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.grey,
+    color: COLORS.grey,
     borderWidth: 1,
   },
   rememberMeContainer: {
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   rememberMeCheckbox: {
     width: 24,
     height: 24,
-    backgroundColor: "#6b7280",
+    backgroundColor: COLORS.grey,
     borderRadius: 12,
     marginRight: 8,
   },
@@ -175,12 +176,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 16,
-    backgroundColor: "#2563eb",
+    backgroundColor: COLORS.blue,
     borderRadius: 8,
     height: windowHeight * 0.06, // Adjusted for better responsiveness
   },
   signInButtonText: {
-    color: "#fff",
+    color: COLORS.white,
     fontSize: windowWidth * 0.045, // Adjusted for better responsiveness
   },
   googleSignInContainer: {
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: "4%",
-    backgroundColor: "#27272a",
+    backgroundColor: COLORS.black,
     borderRadius: 8,
     marginTop: 12,
   },
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   googleSignInText: {
-    color: "#fff",
+    color: COLORS.white,
     marginLeft: 8,
     fontSize: windowWidth * 0.045, // Adjusted for better responsiveness
   },

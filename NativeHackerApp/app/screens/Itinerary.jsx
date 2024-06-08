@@ -15,6 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import Header from "../general components/header";
 import Filter from "../general components/Filter";
+import COLORS from "../constants/colors"
 
 const hardcodedItems = [
   { name: "White Bread", dateBought: 1, daysLeft: "3 days" },
@@ -119,7 +120,7 @@ function Itinerary() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "white",
+      backgroundColor: COLORS.white,
       width: "100%",
       alignSelf: "center",
       paddingBottom: 100, // Ensure there is space for the footer
@@ -132,14 +133,14 @@ function Itinerary() {
       marginTop: "5%",
       marginVertical: "1.5%",
       width: "100%",
-      backgroundColor: "green",
+      backgroundColor: COLORS.dark_green,
       alignSelf: "center",
       maxWidth: "80%",
       borderRadius: "50%",
     },
     searchText: {
       fontSize: 18,
-      color: "white",
+      color: COLORS.white,
     },
     listContainer: {
       flex: 0.8,
@@ -149,7 +150,7 @@ function Itinerary() {
     itemsHeaderText: {
       fontSize: 20,
       fontWeight: "bold",
-      color: "green",
+      color: COLORS.dark_green,
       marginVertical: "5%",
       textAlign: "center",
     },
@@ -195,25 +196,25 @@ function Itinerary() {
       justifyContent: "center",
       paddingHorizontal: "8%",
       paddingVertical: "3%",
-      backgroundColor: "green",
+      backgroundColor: COLORS.dark_green,
       borderRadius: "50%",
     },
     editButtonText: {
       fontSize: 20,
-      color: "white",
+      color: COLORS.white,
       textAlign: "center",
     },
     addButton: {
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "green",
+      backgroundColor: COLORS.dark_green,
       borderRadius: 35,
       height: 70,
       width: 70,
     },
     addButtonText: {
       fontSize: 30,
-      color: "white",
+      color: COLORS.white,
       textAlign: "center",
     },
     editButtonsContainer: {
@@ -225,22 +226,22 @@ function Itinerary() {
     },
     saveButton: {
       paddingVertical: "4%",
-      backgroundColor: "blue",
+      backgroundColor: COLORS.blue,
       marginHorizontal: 10,
       left: "40%",
     },
     cancelButton: {
       paddingHorizontal: "10%",
-      backgroundColor: "red",
+      backgroundColor: COLORS.red,
       marginHorizontal: 10,
       bottom: "-30%",
       right: "-32%",
     },
     deleteIcon: {
-      color: "red",
+      color: COLORS.red,
     },
     dullText: {
-      color: "grey",
+      color: COLORS.grey,
     },
     quantityButtons: {
       flexDirection: "row",
@@ -257,16 +258,16 @@ function Itinerary() {
       fontSize: 18,
     },
     quantityButtonIncrease: {
-      backgroundColor: "green",
+      backgroundColor: COLORS.dark_green,
     },
     quantityButtonDecrease: {
-      backgroundColor: "red",
+      backgroundColor: COLORS.red,
     },
     quantityButtonTextIncrease: {
-      color: "white",
+      color: COLORS.white,
     },
     quantityButtonTextDecrease: {
-      color: "white",
+      color: COLORS.white,
     },
   });
 
@@ -391,7 +392,7 @@ function Itinerary() {
           <Text style={styles.editButtonText}>{"Edit"}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-          <FontAwesome name="camera" size={30} color="white" />
+          <FontAwesome name="camera" size={30} color={COLORS.white} />
         </TouchableOpacity>
       </SafeAreaView>
     </SafeAreaView>

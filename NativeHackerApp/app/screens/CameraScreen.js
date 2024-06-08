@@ -1,6 +1,7 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import COLORS from "../constants/colors"
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState('back');
@@ -60,6 +61,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: COLORS.white,
   },
 });

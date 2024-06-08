@@ -12,6 +12,7 @@ import {
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckBox from '@react-native-community/checkbox';
 import { useNavigation } from '@react-navigation/native'; 
+import COLORS from "../constants/colors"
 
 const getFontFamily = () => {
   if (Platform.OS === "ios") {
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     maxWidth: 480,
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
     alignSelf: "center",
   },
   header: {
@@ -216,12 +217,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 16,
     width: "100%",
-    backgroundColor: "#619f75",
+    backgroundColor: COLORS.green,
   },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
+    color: COLORS.white,
     textAlign: "center",
   },
   welcomeContainer: {
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "green",
+    color: COLORS.dark_green,
     textAlign: "center",
   },
   savingsContainer: {
@@ -244,26 +245,26 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 12,
-    backgroundColor: "#619f75",
+    backgroundColor: COLORS.green,
     marginHorizontal: 4,
     borderRadius: 10,
   },
   savingsText: {
     fontSize: 32,
     fontWeight: "600",
-    color: "white",
+    color: COLORS.white,
     textAlign: "center",
   },
   savingsLabel: {
     marginTop: 8,
     fontSize: 16,
-    color: "white",
+    color: COLORS.white,
     textAlign: "center",
   },
   expiringText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#72a086",
+    color: COLORS.dark_green,
     textAlign: "left",
     marginTop: 20,
   },
@@ -277,14 +278,14 @@ const styles = StyleSheet.create({
   trackerText: {
     marginTop: 12,
     fontSize: 16,
-    color: "green",
+    color: COLORS.dark_green,
     textAlign: "center",
     textDecorationLine: "underline",
   },
   promotionsText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#72a086",
+    color: COLORS.dark_green,
     textAlign: "left",
     marginTop: 20,
   },
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 8,
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: COLORS.grey,
     borderRadius: 8,
   },
   promotionImage: {

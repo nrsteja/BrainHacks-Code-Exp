@@ -8,6 +8,7 @@ import Itinerary from './Itinerary';
 import Maps from './Maps';
 import Account from './Account';
 import Home from './Home';
+import COLORS from "../constants/colors"
 
 const Tab = createBottomTabNavigator();
 const height = Dimensions.get("window").height;
@@ -36,7 +37,7 @@ export default function HomeStack() {
       tabBarIcon: ({focused}) => {
         return(
           <View style = {{alignItems: "center", justifyContent: "center"}}>
-            <Entypo name = "home" size = {24} color = {focused ? 'white' : 'black'}/>
+            <Entypo name = "home" size = {24} color = {focused ? COLORS.white : COLORS.black}/>
             <Text style = {{fontSize: 0.03 * width, color: ""}}>HOME</Text>
           </View>
         )
@@ -49,7 +50,7 @@ export default function HomeStack() {
         tabBarIcon: ({focused}) => {
           return(
             <View style = {{alignItems: "center", justifyContent: "center"}}>
-              <Entypo name = "magnifying-glass" size = {24} color = {focused ? 'white' : 'black'} />
+              <Entypo name = "magnifying-glass" size = {24} color = {focused ? COLORS.white : COLORS.black} />
               <Text style = {{fontSize: 0.03 * width, color: ""}}>SEARCH</Text>
             </View>
           )
@@ -70,7 +71,7 @@ export default function HomeStack() {
               justifyContent: "center",
               backgroundColor: "#90dfaa"
             }}>
-              <FontAwesome name = "compass" size = {0.12 * width} color = {focused ? 'white' : 'black'}/>
+              <FontAwesome name = "compass" size = {0.12 * width} color = {focused ? COLORS.white : COLORS.black}/>
             </View>
           )
         } 
@@ -82,7 +83,7 @@ export default function HomeStack() {
         tabBarIcon: ({focused}) => {
           return(
             <View style = {{alignItems: "center", justifyContent: "center"}}>
-              <Entypo name = "menu" size = {24} color = {focused ? 'white' : 'black'} />
+              <Entypo name = "menu" size = {24} color = {focused ? COLORS.white : COLORS.black} />
               <Text style = {{fontSize: 0.03 * width, color: ""}}>INVENTORY</Text>
             </View>
           )
@@ -96,7 +97,7 @@ export default function HomeStack() {
         tabBarIcon: ({focused}) => {
           return(
             <View style = {{alignItems: "center", justifyContent: "center"}}>
-              <Entypo name = "globe" size = {24} color = {focused ? 'white' : 'black'} />
+              <Entypo name = "globe" size = {24} color = {focused ? COLORS.white : COLORS.black} />
               <Text style = {{fontSize: 0.03 * width, color: ""}}>PROFILE</Text>
             </View>
           )

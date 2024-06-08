@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../general components/header";
+import COLORS from "../constants/colors";
 
 const { width } = Dimensions.get("window");
 
@@ -111,7 +112,7 @@ function Account() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.white,
   },
   scrollViewContainer: {
     alignItems: "center",
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     padding: "5%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "green",
+    backgroundColor: COLORS.dark_green,
   },
   profileContainer: {
     width: "90%",
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#065f46",
+    color: COLORS.dark_green,
     marginVertical: 8,
     textAlign: "center",
   },
@@ -151,19 +152,19 @@ const styles = StyleSheet.create({
   daysSavedText: {
     fontSize: 40,
     fontWeight: "bold",
-    color: "#fff",
+    color: COLORS.white,
   },
   subtitle: {
     marginTop: 8,
     fontSize: 20,
     fontWeight: "bold",
-    color: "#000",
+    color: COLORS.black,
     textAlign: "center",
   },
   settingsTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#065f46",
+    color: COLORS.dark_green,
     marginTop: 20,
     marginBottom: 12,
     width: "90%",
@@ -172,12 +173,12 @@ const styles = StyleSheet.create({
   settingsContainer: {
     width: "90%",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: COLORS.black,
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2.5,
     elevation: 5,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.white,
     padding: 10,
     borderRadius: 10,
     marginBottom: 20, // add margin to prevent overlap
@@ -194,14 +195,14 @@ const styles = StyleSheet.create({
   },
   settingItemText: {
     fontSize: 20,
-    color: "#000",
+    color: COLORS.black,
     marginLeft: 10,
     flex: 1,
   },
   sectionText: {
     marginTop: 20,
     fontSize: 18,
-    color: "#a1a1aa",
+    color: COLORS.grey,
     width: "100%",
     marginLeft: 10,
   },
@@ -226,15 +227,15 @@ const styles = StyleSheet.create({
     position: "relative",
     width: 60,
     height: 32,
-    backgroundColor: "#ccc",
+    backgroundColor: COLORS.grey,
     borderRadius: 34 / 2,
     padding: 2,
   },
   switchOn: {
-    backgroundColor: "#2196F3",
+    backgroundColor: COLORS.blue,
   },
   switchOff: {
-    backgroundColor: "#ccc",
+    backgroundColor: COLORS.grey,
   },
   slider: {
     position: "absolute",
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     left: 1,
     width: 30,
     height: 30,
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
     borderRadius: 15,
     transition: ".4s",
   },

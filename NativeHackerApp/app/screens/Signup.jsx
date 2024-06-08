@@ -5,6 +5,7 @@ import { Hoshi } from 'react-native-textinput-effects';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import COLORS from "../constants/colors"
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -16,13 +17,13 @@ const MyComponent = () => {
     <SafeAreaView style ={{flex: 1}}>
       <View style = {{
         flex: 0.1, 
-        backgroundColor: "#609F75",
+        backgroundColor: COLORS.green,
         width: "100%",
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row"}}>
         <Text style = {{
-          color: "#FFF",
+          color: COLORS.white,
           fontSize: 32,
           fontWeight: "700",
           fontFamily: "Kanit, sans-serif",
@@ -35,9 +36,9 @@ const MyComponent = () => {
         <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
         <Hoshi
           label={'Name'}
-          borderColor={'#619f75'}
+          borderColor={COLORS.green}
           inputPadding={0}
-          backgroundColor={'#f5f5f5'}
+          backgroundColor={COLORS.white}
           style={{ width: 0.85 * width}}
           labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
         />
@@ -45,9 +46,9 @@ const MyComponent = () => {
         <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
           <Hoshi
             label={'Email'}
-            borderColor={'#619f75'}
+            borderColor={COLORS.green}
             inputPadding={0}
-            backgroundColor={'#f5f5f5'}
+            backgroundColor={COLORS.white}
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
           />
@@ -55,9 +56,9 @@ const MyComponent = () => {
         <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
           <Hoshi
             label={'Password'}
-            borderColor={'#619f75'}
+            borderColor={COLORS.green}
             inputPadding={0}
-            backgroundColor={'#f5f5f5'}
+            backgroundColor={COLORS.white}
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
           />
@@ -65,9 +66,9 @@ const MyComponent = () => {
         <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
           <Hoshi
             label={'Confirm Password'}
-            borderColor={'#619f75'}
+            borderColor={COLORS.green}
             inputPadding = {0}
-            backgroundColor={'#f5f5f5'}
+            backgroundColor={COLORS.white}
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
             secureTextEntry = "true"
@@ -80,7 +81,7 @@ const MyComponent = () => {
       </View>
       <View style = {{flex: 0.25, justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 0.1 * width}}>
         <TouchableOpacity style = {{
-          backgroundColor: "darkgreen",
+          backgroundColor: COLORS.dark_green,
           width: 0.8 * width,
           height: 0.05 * height,
           borderRadius: 100,
@@ -136,7 +137,7 @@ const LabelInputPair = ({ label, placeholder, secureTextEntry = false }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFF",
+    backgroundColor: COLORS.white,
     display: "flex",
     maxWidth: 480,
     width: "100%",
@@ -146,14 +147,14 @@ const styles = StyleSheet.create({
     margin: "0 auto",
   },
   header: {
-    backgroundColor: "#609F75",
+    backgroundColor: COLORS.green,
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
     flex: 0.2
   },
   headerText: {
-    color: "#FFF",
+    color: COLORS.white,
     fontSize: 32,
     fontWeight: "700",
     fontFamily: "Kanit, sans-serif",
@@ -167,13 +168,13 @@ const styles = StyleSheet.create({
     paddingRight: 51,
   },
   icon: {
-    borderColor: "#000",
+    borderColor: COLORS.black,
     borderWidth: 2,
     width: 19,
     aspectRatio: "1.59",
   },
   title: {
-    color: "#000",
+    color: COLORS.black,
     marginTop: 66,
     fontSize: 27,
     fontWeight: "600",
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   inputLabel: {
-    color: "#6F6F6F",
+    color: COLORS.grey,
     fontSize: 16,
     fontWeight: "400",
     marginBottom: 13,
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
     alignSelf: "end",
     width: 288,
     maxWidth: "100%",
-    backgroundColor: "#FAFAFA",
+    backgroundColor: COLORS.white,
     color: "#888",
     paddingVertical: 14,
     paddingHorizontal: 15,
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
     marginTop: 18,
     fontSize: 12,
     fontWeight: "400",
-    color: "#00B140",
+    color: COLORS.dark_green,
     gap: 9,
   },
   checkbox: {
@@ -232,14 +233,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "100%",
     maxWidth: 288,
-    backgroundColor: "#00B140",
+    backgroundColor: COLORS.dark_green,
     borderRadius: 10,
     paddingVertical: 16,
     paddingHorizontal: 60,
     marginTop: 17,
   },
   submitButtonText: {
-    color: "#FFF",
+    color: COLORS.white,
     fontSize: 15,
     fontWeight: "600",
     textAlign: "center",
@@ -280,13 +281,13 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   signInLink: {
-    color: "#00B140",
+    color: COLORS.dark_green,
     fontSize: 16,
     fontWeight: "400",
   },
   imageStyle: {
     strokeWidth: 17,
-    stroke: "#000",
+    stroke: COLORS.black,
     borderColor: "rgba(0, 0, 0, 1)",
     borderStyle: "solid",
     borderWidth: 2,

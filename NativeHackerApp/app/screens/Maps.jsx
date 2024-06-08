@@ -11,6 +11,7 @@ import {
 import Header from "../general components/header";
 import Filter from "../general components/Filter";
 import DropDownPicker from "react-native-dropdown-picker";
+import COLORS from "../constants/colors"
 
 const hardcodedFilters = [
   { label: "All", value: "all" },
@@ -82,7 +83,7 @@ const Maps = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: COLORS.white,
     alignSelf: "center",
   },
   headerContainer: {
@@ -101,12 +102,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: "1%",
     width: "100%",
-    backgroundColor: "green",
+    backgroundColor: COLORS.dark_green,
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
+    color: COLORS.white,
   },
   filterButton: {
     flexDirection: "row",
@@ -115,19 +116,19 @@ const styles = StyleSheet.create({
     //paddingHorizontal: 16,
     //paddingVertical: 8,
     //marginTop: 12,
-    backgroundColor: "green",
+    backgroundColor: COLORS.dark_green,
     borderRadius: 30,
     alignSelf: "center",
     //marginBottom: 476,
   },
   filterText: {
     fontSize: 16,
-    color: "white",
+    color: COLORS.white,
     textAlign: "center",
   },
   expandMore: {
     fontSize: 14,
-    color: "#D1D1D1",
+    color: COLORS.grey,
     marginLeft: 8,
   },
   bannerImage: {
