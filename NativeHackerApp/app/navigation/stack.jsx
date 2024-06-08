@@ -7,6 +7,8 @@ import Home from "../screens/Home";
 import Itenary from "../screens/Itenary";
 import Account from "../screens/Account";
 import Maps from "../screens/Maps";
+import EditPage from "../screens/Admin/EditPage";
+import Profile from "../screens/Admin/Profile";
 
 const Stack = createStackNavigator();
 
@@ -58,6 +60,20 @@ export const HomeStack = () => {
       <Stack.Screen
         name="Account"
         component={Account}
+        options={{
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="EditPage"
+        component={EditPage}
+        options={{
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
         options={{
           headerShown: true,
         }}
