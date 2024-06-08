@@ -28,9 +28,6 @@ const MyComponent = () => {
           fontFamily: "Kanit, sans-serif",
         }}>GroceryGrabber</Text>
       </View>
-      <TouchableOpacity style = {{marginTop: 0.01 * height}} onPress={() => navigation.goBack()}>
-        <Icon size = {0.05 * height} name = "chevron-back-outline"/>
-      </TouchableOpacity>
       <View style = {{flex: 0.1, justifyContent: "flex-end", alignItems: "center", marginBottom: 0.02 * height}}>
         <Text style = {{fontSize: 15 * scale, fontFamily: "Kanit, sans-serif", fontWeight: "700"}}>Create Your Account</Text>
       </View>
