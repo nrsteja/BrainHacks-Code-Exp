@@ -62,7 +62,7 @@ const SignUpPrompt = ({ navigation }) => (
       onPress={() => navigation.navigate("Signup")}
       style={styles.signUpPromptLink}
     >
-      Sign up now
+      Sign Up Now
     </Text>
   </View>
 );
@@ -70,7 +70,7 @@ const SignUpPrompt = ({ navigation }) => (
 function Login() {
   const navigation = useNavigation();
   return (
-    <SafeAreaView style={{ flex: 1, borderWidth: 5, borderColor: "red" }}>
+    <SafeAreaView style={{ flex: 1, borderColor: "red" }}>
       <ImageBackground
         source={{
           uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/838485a2e58427926bfd76783e93dcecc690e4e96073aa11272a2c82be1b4d5b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
@@ -123,10 +123,9 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
   },
   container: {
-    flex: 0.6,
+    flex: 0.5,
     alignItems: "center",
     paddingHorizontal: 16,
-    borderWidth: 5,
     justifyContent: "space-between",
   },
   formContainer: {
@@ -136,12 +135,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: "5%",
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 8,
-    borderWidth: 5,
     borderColor: "red",
   },
   inputFieldContainer: {
     marginTop: 12,
-    borderWidth: 2,
   },
   srOnly: {
     position: "absolute",
@@ -155,16 +152,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     borderRadius: 8,
-    borderWidth: 1,
     backgroundColor: "#f4f4f5",
     borderColor: "#d1d5db",
     color: "#6b7280",
+    borderWidth: 2
   },
   rememberMeContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 12,
-    borderWidth: 5,
   },
   rememberMeOption: {
     flexDirection: "row",
@@ -183,6 +179,7 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     backgroundColor: "#2563eb",
     borderRadius: 8,
+    height: 0.04 * windowHeight
   },
   signInButtonText: {
     color: "#fff",
@@ -206,21 +203,17 @@ const styles = StyleSheet.create({
   },
   signUpPromptContainer: {
     marginTop: "2%",
-
     flexDirection: "row",
     justifyContent: "center",
-    borderWidth: 5,
     borderColor: "red",
   },
   signUpPromptText: {
     color: "#4b5563",
     justifyContent: "center",
-    borderWidth: 2,
   },
   signUpPromptLink: {
     color: "#000",
     justifyContent: "center",
-    borderWidth: 2,
   },
 });
 
