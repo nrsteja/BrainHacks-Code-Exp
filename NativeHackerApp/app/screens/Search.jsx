@@ -6,7 +6,11 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
+import Header from "../general components/header";
+
+
 
 const FilterButton = ({ onPress }) => (
   <TouchableOpacity style={styles.filterButtonContainer} onPress={onPress}>
@@ -65,67 +69,13 @@ const MyComponent = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>GroceryGrabber</Text>
+    <SafeAreaView>
+      <Header />
+      <View style = {{marginHorizontal: "10%", marginVertical: "1%", borderWidth: 5, borderRadius: "50%"}}>
+
       </View>
-      <View style={styles.locationContainer}>
-        <View>
-          <Text style={styles.locationText}>Admiralty</Text>
-        </View>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/5121ce089381b2422822a439feb32a66d413e6a02d0b6026805587dfafd3634e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.locationIcon}
-        />
-      </View>
-      <View style={styles.navContainer}>
-        <TouchableOpacity style={styles.navButton}>
-          <Text style={styles.navButtonText}>Supermarket</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Item</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Recipe</Text>
-        </TouchableOpacity>
-      </View>
-      <FilterButton onPress={() => console.log("Filters clicked")} />
-      <View style={styles.resultsContainer}>
-        <View>
-          <Text style={styles.resultsTitle}>Results</Text>
-        </View>
-        {groceryData.map((item, index) => (
-          <GroceryItem
-            key={index}
-            title={item.title}
-            location={item.location}
-            itemsOnSale={item.itemsOnSale}
-            imageUrl={item.imageUrl}
-            onPress={item.onPress}
-          />
-        ))}
-      </View>
-      <View style={styles.navBarContainer}>
-        <TouchableOpacity style={styles.navBarButton}>
-          <Text style={styles.navBarButtonText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navBarButton}>
-          <Text style={styles.navBarButtonText}>Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navBarButton}>
-          <Text style={styles.navBarButtonText}>Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navBarButton}>
-          <Text style={styles.navBarButtonText}>Settings</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navBarButton}>
-          <Text style={styles.navBarButtonText}>More</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+    </SafeAreaView>
+  )
 };
 
 const styles = StyleSheet.create({
@@ -140,7 +90,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 16,
     width: "100%",
-    backgroundColor: "gray",
+    backgroundColor: "#619f75",
   },
   headerText: {
     fontSize: 24,
