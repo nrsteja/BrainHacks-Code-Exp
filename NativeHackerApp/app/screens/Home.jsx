@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckBox from '@react-native-community/checkbox';
+import { useNavigation } from '@react-navigation/native'; 
 
 const getFontFamily = () => {
   if (Platform.OS === "ios") {
@@ -127,8 +128,12 @@ const Promo = ({ name, location, itemsOnSale, image }) => (
 );
 
 function Home() {
+
+  const navigation = useNavigation();
+
   const handleTrackerPress = () => {
     console.log("Navigating to GroceryTracker");
+    navigation.navigate("CameraScreen")
   };
 
   const handlePromotionPress = (title) => {
