@@ -1,225 +1,302 @@
-import React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import * as React from "react";
+import { Dimensions, View, StyleSheet, Image, Text, TextInput, Pressable, SafeAreaView, Touchable, Button} from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Hoshi } from 'react-native-textinput-effects';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-const LabelInput = ({ label, placeholder, secureTextEntry }) => (
-  <View style={styles.inputContainer}>
-    <Text style={styles.labelText}>{label}</Text>
-    <TextInput
-      placeholder={placeholder}
-      secureTextEntry={secureTextEntry}
-      style={styles.textInput}
-      aria-label={label}
-    />
-  </View>
-);
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+const scale = width / 200;
 
-const handleSignUp = () => {
-  Alert.alert("Sign Up", "You have signed up successfully!");
+const MyComponent = () => {
+  const navigation = useNavigation();
+  return (
+    <SafeAreaView style ={{flex: 1}}>
+      <View style = {{
+        flex: 0.1, 
+        backgroundColor: "#609F75",
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row"}}>
+        <Text style = {{
+          color: "#FFF",
+          fontSize: 32,
+          fontWeight: "700",
+          fontFamily: "Kanit, sans-serif",
+        }}>GroceryGrabber</Text>
+      </View>
+      <TouchableOpacity style = {{marginTop: 0.01 * height}} onPress={() => navigation.goBack()}>
+        <Icon size = {0.05 * height} name = "chevron-back-outline"/>
+      </TouchableOpacity>
+      <View style = {{flex: 0.1, justifyContent: "flex-end", alignItems: "center", marginBottom: 0.02 * height}}>
+        <Text style = {{fontSize: 15 * scale, fontFamily: "Kanit, sans-serif", fontWeight: "700"}}>Create Your Account</Text>
+      </View>
+      <View style = {{flex: 0.5, marginHorizontal: 0.05 * width}}>
+        <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
+        <Hoshi
+          label={'Name'}
+          borderColor={'#619f75'}
+          inputPadding={0}
+          backgroundColor={'#f5f5f5'}
+          style={{ width: 0.85 * width}}
+          labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
+        />
+        </View>
+        <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
+          <Hoshi
+            label={'Email'}
+            borderColor={'#619f75'}
+            inputPadding={0}
+            backgroundColor={'#f5f5f5'}
+            style={{ width: 0.85 * width }}
+            labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
+          />
+        </View>
+        <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
+          <Hoshi
+            label={'Password'}
+            borderColor={'#619f75'}
+            inputPadding={0}
+            backgroundColor={'#f5f5f5'}
+            style={{ width: 0.85 * width }}
+            labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
+          />
+        </View>
+        <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
+          <Hoshi
+            label={'Confirm Password'}
+            borderColor={'#619f75'}
+            inputPadding = {0}
+            backgroundColor={'#f5f5f5'}
+            style={{ width: 0.85 * width }}
+            labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
+            secureTextEntry = "true"
+          />
+        </View>
+      </View>
+      <View style = {{flex: 0.05, flexDirection: "row", justifyContent: "center", alignItems: "center", paddingHorizontal: 0.1 * width}}>
+        <BouncyCheckbox style = {{flex: 0.1}}></BouncyCheckbox>
+        <Text style = {{flex: 0.9}}>I understood the terms & policy.</Text>
+      </View>
+      <View style = {{flex: 0.25, justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 0.1 * width}}>
+        <TouchableOpacity style = {{
+          backgroundColor: "darkgreen",
+          width: 0.8 * width,
+          height: 0.05 * height,
+          borderRadius: 100,
+          justifyContent: "center",
+          alignItems: "center",
+          marginVertical: 0.01 * height
+        }} onPress={() => navigation.navigate('HomeStack')}>
+          <Text style = {{
+            fontWeight: 500,
+            color: "white"
+          }}>SIGN UP</Text>
+        </TouchableOpacity>
+        <Text style = {{
+          fontSize: 0.04 * width,
+          marginBottom: 0.01 * height
+        }}>Or Sign Up With</Text>
+        <View style = {{flexDirection: "row"}}>
+          <TouchableOpacity style = {{width: 0.2 * width, height: 0.05 * height, backgroundColor: "white", marginHorizontal: 0.04 * width, borderRadius: 1000, justifyContent: "center", alignItems: "center"}}>
+            <Image resizeMode = "contain" style = {{resizeMode: "contain", width: "80%", height: "80%"}}source = {require('../../assets/google.png')}/>
+          </TouchableOpacity >
+          <TouchableOpacity style = {{width: 0.2 * width, height: 0.05 * height, backgroundColor: "white", marginHorizontal: 0.04 * width, borderRadius: 1000, justifyContent: "center", alignItems: "center"}}>
+            <Image resizeMode = "contain" style = {{resizeMode: "contain", width: "80%", height: "80%"}}source = {require('../../assets/facebook.png')}/>
+          </TouchableOpacity>
+          <TouchableOpacity style = {{width: 0.2 * width, height: 0.05 * height, backgroundColor: "white", marginHorizontal: 0.04 * width, borderRadius: 1000, justifyContent: "center", alignItems: "center"}}>
+            <Image resizeMode = "contain" style = {{resizeMode: "contain", width: "80%", height: "80%"}}source = {require('../../assets/twitter.png')}/>
+          </TouchableOpacity>
+        </View>
+        <View style = {{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+          <Text style = {{fontSize: 0.04 * width}}>Have an account?</Text>
+          <Button title = "Sign In" onPress={() => navigation.navigate('Login')}></Button>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 };
 
-const Signup = () => (
-  <View style={styles.container}>
-    <View style={styles.header}>
-      <Text style={styles.headerText}>GroceryGrabber</Text>
-    </View>
-    <View style={styles.content}>
-      <Image
-        source={{
-          uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/519a6e0013eb4acfc8a945d2f53f08e2907443c867e8e5626e223a04033e7bab?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-        }}
-        style={styles.mainImage}
-        resizeMode="contain"
+const LabelInputPair = ({ label, placeholder, secureTextEntry = false }) => {
+  const id = label.toLowerCase().replace(" ", "-");
+  return (
+    <>
+      <Text style={styles.inputLabel} htmlFor={id}>
+        {label}
+      </Text>
+      <TextInput
+        id={id}
+        placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
+        style={styles.inputField}
       />
-      <Text style={styles.createAccountText}>Create your account</Text>
-      <View style={styles.form}>
-        <LabelInput label="Name" placeholder="ex: jon smith" />
-        <LabelInput label="Email" placeholder="ex: jon.smith@email.com" />
-        <LabelInput label="Password" placeholder="*********" secureTextEntry />
-        <LabelInput
-          label="Confirm password"
-          placeholder="*********"
-          secureTextEntry
-        />
-        <View style={styles.termsContainer}>
-          <View style={styles.checkbox} />
-          <Text style={styles.termsText}>
-            I understood the <Text style={styles.linkText}>terms & policy</Text>
-            .
-          </Text>
-        </View>
-        <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-          <Text style={styles.signUpButtonText}>SIGN UP</Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.signUpWithText}>or sign up with</Text>
-      <View style={styles.socialContainer}>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/fc54c243f75e2f6e1df26bcb0b824a53e0d4f73bc8efee45a49e70b80d9c6b41?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.socialIcon}
-        />
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/9d0409fa56bbc1482a7ec8e467941571132a7ccd24eae2a80af5ca5fea233d3c?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.socialIcon}
-        />
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/04c68511902b52b98a416aad7bb1cbeaacd88ec0171bacb0e9da26dc9013b9af?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.socialIcon}
-        />
-      </View>
-      <View style={styles.signInContainer}>
-        <Text style={styles.haveAccountText}>Have an account?</Text>
-        <Text style={styles.signInText}>SIGN IN</Text>
-      </View>
-    </View>
-  </View>
-);
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingBottom: 20,
-    marginHorizontal: "auto",
-    width: "100%",
-    backgroundColor: "white",
+    backgroundColor: "#FFF",
+    display: "flex",
     maxWidth: 480,
+    width: "100%",
+    paddingBottom: 80,
+    flexDirection: "column",
+    alignItems: "stretch",
+    margin: "0 auto",
   },
   header: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    backgroundColor: "#609F75",
     width: "100%",
-    backgroundColor: "#808080",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 0.2
   },
   headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#ffffff",
-    textAlign: "center",
+    color: "#FFF",
+    fontSize: 32,
+    fontWeight: "700",
+    fontFamily: "Kanit, sans-serif",
   },
-  content: {
-    flex: 1,
-    paddingRight: 12,
-    paddingLeft: 3.5,
-    marginTop: 3.5,
+  formContainer: {
+    display: "flex",
+    marginTop: 14,
     width: "100%",
+    flexDirection: "column",
+    paddingHorizontal: 14,
+    paddingRight: 51,
   },
-  mainImage: {
-    borderColor: "black",
+  icon: {
+    borderColor: "#000",
     borderWidth: 2,
-    aspectRatio: 1.59,
     width: 19,
+    aspectRatio: "1.59",
   },
-  createAccountText: {
-    alignSelf: "flex-end",
-    marginTop: 16,
-    fontSize: 24,
+  title: {
+    color: "#000",
+    marginTop: 66,
+    fontSize: 27,
     fontWeight: "600",
-    color: "black",
+    fontFamily: "Poppins, sans-serif",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  form: {
+  fieldContainer: {
+    marginTop: 34,
+    marginBottom: 16,
     width: "100%",
   },
-  inputContainer: {
-    width: "100%",
-    marginBottom: 3.5,
+  inputLabel: {
+    color: "#6F6F6F",
+    fontSize: 16,
+    fontWeight: "400",
+    marginBottom: 13,
+    marginLeft: 37,
+    fontFamily: "Poppins, sans-serif",
   },
-  labelText: {
-    fontSize: 14,
-    color: "#7D7D7D",
-  },
-  textInput: {
-    paddingVertical: 3.5,
-    paddingHorizontal: 4,
-    marginTop: 3.5,
-    width: "100%",
+  inputField: {
+    alignSelf: "end",
+    width: 288,
     maxWidth: "100%",
-    fontSize: 14,
-    backgroundColor: "#F1F1F1",
-    borderRadius: 8,
-    color: "#8C8C8C",
+    backgroundColor: "#FAFAFA",
+    color: "#888",
+    paddingVertical: 14,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    marginBottom: 13,
   },
   termsContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
+    alignSelf: "center",
+    marginTop: 18,
+    fontSize: 12,
+    fontWeight: "400",
+    color: "#00B140",
+    gap: 9,
   },
   checkbox: {
     width: 13,
     height: 13,
-    borderColor: "#4CAF50",
+    borderColor: "rgba(0, 177, 64, 1)",
     borderWidth: 1,
-    borderRadius: 2,
+    borderRadius: 1,
   },
   termsText: {
-    fontSize: 10,
-    color: "#4CAF50",
-    marginLeft: 5,
+    fontFamily: "Poppins, sans-serif",
   },
-  linkText: {
-    color: "#4CAF50",
+  termsLink: {
+    color: "rgba(0,177,64,1)",
   },
-  signUpButton: {
-    justifyContent: "center",
-    alignItems: "center",
+  submitButton: {
+    alignSelf: "center",
+    width: "100%",
+    maxWidth: 288,
+    backgroundColor: "#00B140",
+    borderRadius: 10,
     paddingVertical: 16,
-    paddingHorizontal: 32,
-    marginTop: 4,
-    backgroundColor: "#4CAF50",
-    borderRadius: 8,
+    paddingHorizontal: 60,
+    marginTop: 17,
   },
-  signUpButtonText: {
-    fontSize: 16,
+  submitButtonText: {
+    color: "#FFF",
+    fontSize: 15,
     fontWeight: "600",
-    color: "white",
     textAlign: "center",
+    fontFamily: "Poppins, sans-serif",
   },
-  signUpWithText: {
-    marginTop: 6,
-    fontSize: 14,
-    color: "#8C8C8C",
+  orText: {
+    color: "#888",
     textAlign: "center",
+    fontFamily: "Poppins, sans-serif",
+    fontSize: 16,
+    fontWeight: "400",
+    marginTop: 25,
   },
   socialContainer: {
     flexDirection: "row",
+    alignItems: "stretch",
+    gap: 15,
     justifyContent: "center",
-    gap: 4,
-    marginTop: 5,
-    marginLeft: 9,
+    marginTop: 19,
   },
   socialIcon: {
+    borderRadius: 5,
     width: 86,
+    height: 42,
     aspectRatio: 2.04,
-    borderRadius: 8,
   },
   signInContainer: {
     flexDirection: "row",
+    alignItems: "stretch",
     justifyContent: "center",
-    marginTop: 7,
-  },
-  haveAccountText: {
-    fontSize: 14,
-    color: "#8C8C8C",
+    gap: 7,
+    marginTop: 26,
+    fontFamily: "Poppins, sans-serif",
   },
   signInText: {
-    fontSize: 14,
-    color: "#4CAF50",
-    marginLeft: 5,
+    color: "#888",
+    fontSize: 16,
+    fontWeight: "400",
   },
+  signInLink: {
+    color: "#00B140",
+    fontSize: 16,
+    fontWeight: "400",
+  },
+  imageStyle: {
+    strokeWidth: 17,
+    stroke: "#000",
+    borderColor: "rgba(0, 0, 0, 1)",
+    borderStyle: "solid",
+    borderWidth: 2,
+    position: "relative",
+    maxWidth: 17,
+    aspectRatio: 1.69,
+  }
 });
 
-export default Signup;
+export default MyComponent;
