@@ -165,6 +165,7 @@ function Home() {
               />
             )}
             keyExtractor={(item) => item.id}
+            persistentScrollbar={true}
           />
         </View>
         <TouchableOpacity onPress={handleTrackerPress}>
@@ -183,6 +184,7 @@ function Home() {
               />
             )}
             keyExtractor={(item) => item.id}
+            persistentScrollbar={true}
           />
         </View>
       </View>

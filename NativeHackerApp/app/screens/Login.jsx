@@ -102,7 +102,7 @@ function Login() {
           </View>
           <View style={{ flex: 0.3 }}>
             <GoogleSignIn />
-            <SignUpPrompt navigation={navigation} />
+            <SignUpPrompt navigation={navigation}/>
           </View>
         </SafeAreaView>
       </ImageBackground>
