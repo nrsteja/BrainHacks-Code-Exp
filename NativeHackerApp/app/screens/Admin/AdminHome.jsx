@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
+  Image,
   TouchableOpacity,
   Pressable,
   TextInput,
@@ -16,40 +17,159 @@ import axios from "axios";
 import Header from "../../general components/header";
 import AdminNavBar from "../../general components/AdminNavBar";
 
+const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
+const UNSPLASH_API_URL = "https://api.unsplash.com/photos/random";
+
 const ItemComponent = ({
   item,
   onIncrement,
   onDecrement,
   onDelete,
   isEditing,
+  onExpand,
+  isExpanded,
+  onEditField,
+  editableField,
+  setEditableField,
+  onSaveEdit,
+  imageUrl,
 }) => (
-  <View style={styles.itemContainer}>
-    <View style={styles.itemDetails}>
-      <View style={styles.emojiContainer}>
-        <Text>{item.emoji}</Text>
+  <View
+    style={[styles.itemContainer, isExpanded ? styles.expandedContainer : null]}
+  >
+    <TouchableOpacity onPress={onExpand}>
+      <View style={styles.itemDetails}>
+        {!isExpanded && (
+          <>
+            <View style={styles.emojiContainer}>
+              <Text>{item.emoji}</Text>
+            </View>
+            <View style={styles.itemName}>
+              <Text style={styles.itemNameText}>{item.itemName}</Text>
+              <Text style={styles.itemDetailText}>
+                Quantity: {item.quantity}
+              </Text>
+              <Text style={styles.itemDetailText}>Price: ${item.price}</Text>
+            </View>
+            {isEditing && (
+              <View style={styles.quantityControls}>
+                <TouchableOpacity
+                  onPress={onDecrement}
+                  style={styles.controlButton}
+                >
+                  <FontAwesome name="minus" size={16} color="red" />
+                </TouchableOpacity>
+                <Text style={styles.quantityText}>{item.quantity}</Text>
+                <TouchableOpacity
+                  onPress={onIncrement}
+                  style={styles.controlButton}
+                >
+                  <FontAwesome name="plus" size={16} color="green" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onDelete}>
+                  <FontAwesome
+                    name="trash"
+                    size={16}
+                    color="red"
+                    style={styles.deleteIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+          </>
+        )}
       </View>
-      <View style={styles.itemName}>
-        <Text style={styles.itemNameText}>{item.itemName}</Text>
-        <Text style={styles.itemDetailText}>Quantity: {item.quantity}</Text>
-        <Text style={styles.itemDetailText}>Price: ${item.price}</Text>
-      </View>
-    </View>
-    {isEditing && (
-      <View style={styles.quantityControls}>
-        <Pressable onPress={onDecrement} style={styles.controlButton}>
-          <FontAwesome name="minus" size={16} color="red" />
-        </Pressable>
-        <Text style={styles.quantityText}>{item.quantity}</Text>
-        <Pressable onPress={onIncrement} style={styles.controlButton}>
-          <FontAwesome name="plus" size={16} color="green" />
-        </Pressable>
-        <Pressable onPress={onDelete}>
-          <FontAwesome
-            name="trash"
-            size={16}
-            color="red"
-            style={styles.deleteIcon}
+    </TouchableOpacity>
+    {isExpanded && (
+      <View style={styles.expandedDetails}>
+        <Text style={styles.itemNameOnImage}>{item.itemName}</Text>
+        {item.image && ( // Check if imageUrl exists
+          <Image
+            source={{
+              uri: item.image,
+            }}
+            style={styles.itemImage}
           />
+        )}
+        <Pressable
+          onPress={() => setEditableField({ id: item.id, field: "expiryDate" })}
+          style={styles.editableButton} // Add this style
+        >
+          {editableField.id === item.id &&
+          editableField.field === "expiryDate" ? (
+            <Modal visible={true} transparent={true} animationType="slide">
+              <View style={styles.modalOverlay}>
+                <View style={styles.editModalContainer}>
+                  <TextInput
+                    style={styles.input}
+                    value={editableField.value}
+                    onChangeText={(text) =>
+                      setEditableField({ ...editableField, value: text })
+                    }
+                    onBlur={() => onSaveEdit(item.id, "expiryDate")}
+                    autoFocus
+                  />
+                  <TouchableOpacity
+                    onPress={() => onSaveEdit(item.id, "expiryDate")}
+                    style={styles.modalButton}
+                  >
+                    <Text style={styles.modalButtonText}>Save</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      setEditableField({ id: null, field: "", value: "" })
+                    }
+                    style={styles.modalButton}
+                  >
+                    <Text style={styles.modalButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          ) : (
+            <Text style={styles.itemDetailText}>
+              Expiry Date: {item.expiryDate}
+            </Text>
+          )}
+        </Pressable>
+        <Pressable
+          onPress={() => setEditableField({ id: item.id, field: "price" })}
+          style={styles.editableButton} // Add this style
+        >
+          {editableField.id === item.id && editableField.field === "price" ? (
+            <Modal visible={true} transparent={true} animationType="slide">
+              <View style={styles.modalOverlay}>
+                <View style={styles.editModalContainer}>
+                  <TextInput
+                    style={styles.input}
+                    value={editableField.value}
+                    onChangeText={(text) =>
+                      setEditableField({ ...editableField, value: text })
+                    }
+                    onBlur={() => onSaveEdit(item.id, "price")}
+                    autoFocus
+                    keyboardType="numeric"
+                  />
+                  <TouchableOpacity
+                    onPress={() => onSaveEdit(item.id, "price")}
+                    style={styles.modalButton}
+                  >
+                    <Text style={styles.modalButtonText}>Save</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      setEditableField({ id: null, field: "", value: "" })
+                    }
+                    style={styles.modalButton}
+                  >
+                    <Text style={styles.modalButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          ) : (
+            <Text style={styles.itemDetailText}>Price: ${item.price}</Text>
+          )}
         </Pressable>
       </View>
     )}
@@ -63,26 +183,54 @@ const AdminHome = () => {
       emoji: "🍞",
       itemName: "Gardenia Bread",
       quantity: 1,
-      price: 2.5,
+      expiryDate: "2023-12-31",
+      price: 5,
+      image:
+        "https://www.budgetbytes.com/wp-content/uploads/2023/08/Garlic-Bread-close.jpg",
     },
-    { id: "Eggs", emoji: "🥚", itemName: "Eggs", quantity: 12, price: 3.0 },
-    { id: "Milk", emoji: "🥛", itemName: "Milk", quantity: 2, price: 1.5 },
+    {
+      id: "Eggs",
+      emoji: "🥚",
+      itemName: "Eggs",
+      quantity: 12,
+      expiryDate: "2023-12-31",
+      price: 2,
+      image:
+        "https://www.simplyrecipes.com/thmb/zsQvDavpqD2PtIO-7W6nBWVHCe4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Hard-Boiled-Eggs-LEAD-03-42506773297f4a15920c46628d534d67.jpg",
+    },
+    {
+      id: "Milk",
+      emoji: "🥛",
+      itemName: "Milk",
+      quantity: 2,
+      expiryDate: "2023-12-31",
+      price: 1,
+      image:
+        "https://www.southernliving.com/thmb/zCKBQZG85v0gxUpn5Nm_8elGJaA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1413944242-79c406e0bbe4435596bc671f95a949cb.jpg",
+    },
     {
       id: "Peanut Butter",
       emoji: "🥜",
       itemName: "Peanut Butter",
       quantity: 1,
-      price: 4.0,
+      expiryDate: "2023-12-31",
+      price: 4,
+      image:
+        "https://joyfoodsunshine.com/wp-content/uploads/2020/04/homemade-peanut-butter-recipe-16x9-2.jpg",
     },
     {
       id: "Dragon Fruit",
       emoji: "🐉",
       itemName: "Dragon Fruit",
       quantity: 3,
-      price: 5.0,
+      expiryDate: "2023-12-31",
+      price: 4,
+      image:
+        "https://www.verywellhealth.com/thmb/Ext8JqAVCEre8mhP02lUrFXz71E=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/VWH-GettyImages-1330385063-baf7c7cf81534999aa4cbdd398c5e3ed.jpg",
     },
   ]);
 
+  const [imageUrls, setImageUrls] = useState({}); // State to store image URLs
   const [isEditing, setIsEditing] = useState(false);
   const [newItem, setNewItem] = useState({
     itemName: "",
@@ -91,11 +239,17 @@ const AdminHome = () => {
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [expandedItemId, setExpandedItemId] = useState(null);
+  const [editableField, setEditableField] = useState({
+    id: null,
+    field: "",
+    value: "",
+  });
 
   const toggleEditMode = () => setIsEditing(!isEditing);
 
   const handleAddItem = async () => {
-    if (newItem.itemName && newItem.quantity > 0 && newItem.price > 0) {
+    if (newItem.itemName && newItem.quantity > 0 && newItem.price !== "") {
       const itemExists = items.some(
         (item) => item.itemName.toLowerCase() === newItem.itemName.toLowerCase()
       );
@@ -106,15 +260,26 @@ const AdminHome = () => {
       setLoading(true);
       try {
         const emoji = await generateEmojiForItem(newItem.itemName);
-        const newItemWithId = { ...newItem, id: newItem.itemName, emoji };
+        const imageUrl = await fetchImageFromUnsplash(
+          newItem.itemName,
+          UNSPLASH_API_KEY
+        ); // Fetch image URL
+        const newItemWithId = {
+          ...newItem,
+          id: newItem.itemName,
+          emoji,
+          image: imageUrl, // Pass imageUrl as image
+        };
         setItems([...items, newItemWithId]);
         setNewItem({ itemName: "", quantity: 1, price: "" });
         setModalVisible(false);
       } catch (error) {
-        console.error("Error fetching emoji:", error);
+        console.error("Error fetching emoji or image:", error);
       } finally {
         setLoading(false);
       }
+    } else {
+      alert("Please fill in all required fields.");
     }
   };
 
@@ -136,6 +301,24 @@ const AdminHome = () => {
           : item
       )
     );
+
+  const handleExpandItem = (id) => {
+    setExpandedItemId(expandedItemId === id ? null : id);
+  };
+
+  const handleEditField = (id, field) => {
+    const item = items.find((item) => item.id === id);
+    setEditableField({ id, field, value: item[field] });
+  };
+
+  const handleSaveEdit = (id, field) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, [field]: editableField.value } : item
+      )
+    );
+    setEditableField({ id: null, field: "", value: "" });
+  };
 
   const getEmojiForItem = (itemName) => {
     const lowerName = itemName.toLowerCase();
@@ -186,6 +369,67 @@ const AdminHome = () => {
       return "🛒";
     }
   };
+  const axios = require("axios");
+  // const fetchImageFromAPI = async (itemName) => {
+  //   const API_URL = `https://api.unsplash.com/search/photos`;
+  //   const ACCESS_KEY = "YOUR_UNSPLASH_ACCESS_KEY"; // Replace with your actual Unsplash Access Key
+
+  //   try {
+  //     const response = await axios.get(API_URL, {
+  //       params: {
+  //         query: itemName,
+  //         per_page: 1, // Adjust the number of results per page if needed
+  //       },
+  //       headers: {
+  //         Authorization: `Client-ID ${ACCESS_KEY}`,
+  //       },
+  //     });
+
+  //     if (response.data.results.length > 0) {
+  //       const imageUrl = response.data.results[0].urls.regular;
+  //       console.log(imageUrl);
+  //       return imageUrl;
+  //     } else {
+  //       console.error("No images found for:", itemName);
+  //       return "https://via.placeholder.com/150"; // Fallback image
+  //     }
+  //   } catch (error) {
+  //     if (error.response) {
+  //       console.error("Error response data:", error.response.data);
+  //       console.error("Error response status:", error.response.status);
+  //       console.error("Error response headers:", error.response.headers);
+  //     } else if (error.request) {
+  //       console.error("Error request data:", error.request);
+  //     } else {
+  //       console.error("Error message:", error.message);
+  //     }
+  //     console.error("Error config:", error.config);
+  //     return "https://via.placeholder.com/150"; // Fallback image
+  //   }
+  // };
+  const fetchImageFromUnsplash = async (itemName, accessKey) => {
+    const url = `https://api.unsplash.com/search/photos?page=1&query=${encodeURIComponent(
+      itemName
+    )}&client_id=${accessKey}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data.results[0].urls.small);
+      if (data.results && data.results.length > 0) {
+        const imageUrl = data.results[0].urls.small;
+        return imageUrl;
+      } else {
+        throw new Error("No image found for the given item.");
+      }
+    } catch (error) {
+      console.error("Error fetching image:", error);
+      throw error;
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -201,254 +445,242 @@ const AdminHome = () => {
             onDecrement={() => handleDecrement(item.id)}
             onDelete={() => handleDeleteItem(item.id)}
             isEditing={isEditing}
+            onExpand={() => handleExpandItem(item.id)}
+            isExpanded={expandedItemId === item.id}
+            onEditField={handleEditField}
+            editableField={editableField}
+            setEditableField={setEditableField}
+            onSaveEdit={handleSaveEdit}
           />
         )}
-        contentContainerStyle={styles.itemsContainer}
+        contentContainerStyle={styles.listContainer}
       />
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalBackground}>
+
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Add New Item</Text>
             <TextInput
-              style={styles.input}
               placeholder="Item Name"
               value={newItem.itemName}
               onChangeText={(text) =>
                 setNewItem({ ...newItem, itemName: text })
               }
+              style={styles.input}
             />
             <TextInput
-              style={styles.input}
               placeholder="Quantity"
-              keyboardType="numeric"
-              value={newItem.quantity.toString()}
+              value={String(newItem.quantity)}
               onChangeText={(text) =>
-                setNewItem({ ...newItem, quantity: text ? parseInt(text) : "" })
+                setNewItem({ ...newItem, quantity: Number(text) })
               }
+              keyboardType="numeric"
+              style={styles.input}
             />
             <TextInput
-              style={styles.input}
               placeholder="Price"
-              keyboardType="numeric"
-              value={newItem.price.toString()}
+              value={String(newItem.price)}
               onChangeText={(text) =>
-                setNewItem({ ...newItem, price: text ? parseFloat(text) : "" })
+                setNewItem({ ...newItem, price: Number(text) })
               }
+              keyboardType="numeric"
+              style={styles.input}
             />
             <TouchableOpacity
               onPress={handleAddItem}
-              style={styles.addItemButton}
+              style={styles.modalButton}
             >
               {loading ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text style={styles.addItemButtonText}>Add Item</Text>
+                <Text style={styles.modalButtonText}>Add Item</Text>
               )}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
-              style={styles.cancelButton}
+              style={styles.modalButtonCancel}
             >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={styles.modalButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      <View style={styles.actionRow}>
-        <TouchableOpacity onPress={toggleEditMode} style={styles.updateButton}>
-          <Text style={styles.updateButtonText}>
-            {isEditing ? "Done" : "Update"}
-          </Text>
+      <View style={styles.controlsContainer}>
+        <TouchableOpacity
+          onPress={toggleEditMode}
+          style={[styles.smallButton, isEditing && styles.activeControlButton]}
+        >
+          <FontAwesome
+            name="edit"
+            size={35}
+            color={isEditing ? "white" : "blue"}
+          />
         </TouchableOpacity>
-        {isEditing && (
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={styles.addButton}
-          >
-            <Text style={styles.addButtonText}>Add Item</Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          style={styles.smallButton}
+        >
+          <Ionicons name="add-circle" size={50} color="green" />
+        </TouchableOpacity>
       </View>
       <AdminNavBar />
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    padding: 20,
+    backgroundColor: "#f5f5f5",
   },
-  actionRow: {
+  controlsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     backgroundColor: "transparent",
   },
-  updateButton: {
+  smallButton: {
+    backgroundColor: "transparent",
     justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 30,
+    marginHorizontal: 10,
+  },
+  activeControlButton: {
     backgroundColor: "#007bff",
-    borderRadius: 100,
-    marginRight: 16,
   },
-  updateButtonText: {
-    color: "white",
-    fontWeight: "bold",
+  controlButtonText: {
+    marginLeft: 5,
+    color: "black",
   },
-  addButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 8,
-    backgroundColor: "#28a745",
-    borderRadius: 100,
-  },
-  addButtonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  itemsContainer: {
-    width: "100%",
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+  listContainer: {
+    paddingBottom: 20,
   },
   itemContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginTop: 12,
+    padding: 15,
     backgroundColor: "#ffffff",
-    borderRadius: 16,
+    borderRadius: 10,
+    marginBottom: 10,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
     elevation: 2,
+  },
+  expandedContainer: {
+    backgroundColor: "#e6f7ff",
   },
   itemDetails: {
     flexDirection: "row",
     alignItems: "center",
   },
   emojiContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 8,
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
-    height: 52,
-    width: 52,
-    marginRight: 12,
-    borderColor: "#dee2e6",
-    borderWidth: 1,
+    margin: 15,
   },
   itemName: {
-    marginLeft: 8,
+    flex: 1,
+    margin: 10,
   },
   itemNameText: {
     fontWeight: "bold",
     fontSize: 16,
-    color: "#343a40",
   },
   itemDetailText: {
     fontSize: 14,
-    color: "#6c757d",
+    color: "black",
   },
   quantityControls: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 10,
   },
   controlButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 8,
-    backgroundColor: "#ffffff",
-    borderColor: "#dee2e6",
-    borderWidth: 1,
-    height: 32,
-    width: 32,
-    marginHorizontal: 4,
-    borderRadius: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
+    padding: 5,
   },
   quantityText: {
-    marginHorizontal: 8,
-    fontWeight: "bold",
-    color: "#343a40",
+    marginHorizontal: 10,
+    fontSize: 16,
   },
   deleteIcon: {
-    marginLeft: 8,
+    marginLeft: 10,
   },
-  modalBackground: {
+  expandedDetails: {},
+  itemImage: {
+    width: 350,
+    height: 250,
+    alignSelf: "center",
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    marginVertical: 5,
+    width: 200,
+  },
+  modalOverlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContainer: {
-    width: "80%",
+    width: 300,
     padding: 20,
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  editModalContainer: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
     alignItems: "center",
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#343a40",
     marginBottom: 20,
   },
-  input: {
-    width: "100%",
-    padding: 8,
-    marginVertical: 8,
-    borderWidth: 1,
-    borderColor: "#dee2e6",
-    borderRadius: 8,
-    backgroundColor: "#f8f9fa",
+  modalButton: {
+    padding: 10,
+    backgroundColor: "#007bff",
+    borderRadius: 5,
+    marginTop: 10,
   },
-  addItemButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 8,
-    backgroundColor: "#28a745",
-    borderRadius: 100,
-    marginTop: 8,
-    width: "100%",
+  modalButtonCancel: {
+    padding: 10,
+    backgroundColor: "red",
+    borderRadius: 5,
+    marginTop: 10,
   },
-  addItemButtonText: {
+  modalButtonText: {
     color: "white",
+  },
+  itemDetailsContainer: {
+    flexDirection: "row", // Arrange itemDetails and quantityControls in a row
+    justifyContent: "space-between", // Space them out
+    alignItems: "center", // Align them center vertically
+  },
+  expandedDetails: {
+    marginTop: 10,
+    position: "relative", // Ensure positioning for itemNameOnImage
+  },
+  itemNameOnImage: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    zIndex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    color: "white",
+    padding: 5,
+    borderRadius: 5,
+    fontSize: 18,
     fontWeight: "bold",
   },
-  cancelButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 8,
-    backgroundColor: "#dc3545",
-    borderRadius: 100,
-    marginTop: 8,
-    width: "100%",
-  },
-  cancelButtonText: {
-    color: "white",
-    fontWeight: "bold",
+  editableButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "white",
+    borderRadius: 20,
+    marginVertical: 2,
   },
 });
 
