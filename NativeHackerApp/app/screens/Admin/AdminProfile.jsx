@@ -1,370 +1,401 @@
-import * as React from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Modal, TextInput, Clipboard, KeyboardAvoidingView } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import Toast from 'react-native-toast-message';
+import Header from "../../general components/header";
+import AdminNavBar from "../../general components/AdminNavBar";
+import COLORS from "../../constants/colors";
+import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from "@react-navigation/native";
 
-// Screen width for responsive design
-const screenWidth = Dimensions.get("window").width;
-
-const UserInformation = ({ label, value, iconSrc }) => {
-  return (
-    <TouchableOpacity
-      onPress={() => Alert.alert(`${label}: ${value}`)}
-      style={styles.infoContainer}
-    >
-      <View style={styles.infoContent}>
-        <Image source={{ uri: iconSrc }} style={styles.icon} />
-        <View style={styles.infoTextContainer}>
-          <Text style={styles.infoLabel}>{label}</Text>
-          <Text style={styles.infoValue}>{value}</Text>
-        </View>
+const ProfileItem = ({ icon, label, value, onEdit }) => (
+  <View style={styles.profileItemContainer}>
+    <View style={styles.profileItemDetails}>
+      <View style={styles.profileIconContainer}>
+        <FontAwesome name={icon} size={24} color={COLORS.black} />
       </View>
-      <Image
-        source={{
-          uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1674691437b4cb1a5f55cc817b1ed0a10f2b254bf06f5c0ed79a8fa7237237c8?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-        }}
-        style={styles.arrowIcon}
-      />
-    </TouchableOpacity>
-  );
-};
-
-const UserInfoList = ({ data }) => {
-  return (
-    <View>
-      {data.map((info, index) => (
-        <UserInformation key={index} {...info} />
-      ))}
+      <View style={styles.profileItemTextContainer}>
+        <Text style={styles.profileItemValue}>{value}</Text>
+        <Text style={styles.profileItemLabel}>{label}</Text>
+      </View>
     </View>
-  );
-};
+    <TouchableOpacity onPress={onEdit} style={styles.editButton}>
+      <FontAwesome name="chevron-right" size={16} color={COLORS.grey} />
+    </TouchableOpacity>
+  </View>
+);
 
 const AdminProfile = () => {
-  const userInfoData = [
-    {
-      label: "NTUC FairPrice",
-      value: "Parent Company",
-      iconSrc:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/2cc2b53f924c0d4bfa2b79729f42dc61a94c6e8f1136b8550d5b9bee4517dd54?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-    },
-    {
-      label: "NIN",
-      value: "Identification Verification",
-      iconSrc:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/adcf512a559427a5b1d7cd1258beff7433bb016d6879219580271ae29495b6f3?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-    },
-    {
-      label: "wdlsFairprice@gmail.com",
-      value: "Email Address",
-      iconSrc:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/60dc7c3a82e80bc3f1ae72546e8c53320583965252ab1353e7634eac31366608?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-    },
-  ];
+  const [user, setUser] = useState({
+    name: "Woodlands Fairprice",
+    logo: "👤",
+    accountNumber: "1234567890",
+    accountName: "@WoodlandsFairprice",
+    address: "Woodlands, Singapore",
+    phoneNumber: "+65 9235 0345",
+    emailAddress: "wdlsFairprice@gmail.com",
+    idVerification: "Verified",
+    parentCompanyName: "NTUC Fairprice",
+  });
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editingField, setEditingField] = useState(null);
+  const [newFieldValue, setNewFieldValue] = useState("");
+  const [parentCompanyOther, setParentCompanyOther] = useState(false);
+  const navigation = useNavigation();
+
+  const handleCopyAccountNumber = () => {
+    Clipboard.setString(user.accountNumber);
+    Toast.show({
+      type: 'success',
+      text1: 'Copied',
+      text2: 'Account number copied to clipboard',
+    });
+  };
+
+  const handleEdit = (field) => {
+    setEditingField(field);
+    setNewFieldValue(user[field]);
+    setModalVisible(true);
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSave = () => {
+    if (editingField === "phoneNumber" && !/^\+65 \d{8}$/.test(newFieldValue)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Phone Number',
+        text2: 'Phone number must be in the format +65 followed by 8 digits',
+      });
+      return;
+    }
+    if (editingField === "emailAddress" && !validateEmail(newFieldValue)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Email Address',
+        text2: 'Please enter a valid email address',
+      });
+      return;
+    }
+    setUser({ ...user, [editingField]: newFieldValue });
+    setModalVisible(false);
+  };
+
+  const handleSignOut = () => {
+    // Add sign-out functionality here
+    navigation.navigate("Login");
+    Toast.show({
+      type: 'success',
+      text1: 'Signed Out',
+      text2: 'You have been signed out successfully',
+    });
+  };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>GroceryGrabber</Text>
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Profile</Text>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.shopInfo}>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/f0536dd54c0fa564069230e9cbe9162cc80f4dad46a57a95c3d280c75ccccaad?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.shopIcon}
-        />
-        <View style={styles.shopTextContainer}>
-          <Text style={styles.shopName}>Woodlands FairPrice</Text>
-          <Image
-            source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/81c17d374f558d400eec5bd91bda0cf0f7996f7ba1fb35a18df637cd61bb6b12?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-            }}
-            style={styles.shopArrowIcon}
-          />
+    <SafeAreaView style={styles.container}>
+      <Header />
+      <View style={styles.profileHeader}>
+        <View style={styles.profileHeaderContent}>
+          <Text style={styles.profileLogo}>{user.logo}</Text>
+          <Text style={styles.profileName}>{user.name}</Text>
+        </View>
+        <View style={styles.accountNumberContainer}>
+          <Text style={styles.profileAccountNumber}>Account Number: {user.accountNumber}</Text>
+          <TouchableOpacity onPress={handleCopyAccountNumber} style={styles.copyButton}>
+            <FontAwesome name="copy" size={16} color="#007bff" />
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.userRoleContainer}>
-        <Text style={styles.userRole}>Super User</Text>
-        <Text style={styles.addIcon}>+</Text>
+      <View style={styles.profileItemsContainer}>
+        <ProfileItem icon="user" label="Account Name" value={user.accountName} onEdit={() => handleEdit("accountName")} />
+        <ProfileItem icon="map-marker" label="Address" value={user.address} onEdit={() => handleEdit("address")} />
+        <ProfileItem icon="phone" label="Phone Number" value={user.phoneNumber} onEdit={() => handleEdit("phoneNumber")} />
+        <ProfileItem icon="envelope" label="Email Address" value={user.emailAddress} onEdit={() => handleEdit("emailAddress")} />
+        <ProfileItem icon="id-card" label="Identification Verification" value={user.idVerification} onEdit={() => handleEdit("idVerification")} />
+        <ProfileItem icon="building" label="Parent Company Name" value={user.parentCompanyName} onEdit={() => handleEdit("parentCompanyName")} />
       </View>
-      <View style={styles.accountInfo}>
-        <Text style={styles.accountText}>Account Number: 043423802</Text>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/7cda674d4ee51c2bb31952b8b57cb209f7f6ad09235af94ccbce0c6f54a82313?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.accountIcon}
-        />
-      </View>
-      <TouchableOpacity
-        style={styles.detailsContainer}
-        onPress={() => Alert.alert("Account Name")}
-      >
-        <View style={styles.detailsContent}>
-          <Image
-            source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/cb3055b52c711c964baebfa14021ffa66175a880d316d6f586c01d444a14d9ef?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-            }}
-            style={styles.icon}
-          />
-          <View style={styles.detailsTextContainer}>
-            <Text style={styles.detailsLabel}>@WoodlandsFairPrice</Text>
-            <Text style={styles.detailsValue}>Account Name</Text>
-          </View>
-        </View>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/4531e17fc9b9aa9ba5b0d560e89007fc1b42d083d71e81a326dc7798bbffbba9?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.arrowIcon}
-        />
+      <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
+        <Text style={styles.signOutButtonText}>Sign Out</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.detailsContainer}
-        onPress={() => Alert.alert("Address")}
+      <AdminNavBar />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.detailsContent}>
-          <Image
-            source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/1cf565bf3dad06c2be5c57cf4e1c241b1104ecb632b3e951c8dbf3844384274b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-            }}
-            style={styles.icon}
-          />
-          <View style={styles.detailsTextContainer}>
-            <Text style={styles.detailsLabel}>Woodlands,Singapore</Text>
-            <Text style={styles.detailsValue}>Address</Text>
-          </View>
+        <View style={styles.modalBackground}>
+          <KeyboardAvoidingView style={styles.modalContainer} behavior="padding">
+            <Text style={styles.modalTitle}>Edit {editingField}</Text>
+            {editingField === "phoneNumber" ? (
+              <View style={styles.phoneNumberContainer}>
+                <Text style={styles.phonePrefix}>+65</Text>
+                <TextInput
+                  style={styles.phoneInput}
+                  value={newFieldValue.replace("+65 ", "")}
+                  keyboardType="numeric"
+                  onChangeText={(text) => {
+                    const formattedText = text.replace(/[^0-9]/g, "");
+                    setNewFieldValue(`+65 ${formattedText}`);
+                  }}
+                  maxLength={8}
+                />
+              </View>
+            ) : editingField === "emailAddress" ? (
+              <TextInput
+                style={styles.input}
+                value={newFieldValue}
+                onChangeText={(text) => {
+                  setNewFieldValue(text);
+                  if (!validateEmail(text)) {
+                    Toast.show({
+                      type: 'error',
+                      text1: 'Invalid Email Address',
+                      text2: 'Please enter a valid email address',
+                    });
+                  }
+                }}
+                keyboardType="email-address"
+              />
+            ) : editingField === "idVerification" ? (
+              <Picker
+                selectedValue={newFieldValue}
+                onValueChange={(itemValue) => setNewFieldValue(itemValue)}
+                style={styles.picker}
+              >
+                <Picker.Item label="Verified" value="Verified" />
+                <Picker.Item label="Unverified" value="Unverified" />
+              </Picker>
+            ) : editingField === "parentCompanyName" ? (
+              <>
+                <Picker
+                  selectedValue={newFieldValue}
+                  onValueChange={(itemValue) => {
+                    setNewFieldValue(itemValue);
+                    setParentCompanyOther(itemValue === "Other");
+                  }}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="NTUC Fairprice" value="NTUC Fairprice" />
+                  <Picker.Item label="Prime" value="Prime" />
+                  <Picker.Item label="Giant" value="Giant" />
+                  <Picker.Item label="Sheng Siong" value="Sheng Siong" />
+                  <Picker.Item label="Other" value="Other" />
+                </Picker>
+                {parentCompanyOther && (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter Parent Company Name"
+                    value={newFieldValue}
+                    onChangeText={setNewFieldValue}
+                  />
+                )}
+              </>
+            ) : (
+              <TextInput
+                style={styles.input}
+                value={newFieldValue}
+                onChangeText={setNewFieldValue}
+              />
+            )}
+            <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
+              <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </KeyboardAvoidingView>
         </View>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/4531e17fc9b9aa9ba5b0d560e89007fc1b42d083d71e81a326dc7798bbffbba9?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.arrowIcon}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.detailsContainer}
-        onPress={() => Alert.alert("Phone number")}
-      >
-        <View style={styles.detailsContent}>
-          <Image
-            source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/2713c55ad2ddbad7651a37d20e794db71308b94844ac73c32af76a17a6cd0de6?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-            }}
-            style={styles.icon}
-          />
-          <View style={styles.detailsTextContainer}>
-            <Text style={styles.detailsLabel}>+65 92350345</Text>
-            <Text style={styles.detailsValue}>Phone number</Text>
-          </View>
-        </View>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/4531e17fc9b9aa9ba5b0d560e89007fc1b42d083d71e81a326dc7798bbffbba9?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.arrowIcon}
-        />
-      </TouchableOpacity>
-      <UserInfoList data={userInfoData} />
-      <View style={styles.footer}>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a3a3fe259f6c8ab64003e9294a1c9d48a6cd7609019165cce4a3a33a931cab1?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.footerIcon}
-        />
-        <View style={styles.footerButton}>
-          <Image
-            source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/30e3d31c19bd0f1572ad7b026331c9ca2f1456fef2f7240082d0d7f41419665f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-            }}
-            style={styles.footerButtonIcon}
-          />
-        </View>
-      </View>
-    </View>
+      </Modal>
+      <Toast position="bottom" />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
-    alignSelf: "center",
-    width: screenWidth < 480 ? "100%" : 480,
+    backgroundColor: COLORS.white,
   },
-  header: {
+  profileHeader: {
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 16,
-    backgroundColor: "#4B5563",
+    padding: 16,
+    backgroundColor: COLORS.white,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.grey,
   },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    textAlign: "center",
-  },
-  titleContainer: {
-    alignSelf: "center",
-    marginTop: 20,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#111827",
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "#D1D5DB",
-    marginVertical: 10,
-  },
-  shopInfo: {
+  profileHeaderContent: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 20,
   },
-  shopIcon: {
-    width: 50,
-    height: 50,
+  profileLogo: {
+    fontSize: 48,
+    marginRight: 16,
   },
-  shopTextContainer: {
-    marginLeft: 10,
+  profileName: {
+    fontWeight: "bold",
+    fontSize: 28,
+    color: COLORS.black,
+  },
+  accountNumberContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 8,
+  },
+  profileAccountNumber: {
+    fontSize: 16,
+    color: COLORS.grey,
+    marginRight: 8,
+  },
+  copyButton: {
+    padding: 8,
+    backgroundColor: "#e9ecef",
+    borderRadius: 4,
+  },
+  profileItemsContainer: {
     flex: 1,
+    padding: 16,
   },
-  shopName: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#1F2937",
-  },
-  shopArrowIcon: {
-    width: 30,
-    height: 30,
-  },
-  userRoleContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 20,
-  },
-  userRole: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#111827",
-  },
-  addIcon: {
-    fontSize: 20,
-    color: "#FFFFFF",
-  },
-  accountInfo: {
+  profileItemContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: 20,
+    padding: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    marginBottom: 12,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  accountText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#6B7280",
-  },
-  accountIcon: {
-    width: 25,
-    height: 25,
-  },
-  detailsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    marginVertical: 5,
-  },
-  detailsContent: {
+  profileItemDetails: {
     flexDirection: "row",
     alignItems: "center",
   },
-  detailsTextContainer: {
-    marginLeft: 10,
-  },
-  detailsLabel: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#4338CA",
-  },
-  detailsValue: {
-    fontSize: 12,
-    color: "#6B7280",
-    marginTop: 5,
-  },
-  icon: {
-    width: 25,
-    height: 25,
-  },
-  arrowIcon: {
-    width: 20,
-    height: 20,
-  },
-  infoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  profileIconContainer: {
+    justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
+    padding: 8,
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    marginRight: 12,
+    borderColor: COLORS.grey,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
-    marginVertical: 5,
   },
-  infoContent: {
-    flexDirection: "row",
-    alignItems: "center",
+  profileItemTextContainer: {
+    marginLeft: 8,
   },
-  infoTextContainer: {
-    marginLeft: 10,
-  },
-  infoLabel: {
+  profileItemLabel: {
     fontSize: 14,
+    color: COLORS.grey,
+  },
+  profileItemValue: {
     fontWeight: "bold",
-    color: "#4338CA",
+    fontSize: 16,
+    color: COLORS.black,
   },
-  infoValue: {
-    fontSize: 12,
-    color: "#6B7280",
-    marginTop: 5,
+  editButton: {
+    padding: 12,
   },
-  footer: {
-    flexDirection: "row",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    backgroundColor: "#4B5563",
-  },
-  footerIcon: {
-    width: 38,
-    height: 38,
-    alignSelf: "center",
-  },
-  footerButton: {
+  modalBackground: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 10,
-    backgroundColor: "#374151",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  footerButtonIcon: {
-    width: 36,
-    height: 36,
+  modalContainer: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: COLORS.black,
+    marginBottom: 20,
+  },
+  phoneNumberContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  phonePrefix: {
+    fontSize: 16,
+    color: COLORS.black,
+    marginRight: 8,
+  },
+  phoneInput: {
+    flex: 1,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: COLORS.grey,
+    borderRadius: 8,
+    backgroundColor: COLORS.white,
+  },
+  input: {
+    width: "100%",
+    padding: 8,
+    marginVertical: 8,
+    borderWidth: 1,
+    borderColor: COLORS.grey,
+    borderRadius: 8,
+    backgroundColor: COLORS.white,
+  },
+  picker: {
+    width: "100%",
+    height: 50,
+    marginVertical: 8,
+  },
+  saveButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    backgroundColor: COLORS.dark_green,
+    borderRadius: 100,
+    marginTop: 8,
+    width: "100%",
+  },
+  saveButtonText: {
+    color: COLORS.white,
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    backgroundColor: COLORS.red,
+    borderRadius: 100,
+    marginTop: 8,
+    marginBottom: 20,
+    width: "100%",
+  },
+  cancelButtonText: {
+    color: COLORS.white,
+    fontWeight: "bold",
+  },
+  signOutButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    backgroundColor: COLORS.blue,
+    borderRadius: 100,
+    marginVertical: 20,
+    alignSelf: "center",
+  },
+  signOutButtonText: {
+    color: COLORS.white,
+    fontWeight: "bold",
   },
 });
 
