@@ -52,7 +52,7 @@ const GoogleSignIn = ({ navigation }) => (
     />
     <Text
       style={styles.googleSignInText}
-      onPress={() => navigation.navigate("EditPage")}
+      onPress={() => navigation.navigate("AdminHome")}
     >
       Or sign in with Google
     </Text>

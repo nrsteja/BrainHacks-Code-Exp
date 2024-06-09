@@ -45,7 +45,7 @@ const UserInfoList = ({ data }) => {
   );
 };
 
-const Profile = () => {
+const AdminProfile = () => {
   const userInfoData = [
     {
       label: "NTUC FairPrice",
@@ -368,4 +368,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default AdminProfile;
