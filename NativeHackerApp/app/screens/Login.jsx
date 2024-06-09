@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Dimensions, SafeAreaView, Platform } from "react-native";
+import { Dimensions, SafeAreaView, Platform, Button } from "react-native";
 import * as React from "react";
 import {
   View,
@@ -32,26 +32,25 @@ const RememberMe = () => (
       <View style={styles.rememberMeCheckbox} />
       <Text>Remember me</Text>
     </View>
-    <Text>Forgot password?</Text>
+    <Button title = "Forgot password?"></Button>
   </View>
 );
 
 const SignInButton = ({ text, onPress }) => (
-  <TouchableOpacity style={styles.signInButton} onPress = {onPress}>
+  <TouchableOpacity style={styles.signInButton} onPress={onPress}>
     <Text style={styles.signInButtonText}>{text}</Text>
   </TouchableOpacity>
 );
 
 const GoogleSignIn = () => (
-  <View style={styles.googleSignInContainer}>
+  <TouchableOpacity style={styles.googleSignInContainer}>
     <Image
-      source={{
-        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/065217c8a0d16a6ca1e660ef70df9999d9c1260c65643450f0cb4521b735f00b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-      }}
+      source={require('../../assets/google.png')}
       style={styles.googleSignInImage}
+      resizeMode="contain"
     />
     <Text style={styles.googleSignInText}>Or sign in with Google</Text>
-  </View>
+  </TouchableOpacity>
 );
 
 const SignUpPrompt = ({ navigation }) => (
@@ -70,7 +69,7 @@ const SignUpPrompt = ({ navigation }) => (
 function Login() {
   const navigation = useNavigation();
   return (
-    <SafeAreaView style={{ flex: 1, borderColor: "red" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
         source={{
           uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/838485a2e58427926bfd76783e93dcecc690e4e96073aa11272a2c82be1b4d5b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
@@ -98,11 +97,11 @@ function Login() {
               secureTextEntry={true}
             />
             <RememberMe />
-            <SignInButton text="Sign in" onPress={() => {navigation.replace('HomeStack')}}/>
+            <SignInButton text="Sign in" onPress={() => { navigation.replace('HomeStack') }} />
           </View>
-          <View style={{ flex: 0.3 }}>
+          <View style={{ flex: 0.3, width: "80%" }}>
             <GoogleSignIn />
-            <SignUpPrompt navigation={navigation}/>
+            <SignUpPrompt navigation={navigation} />
           </View>
         </SafeAreaView>
       </ImageBackground>
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 0.5,
     alignItems: "center",
-    paddingHorizontal: 16,
+    paddingHorizontal: "5%",
     justifyContent: "space-between",
   },
   formContainer: {
@@ -135,7 +134,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: "5%",
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 8,
-    borderColor: "red",
   },
   inputFieldContainer: {
     marginTop: 12,
@@ -155,7 +153,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4f4f5",
     borderColor: "#d1d5db",
     color: "#6b7280",
-    borderWidth: 2
+    borderWidth: 1,
   },
   rememberMeContainer: {
     flexDirection: "row",
@@ -176,44 +174,45 @@ const styles = StyleSheet.create({
   signInButton: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "5%",
+    marginTop: 16,
     backgroundColor: "#2563eb",
     borderRadius: 8,
-    height: 0.04 * windowHeight
+    height: windowHeight * 0.06, // Adjusted for better responsiveness
   },
   signInButtonText: {
     color: "#fff",
+    fontSize: windowWidth * 0.045, // Adjusted for better responsiveness
   },
   googleSignInContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: "5%",
-    paddingVertical: "2.5%",
+    paddingVertical: "4%",
     backgroundColor: "#27272a",
     borderRadius: 8,
+    marginTop: 12,
   },
   googleSignInImage: {
-    width: 20,
-    height: 20,
-    marginRight: 8,
+    resizeMode: "contain",
+    width: "10%",
+    height: "100%",
   },
   googleSignInText: {
     color: "#fff",
+    marginLeft: 8,
+    fontSize: windowWidth * 0.045, // Adjusted for better responsiveness
   },
   signUpPromptContainer: {
-    marginTop: "2%",
+    marginTop: 16,
     flexDirection: "row",
     justifyContent: "center",
-    borderColor: "red",
   },
   signUpPromptText: {
     color: "#4b5563",
-    justifyContent: "center",
   },
   signUpPromptLink: {
     color: "#000",
-    justifyContent: "center",
+    marginLeft: 4,
   },
 });
 
