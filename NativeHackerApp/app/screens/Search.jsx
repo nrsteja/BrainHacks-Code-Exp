@@ -83,7 +83,6 @@ const MyComponent = () => {
       <Header />
       <View style = {styles.inputView}>
         <TextInput defaultValue = "Enter a location" style = {styles.input} value = {searchText} onChangeText={setSearchText}/>
-        <MaterialCommunityIcons style = {{position: "absolute", left: 0.14 * width}} name="map-search" size={0.1 * width} color = "black" />
       </View>
       <View style = {{flex: 0.15, justifyContent: "center", marginTop: "1%"}}>
         <View style = {{flex: 0.3, flexDirection: "row", justifyContent: "center"}}>
@@ -143,101 +142,139 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   inputView: {
-    flex: 0.1, 
-    justifyContent: "center", 
-    paddingHorizontal: 0.1 * width,
-    marginTop: 0.01 * height
+    flex: 0.1,
+    justifyContent: "center",
+    paddingHorizontal: width * 0.05,
+    marginTop: height * 0.01,
   },
   input: {
     flex: 0.8,
-    justifyContent: "center",
-    alignItems: "center",
+    height: height * 0.06,
     borderRadius: 20,
-    paddingLeft: "22.5%",
-    fontSize: 0.02 * height,
+    paddingLeft: width * 0.05,
+    fontSize: width * 0.04,
     color: COLORS.white,
-    backgroundColor: COLORS.green
+    backgroundColor: COLORS.green,
   },
   filterButton: {
-    width: 0.25 * width, 
-    height: 0.03 * height,
-    backgroundColor: "white", 
-    marginHorizontal: 0.01 * width, 
-    borderRadius: 1000, 
-    justifyContent: "center", 
-    alignItems: "center"
+    width: width * 0.28,
+    height: height * 0.06,
+    backgroundColor: "white",
+    marginHorizontal: width * 0.02,
+    borderRadius: 1000,
+    justifyContent: "center",
+    alignItems: "center",
   },
   selectedButton: {
     backgroundColor: COLORS.green,
   },
   buttonText: {
-    color: COLORS.black
+    color: COLORS.black,
+    fontSize: width * 0.04,
   },
   selectedButtonText: {
-    color: COLORS.white
+    color: COLORS.white,
   },
   resultsText: {
     color: COLORS.dark_green,
     fontWeight: "200",
-    fontSize: 0.07 * width,
+    fontSize: width * 0.06,
+  },
+  groceryItemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: width * 0.04,
+    borderBottomWidth: 1,
+    borderColor: COLORS.grey,
+  },
+  groceryItemImage: {
+    width: width * 0.2,
+    height: width * 0.2,
+    borderRadius: 8,
+    marginRight: width * 0.04,
+  },
+  groceryItemDetails: {
+    flex: 1,
+  },
+  groceryItemTitle: {
+    fontSize: width * 0.05,
+    fontWeight: "bold",
+  },
+  groceryItemFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: height * 0.01,
   },
   promotionsText: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     fontWeight: "bold",
     color: COLORS.dark_green,
     textAlign: "left",
-    marginTop: 20,
+    marginTop: height * 0.02,
   },
   promotionBox: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16,
-    padding: 8,
+    marginBottom: height * 0.02,
+    padding: width * 0.02,
     borderWidth: 1,
     borderColor: COLORS.grey,
     borderRadius: 8,
   },
   promotionImage: {
-    width: 60,
-    height: 60,
-    marginRight: 8,
+    width: width * 0.15,
+    height: width * 0.15,
+    marginRight: width * 0.02,
     borderRadius: 4,
   },
   promotionDetails: {
     flex: 1,
   },
   promotionTitle: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     fontWeight: "bold",
   },
   promotionSubtitle: {
-    fontSize: 14,
+    fontSize: width * 0.035,
     color: "#555",
   },
   promotionItems: {
-    fontSize: 12,
+    fontSize: width * 0.03,
     color: "#999",
   },
   expiringText: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     fontWeight: "bold",
     color: COLORS.dark_green,
     textAlign: "left",
-    marginTop: 20,
+    marginTop: height * 0.02,
   },
   expiryFont: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     fontWeight: "bold",
   },
   itemsFont: {
-    fontSize: 16,
+    fontSize: width * 0.04,
   },
   trackerText: {
-    marginTop: 12,
-    fontSize: 16,
+    marginTop: height * 0.015,
+    fontSize: width * 0.04,
     color: COLORS.dark_green,
     textAlign: "center",
     textDecorationLine: "underline",
+  },
+  filterButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: height * 0.02,
+  },
+  flatListContainer: {
+    flex: 0.9,
+    paddingHorizontal: width * 0.04,
+  },
+  searchIcon: {
+    position: 'absolute',
+    left: width * 0.05,
   },
 });
 
