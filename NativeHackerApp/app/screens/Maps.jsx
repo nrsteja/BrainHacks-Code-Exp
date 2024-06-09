@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Button } from 're
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useNavigation } from "@react-navigation/native";
-
+import Entypo from '@expo/vector-icons/Entypo';
 
 const GOOGLE_PLACES_API_KEY = 'AIzaSyBbcOqj7cnjA-3E_VRsCFyzKjUygMGAQnU';
 const width = Dimensions.get("window").width;
@@ -166,7 +166,7 @@ const MapScreen = () => {
            >
              <Callout style={styles.callout}>
                <Text style={styles.calloutTitle}>{supermarket.name}</Text>
-               <Text style = {{alignItems: "center"}}>{supermarket.vicinity}</Text>
+               <Text style = {{textAlign: "center"}}>{supermarket.vicinity}</Text>
                <Button title = "Check Out Items Here" onPress = {() => navigation.navigate('Search')}/>
              </Callout>
            </Marker>
@@ -177,30 +177,29 @@ const MapScreen = () => {
      )}
      <View style={styles.navigationButtonsContainer}>
        <TouchableOpacity style={styles.navigationButton} onPress={() => handleNavigation('up')}>
-         <Text style={styles.navigationButtonText}>Up</Text>
+       <Entypo name="arrow-bold-up" size={0.08 * width} color="white" />
        </TouchableOpacity>
        <View style={styles.horizontalNavigationButtonsContainer}>
-         <TouchableOpacity style={styles.navigationButton} onPress={() => handleNavigation('left')}>
-           <Text style={styles.navigationButtonText}>Left</Text>
+         <TouchableOpacity style={styles.horizontalNavigationButton} onPress={() => handleNavigation('left')}>
+         <Entypo name="arrow-bold-left" size={0.08 * width} color="white" />
          </TouchableOpacity>
-         <TouchableOpacity style={styles.navigationButton} onPress={() => handleNavigation('right')}>
-           <Text style={styles.navigationButtonText}>Right</Text>
+         <TouchableOpacity style={styles.horizontalNavigationButton} onPress={() => handleNavigation('right')}>
+         <Entypo name="arrow-bold-right" size={0.08 * width} color="white" />
          </TouchableOpacity>
        </View>
        <TouchableOpacity style={styles.navigationButton} onPress={() => handleNavigation('down')}>
-         <Text style={styles.navigationButtonText}>Down</Text>
+       <Entypo name="arrow-bold-down" size={0.08 * width} color="white" />
        </TouchableOpacity>
      </View>
    </View>
  );
 };
 
-
 const styles = StyleSheet.create({
  navigationButtonsContainer: {
    position: 'absolute',
    bottom: 0.125 * height,
-   left: 0.05 * width,
+   left: 0.01 * width,
    flexDirection: 'column',
    alignItems: 'center',
    justifyContent: 'center',
@@ -210,11 +209,16 @@ const styles = StyleSheet.create({
    alignItems: 'center',
    justifyContent: 'center',
  },
- navigationButton: {
-   backgroundColor: 'rgba(0, 0, 0, 0.7)',
+ horizontalNavigationButton: {
+   backgroundColor: '#619f75',
    padding: 10,
-   marginVertical: 5,
-   borderRadius: 5,
+   marginHorizontal: 0.05 * width,
+   borderRadius: 100,
+ },
+ navigationButton: {
+   backgroundColor: '#619f75',
+   padding: 10,
+   borderRadius: 100,
  },
  navigationButtonText: {
    color: 'white',
