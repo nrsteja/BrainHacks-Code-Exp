@@ -17,6 +17,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import Header from "../general components/header";
 import Filter from "../general components/Filter";
 import { useNavigation } from "@react-navigation/native";
+import COLORS from "../constants/colors";
 
 const hardcodedItems = [
   { name: "White Bread", dateBought: 1, daysLeft: "3 days", daysLeftNumber: 3 },
@@ -221,7 +222,7 @@ function Itinerary() {
       marginTop: "5%",
       marginVertical: "1.5%",
       width: "100%",
-      backgroundColor: "green",
+      backgroundColor: COLORS.green,
       alignSelf: "center",
       maxWidth: "80%",
       borderRadius: "50%",
@@ -238,7 +239,7 @@ function Itinerary() {
     itemsHeaderText: {
       fontSize: 20,
       fontWeight: "bold",
-      color: "green",
+      color: COLORS.green,
       marginVertical: "5%",
       textAlign: "center",
     },
@@ -284,7 +285,7 @@ function Itinerary() {
       justifyContent: "center",
       paddingHorizontal: "8%",
       paddingVertical: "3%",
-      backgroundColor: "green",
+      backgroundColor: COLORS.green,
       borderRadius: "50%",
       bottom: "3%",
     },
@@ -296,7 +297,7 @@ function Itinerary() {
     addButton: {
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "green",
+      backgroundColor: COLORS.green,
       borderRadius: 35,
       height: 70,
       width: 70,
@@ -395,7 +396,7 @@ function Itinerary() {
     },
 
     searchBar: {
-      backgroundColor: "green",
+      backgroundColor: COLORS.green,
       padding: "4%",
       borderRadius: 20,
       margin: "5%",
@@ -440,7 +441,7 @@ function Itinerary() {
       marginTop: 10,
     },
     modalButton: {
-      backgroundColor: "green",
+      backgroundColor: COLORS.green,
       padding: 10,
       borderRadius: 5,
     },

@@ -9,14 +9,15 @@ import {
   SafeAreaView,
   TextInput,
   Dimensions,
-  FlatList
+  FlatList,
+  ImageBackground
 } from "react-native";
 import Header from "../general components/header";
 import COLORS from "../constants/colors"
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useState } from "react";
-import { Promo, Item } from "./Home";
-import { PROMOS, ITEMS } from "./Lists";
+import { Promo } from "./Home";
+import { PROMOS, MARKETITEMS, RECIPES } from "./Lists";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -32,24 +33,85 @@ const FilterButton = ({ onPress }) => (
   </TouchableOpacity>
 );
 
-const GroceryItem = ({ title, location, itemsOnSale, imageUrl, onPress }) => (
-  <TouchableOpacity style={styles.groceryItemContainer} onPress={onPress}>
-    <Image source={{ uri: imageUrl }} style={styles.groceryItemImage} />
-    <View style={styles.groceryItemDetails}>
-      <View>
-        <Text style={styles.groceryItemTitle}>{title}</Text>
-      </View>
-      <View>
-        <Text>{location}</Text>
-      </View>
-      <View style={styles.groceryItemFooter}>
-        <Text>Items on sale: {itemsOnSale}</Text>
-      </View>
+const InfoItem = ({ children }) => (
+  <View>
+    <Text>{children}</Text>
+  </View>
+);
+
+export const MarketItem = ({ image, name, expiryDate, itemsOnSale }) => (
+  <TouchableOpacity
+    style={styles.marketCard}
+    onPress={() => handlePromotionPress(name)}
+  >
+    <Image
+      source={{
+        uri: image,
+      }}
+      style={styles.marketImage}
+    />
+    <View style={styles.marketContent}>
+      <Text style={styles.marketTitle}>{name}</Text>
+      <Text style={styles.marketExpiry}>{expiryDate}</Text>
+      <Text style={styles.marketSale}>Items On Sale: {itemsOnSale}</Text>
     </View>
   </TouchableOpacity>
 );
 
-const MyComponent = () => {
+export const Recipe = ({ rating, location, name, numIng, time, image }) => (
+  <TouchableOpacity style = {styles.recipeContainer}>
+    <Image source = {{uri: image}} style = {styles.mainImage}>
+    </Image>
+    <Text>Hello</Text>
+  </TouchableOpacity>
+
+  /*
+  <ImageBackground resizeMode="cover" source = {{uri: image}} styles = {styles.mainImage}>
+    <View style = {styles.topContainer}>
+      <View style={styles.ratingContainer}>
+        <Image resizeMode="auto" source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/d3913b1093e0c08a10080c42e0862e7b7345f97e27196d420585ed33eac1d0c5?apiKey=59cb32cf54144d2a81842acbd6f14d63&" }} style={styles.starIcon} />
+        <View>
+          <Text>5,0</Text>
+        </View>
+      </View>
+    </View>  
+    <View style={styles.locationContainer}>
+      <Image resizeMode="auto" source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/64bb241643aabe308381e900f07e87004b2ea8930b8a7b7960983a7a9183556a?apiKey=59cb32cf54144d2a81842acbd6f14d63&" }} style={styles.locationIcon} />
+      <View>
+        <Text>{location}</Text>
+      </View>
+    </View>
+    <View style={styles.titleContainer}>
+      <Text>{name}</Text>
+    </View>
+    <View style={styles.infoContainer}>
+      <InfoItem>{numIng}</InfoItem>
+      <View style={styles.divider} />
+      <InfoItem>{time}</InfoItem>
+    </View>
+  </ImageBackground>
+  */
+  /*
+  <TouchableOpacity
+    style={styles.marketCard}
+    onPress={() => handlePromotionPress(name)}
+  >
+    <Image
+      source={{
+        uri: image,
+      }}
+      style={styles.marketImage}
+    />
+    <View style={styles.marketContent}>
+      <Text style={styles.marketTitle}>{name}</Text>
+      <Text style={styles.marketExpiry}>{expiryDate}</Text>
+      <Text style={styles.marketSale}>Items On Sale: {itemsOnSale}</Text>
+    </View>
+  </TouchableOpacity>
+  */
+);
+
+const Search = () => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [searchText, setSearchText] = useState('');
 
@@ -70,11 +132,23 @@ const MyComponent = () => {
     />
   );
 
-  const renderItem = ({ item }) => (
-    <Item
+  const renderMarket = ({ item }) => (
+    <MarketItem
+      image = {item.image}
       name={item.name}
-      daysLeft={item.daysLeft}
-      used={item.used}
+      expiryDate={item.expiryDate}
+      itemsOnSale={item.itemsOnSale}
+    />
+  );
+
+  const renderRecipe = ({ item }) => (
+    <Recipe
+      rating = {item.rating}
+      location = {item.location}
+      name = {item.name}
+      numIng = {item.numIng}
+      time = {item.time}
+      image = {item.image}
     />
   );
 
@@ -114,16 +188,15 @@ const MyComponent = () => {
           />)}
           {selectedButton === 'button2' && (
           <FlatList
-            data={filterData(ITEMS)}
-            renderItem={renderItem}
+            data={filterData(MARKETITEMS)}
+            renderItem={renderMarket}
             keyExtractor={(item) => item.id}
             persistentScrollbar={true}
-          />
-          )}
+          />)}
           {selectedButton === 'button3' && (
           <FlatList
-            data={filterData(ITEMS)}
-            renderItem={renderItem}
+            data={filterData(RECIPES)}
+            renderItem={renderRecipe}
             keyExtractor={(item) => item.id}
             persistentScrollbar={true}
           />
@@ -276,6 +349,119 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: width * 0.05,
   },
+  marketImage: {
+    width: width * 0.15,
+    height: width * 0.15,
+    marginRight: width * 0.02,
+    borderRadius: 4,
+  },
+  marketContent: {
+    flex: 1,
+  },
+  marketTitle: {
+    fontSize: width * 0.04,
+    fontWeight: "bold",
+  },
+  marketExpiry: {
+    fontSize: width * 0.035,
+    color: "#555",
+  },
+  marketSale: {
+    fontSize: width * 0.03,
+    color: "#999",
+  },
+  marketCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: height * 0.02,
+    padding: width * 0.02,
+    borderWidth: 1,
+    borderColor: COLORS.grey,
+    borderRadius: 8,
+  },
+  recipeContainer: {
+    width: 0.9 * width,
+    height: 0.2 * height,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+  },
+  mainImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: 'cover',
+    borderRadius: 20
+  },
+  topContainer: {
+    position: "relative",
+    display: "flex",
+    width: "100%",
+    alignItems: "stretch",
+    gap: 20,
+    whiteSpace: "nowrap",
+    justifyContent: "space-between",
+  },
+  ratingContainer: {
+    alignItems: "stretch",
+    borderRadius: 8,
+    backdropFilter: "blur(2.5px)",
+    backgroundColor: "rgba(48, 48, 48, 0.30)",
+    display: "flex",
+    gap: 4,
+    padding: "4px 8px",
+  },
+  starIcon: {
+    position: "relative",
+    width: 16,
+    flexShrink: 0,
+    margin: "auto 0",
+    aspectRatio: "1",
+  },
+  iconShadow: {
+    filter: "drop-shadow(0px 8px 25px rgba(32, 32, 32, 0.15))",
+    alignSelf: "start",
+    position: "relative",
+    width: 31,
+    flexShrink: 0,
+    aspectRatio: "1.19",
+  },
+  locationContainer: {
+    position: "relative",
+    display: "flex",
+    alignItems: "stretch",
+    gap: 4,
+    color: "#FFF",
+    fontWeight: "700",
+  },
+  locationIcon: {
+    position: "relative",
+    width: 16,
+    flexShrink: 0,
+    aspectRatio: "1",
+  },
+  titleContainer: {
+    position: "relative",
+    marginTop: 18,
+    font: "16px/22px Poppins, sans-serif",
+  },
+  infoContainer: {
+    alignItems: "stretch",
+    position: "relative",
+    display: "flex",
+    marginTop: 5,
+    gap: 7,
+    fontSize: 12,
+    fontWeight: "400",
+  },
+  divider: {
+    borderColor: "rgba(255, 255, 255, 1)",
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundColor: "#FFF",
+    width: 1,
+    flexShrink: 0,
+    height: 18,
+  },
 });
 
-export default MyComponent;
+export default Search;

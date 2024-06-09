@@ -54,6 +54,68 @@ export const PROMOS = [
     },
 ];
 
+export const MARKETITEMS = [
+  {
+    id: "1",
+    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/b254bd1bf039ac12935f333dfbd640c1bfb0521a4bc737d57ec774cd6506e4d3?apiKey=59cb32cf54144d2a81842acbd6f14d63&",
+    name: "Multi-Grain Gardenia Bread",
+    expiryDate: "03/06/2024",
+    itemsOnSale: 11,
+  },
+  {
+    id: "2",
+    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/e3e5cb1e02aafd72853d2fa55b9b788fe8db3386d5bbee3373ecec441f90af70?apiKey=59cb32cf54144d2a81842acbd6f14d63&",
+    name: "Sheng Hiong 12pc Eggs",
+    expiryDate: "05/06/2024",
+    itemsOnSale: 2,
+  },
+  {
+    id: "3",
+    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/bf96492e4aea5f9f24519e0d29cd30ab101c6ef311d9d4fe6b8243d21c5a67ac?apiKey=59cb32cf54144d2a81842acbd6f14d63&",
+    name: "Marygold 1L Fresh Milk",
+    expiryDate: "04/06/2024",
+    itemsOnSale: 4,
+  },
+  {
+    id: "4",
+    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/1e30ccaba9aff7fab9af50bf8cf8f9c66fd9d31982a08d87cefbf70862da467a?apiKey=59cb32cf54144d2a81842acbd6f14d63&",
+    name: "1kg Pasar Fresh Chicken",
+    expiryDate: "03/06/2024",
+    itemsOnSale: 11,
+  },
+]
+
+export const RECIPES = [
+  {
+    id: "1",
+    rating: 5.0,
+    location: "Woodlands, Fairprice",
+    name: "How to Make Italian Spaghetti at Home",
+    numIng: "12 Ingredients",
+    time: "40 Min",
+    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/1fea571399b7dca4a43d750fbb84c86056f125fce7b85af233e9b2576680f88b?apiKey=59cb32cf54144d2a81842acbd6f14d63&"
+  },
+  {
+    id: "2",
+    rating: 4.7,
+    location: "888 Plaza, Giant",
+    name: "Simple Chicken Meal Prep",
+    numIng: "10 Ingredients",
+    time: "30 Min",
+    image: "https://cdn.builder.io/api/v1/image/assets/TEMP/dd0a5f414815ae42d16b1a6f4c9867f0336b937731b03782155550d6d775c2b2?apiKey=59cb32cf54144d2a81842acbd6f14d63&"
+  },
+  {
+    id: "3",
+    rating: 4.7,
+    location: "Kampung Admiralty FairPrice",
+    name: "Japanese Fried Rice",
+    numIng: "15 Ingredients",
+    time: "30 Min",
+    image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6ed7fb81756cbbbed5abc99b7d9f7a475f554b35526524d9698d3ea7942de826?apiKey=59cb32cf54144d2a81842acbd6f14d63&'
+  }
+]
+
+
 function Lists() {
 
 }
