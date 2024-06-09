@@ -7,10 +7,18 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
+  TextInput,
+  Dimensions,
+  FlatList
 } from "react-native";
 import Header from "../general components/header";
 import COLORS from "../constants/colors"
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useState } from "react";
+import { PROMOS, Promo, ITEMS, Item } from "./Home";
 
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 const FilterButton = ({ onPress }) => (
   <TouchableOpacity style={styles.filterButtonContainer} onPress={onPress}>
@@ -41,38 +49,86 @@ const GroceryItem = ({ title, location, itemsOnSale, imageUrl, onPress }) => (
 );
 
 const MyComponent = () => {
-  const groceryData = [
-    {
-      title: "Fairprice",
-      location: "Kampung Admiralty",
-      itemsOnSale: 11,
-      imageUrl:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/233402a655fce3616d5404a84b9c5cfa3816ca29d7f7e9f57002b53e34d3e79f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-      onPress: () => console.log("Fairprice clicked"),
-    },
-    {
-      title: "Cold Storage",
-      location: "Causeway Point",
-      itemsOnSale: 2,
-      imageUrl:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/c03b51cecc85bf286bcb805b286071226ee009e347f7e995a30b085156157c0e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-      onPress: () => console.log("Cold Storage clicked"),
-    },
-    {
-      title: "Giant",
-      location: "Admiralty MRT",
-      itemsOnSale: 4,
-      imageUrl:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-      onPress: () => console.log("Giant clicked"),
-    },
-  ];
+  const [selectedButton, setSelectedButton] = useState(null);
+  const [searchText, setSearchText] = useState('');
+
+  const handlePress = (button) => {
+    setSelectedButton(button);
+  };
+
+  const filterData = (data) => {
+    return data.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
+  }
+
+  const renderPromo = ({ item }) => (
+    <Promo
+      name={item.name}
+      location={item.location}
+      itemsOnSale={item.itemsOnSale}
+      image={item.image}
+    />
+  );
+
+  const renderItem = ({ item }) => (
+    <Item
+      name={item.name}
+      daysLeft={item.daysLeft}
+      used={item.used}
+    />
+  );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style = {styles.container}>
       <Header />
-      <View style = {{marginHorizontal: "10%", marginVertical: "1%", borderWidth: 5, borderRadius: "50%"}}>
+      <View style = {styles.inputView}>
+        <TextInput defaultValue = "Enter a location" style = {styles.input} value = {searchText} onChangeText={setSearchText}/>
+        <MaterialCommunityIcons style = {{position: "absolute", left: 0.14 * width}} name="map-search" size={0.1 * width} color = "black" />
+      </View>
+      <View style = {{flex: 0.15, justifyContent: "center", marginTop: "1%"}}>
+        <View style = {{flex: 0.3, flexDirection: "row", justifyContent: "center"}}>
+          <TouchableOpacity style = {[styles.filterButton, selectedButton === 'button1' && styles.selectedButton]} onPress={() => handlePress('button1')}>
+            <Text style = {[styles.buttonText, selectedButton === 'button1' && styles.selectedButtonText]}>Supermarket</Text>
+          </TouchableOpacity >
+          <TouchableOpacity style = {[styles.filterButton, selectedButton === 'button2' && styles.selectedButton]} onPress={() => handlePress('button2')}>
+            <Text style = {[styles.buttonText, selectedButton === 'button2' && styles.selectedButtonText]}>Item</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style = {[styles.filterButton, selectedButton === 'button3' && styles.selectedButton]} onPress={() => handlePress('button3')}>
+            <Text style = {[styles.buttonText, selectedButton === 'button3' && styles.selectedButtonText]}>Recipe</Text>
+          </TouchableOpacity>
+        </View>
+        <View style = {{flex: 0.7}}>
 
+        </View>
+      </View>
+      <View style = {{flex: 0.75, paddingHorizontal: 0.04 * width}}>
+        <View style = {{flex: 0.1}}>
+          <Text style = {styles.resultsText}>Results</Text>
+        </View>
+        <View style = {{flex: 0.9}}>
+          {selectedButton === 'button1' && (
+          <FlatList
+            data={filterData(PROMOS)}
+            renderItem={renderPromo}
+            keyExtractor={(item) => item.id}
+            persistentScrollbar={true}
+          />)}
+          {selectedButton === 'button2' && (
+          <FlatList
+            data={filterData(ITEMS)}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            persistentScrollbar={true}
+          />
+          )}
+          {selectedButton === 'button3' && (
+          <FlatList
+            data={filterData(ITEMS)}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            persistentScrollbar={true}
+          />
+          )}
+        </View>
       </View>
     </SafeAreaView>
   )
@@ -82,135 +138,105 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    maxWidth: 480,
+    width: "100%",
     alignSelf: "center",
   },
-  header: {
+  inputView: {
+    flex: 0.1, 
+    justifyContent: "center", 
+    paddingHorizontal: 0.1 * width,
+    marginTop: 0.01 * height
+  },
+  input: {
+    flex: 0.8,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 16,
-    width: "100%",
+    borderRadius: 20,
+    paddingLeft: "22.5%",
+    fontSize: 0.02 * height,
+    color: COLORS.white,
+    backgroundColor: COLORS.green
+  },
+  filterButton: {
+    width: 0.25 * width, 
+    height: 0.03 * height,
+    backgroundColor: "white", 
+    marginHorizontal: 0.01 * width, 
+    borderRadius: 1000, 
+    justifyContent: "center", 
+    alignItems: "center"
+  },
+  selectedButton: {
     backgroundColor: COLORS.green,
   },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: COLORS.white,
-    textAlign: "center",
+  buttonText: {
+    color: COLORS.black
   },
-  locationContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginTop: 12,
-    backgroundColor: COLORS.grey,
-    borderRadius: 24,
-    maxWidth: 323,
-    alignSelf: "center",
+  selectedButtonText: {
+    color: COLORS.white
   },
-  locationText: {
-    fontSize: 16,
-    color: COLORS.white,
+  resultsText: {
+    color: COLORS.dark_green,
+    fontWeight: "200",
+    fontSize: 0.07 * width,
   },
-  locationIcon: {
-    width: 36,
-    height: 36,
-  },
-  navContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 10,
-    maxWidth: 280,
-    alignSelf: "center",
-  },
-  navButton: {
-    backgroundColor: COLORS.grey,
-    paddingVertical: 4,
-    paddingHorizontal: 12,
-    borderRadius: 24,
-    shadowColor: "rgba(0,0,0,0.25)",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-  },
-  navButtonText: {
-    fontSize: 14,
-    color: COLORS.white,
-  },
-  filterButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 32,
-    paddingVertical: 8,
-    marginTop: 8,
-    backgroundColor: COLORS.grey,
-    borderRadius: 30,
-  },
-  filterButtonTextContainer: {
-    alignItems: "center",
-  },
-  filterButtonText: {
-    fontSize: 16,
-    color: COLORS.white,
-  },
-  filterButtonIconContainer: {
-    alignItems: "center",
-  },
-  filterButtonIcon: {
-    fontSize: 14,
-    color: COLORS.grey,
-  },
-  resultsContainer: {
-    paddingHorizontal: 16,
-    marginTop: 40,
-  },
-  resultsTitle: {
-    fontSize: 24,
+  promotionsText: {
+    fontSize: 18,
     fontWeight: "bold",
     color: COLORS.dark_green,
+    textAlign: "left",
+    marginTop: 20,
   },
-  groceryItemContainer: {
+  promotionBox: {
     flexDirection: "row",
-    borderWidth: 2,
-    borderColor: COLORS.grey,
-    paddingVertical: 8,
-    marginTop: 10,
-  },
-  groceryItemImage: {
-    width: 106,
-    height: 106,
-  },
-  groceryItemDetails: {
-    justifyContent: "center",
-    marginLeft: 12,
-  },
-  groceryItemTitle: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  groceryItemFooter: {
-    marginTop: 10,
-  },
-  navBarContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: 16,
-    backgroundColor: COLORS.grey,
-    width: "100%",
+    marginBottom: 16,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: COLORS.grey,
+    borderRadius: 8,
   },
-  navBarButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 24,
+  promotionImage: {
+    width: 60,
+    height: 60,
+    marginRight: 8,
+    borderRadius: 4,
   },
-  navBarButtonText: {
+  promotionDetails: {
+    flex: 1,
+  },
+  promotionTitle: {
     fontSize: 16,
-    color: COLORS.white,
+    fontWeight: "bold",
+  },
+  promotionSubtitle: {
+    fontSize: 14,
+    color: "#555",
+  },
+  promotionItems: {
+    fontSize: 12,
+    color: "#999",
+  },
+  expiringText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: COLORS.dark_green,
+    textAlign: "left",
+    marginTop: 20,
+  },
+  expiryFont: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  itemsFont: {
+    fontSize: 16,
+  },
+  trackerText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: COLORS.dark_green,
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
 });
 

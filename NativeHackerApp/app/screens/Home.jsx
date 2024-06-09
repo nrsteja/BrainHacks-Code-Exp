@@ -24,28 +24,28 @@ const getFontFamily = () => {
   return "System";
 };
 
-const ITEMS = [
+export const ITEMS = [
   {
     id: "1",
-    itemName: "White Bread",
+    name: "White Bread",
     daysLeft: 3,
     used: true,
   },
   {
     id: "2",
-    itemName: "Spinach",
+    name: "Spinach",
     daysLeft: 1,
     used: true,
   },
   {
     id: "3",
-    itemName: "Milk - Gardenia",
+    name: "Milk - Gardenia",
     daysLeft: 4,
     used: true,
   },
 ];
 
-const PROMOS = [
+export const PROMOS = [
   {
     id: "1",
     name: "FairPrice",
@@ -94,11 +94,11 @@ const MoneySaved = ({ amount }) => (
   </View>
 );
 
-const Item = ({ itemName, daysLeft, used }) => (
+export const Item = ({ name, daysLeft, used }) => (
   <View>
     <View style={{ flexDirection: "row", justifyContent: "center" }}>
       <View style={{ flex: 0.6 }}>
-        <Text style={styles.itemsFont}>{itemName}</Text>
+        <Text style={styles.itemsFont}>{name}</Text>
       </View>
       <View style={{ flex: 0.2, alignItems: "center" }}>
         <Text style={styles.itemsFont}>{daysLeft}</Text>
@@ -110,7 +110,7 @@ const Item = ({ itemName, daysLeft, used }) => (
   </View>
 );
 
-const Promo = ({ name, location, itemsOnSale, image }) => (
+export const Promo = ({ name, location, itemsOnSale, image }) => (
   <TouchableOpacity
     style={styles.promotionBox}
     onPress={() => handlePromotionPress(name)}
@@ -169,7 +169,7 @@ function Home() {
             data={ITEMS}
             renderItem={({ item }) => (
               <Item
-                itemName={item.itemName}
+                name={item.name}
                 daysLeft={item.daysLeft}
                 used={item.used}
               />
@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    maxWidth: 480,
     backgroundColor: COLORS.white,
     alignSelf: "center",
   },
