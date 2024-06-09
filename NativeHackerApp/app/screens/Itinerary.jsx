@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
-  Image,
   Text,
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  TextInput,
+  Modal,
   Alert,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -15,23 +16,27 @@ import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import Header from "../general components/header";
 import Filter from "../general components/Filter";
-import COLORS from "../constants/colors"
 
 const hardcodedItems = [
-  { name: "White Bread", dateBought: 1, daysLeft: "3 days" },
-  { name: "Eggs", dateBought: 12, daysLeft: "10 days" },
-  { name: "Almonds", dateBought: 1, daysLeft: "2 weeks" },
-  { name: "Spinach", dateBought: 1, daysLeft: "5 days" },
-  { name: "Cabbage", dateBought: 2, daysLeft: "5 days" },
-  { name: "Bananas", dateBought: 6, daysLeft: "2 days" },
-  { name: "Fresh Orange Juice", dateBought: 2, daysLeft: "14 days" },
-  { name: "Milk", dateBought: 3, daysLeft: "7 days" },
+  { name: "White Bread", dateBought: 1, daysLeft: "3 days", daysLeftNumber: 3 },
+  { name: "Eggs", dateBought: 12, daysLeft: "10 days", daysLeftNumber: 10 },
+  { name: "Almonds", dateBought: 1, daysLeft: "14 days", daysLeftNumber: 14 },
+  { name: "Spinach", dateBought: 1, daysLeft: "5 days", daysLeftNumber: 5 },
+  { name: "Cabbage", dateBought: 2, daysLeft: "5 days", daysLeftNumber: 5 },
+  { name: "Bananas", dateBought: 6, daysLeft: "2 days", daysLeftNumber: 2 },
+  {
+    name: "Fresh Orange Juice",
+    dateBought: 2,
+    daysLeft: "14 days",
+    daysLeftNumber: 14,
+  },
+  { name: "Milk", dateBought: 3, daysLeft: "7 days", daysLeftNumber: 7 },
 ];
 
 const hardcodedFilters = [
   { label: "All", value: "all" },
   { label: "Expiring Soon", value: "expiringSoon" },
-  { label: "Fresh", value: "fresh" },
+  { label: "Quantity Wise", value: "quantityWise" },
 ];
 
 function Itinerary() {
@@ -41,9 +46,38 @@ function Itinerary() {
   const [editMode, setEditMode] = useState(false);
   const [markedForDeletion, setMarkedForDeletion] = useState([]);
   const [editedItems, setEditedItems] = useState([...hardcodedItems]);
+  const [showAddOptions, setShowAddOptions] = useState(false);
+  const [showManualAddModal, setShowManualAddModal] = useState(false);
+  const [newItemName, setNewItemName] = useState("");
+  const [newItemQuantity, setNewItemQuantity] = useState("");
+  const [newItemDaysLeft, setNewItemDaysLeft] = useState("");
+  const [itemNameError, setItemNameError] = useState("");
+  const [itemQuantityError, setItemQuantityError] = useState("");
+  const [itemDaysLeftError, setItemDaysLeftError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredItems, setFilteredItems] = useState([...items]);
+
+  useEffect(() => {
+    setFilteredItems(getFilteredItems());
+  }, [searchQuery, selectedFilter, items]);
+
+  const filterItems = () => {
+    if (searchQuery.trim() === "") {
+      return items;
+    } else {
+      return items.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+  };
 
   const handleEditPress = () => {
+    console.log("Before toggle:", editMode);
     setEditMode(!editMode);
+    console.log("After toggle:", editMode);
+    if (showAddOptions) {
+      setShowAddOptions(false);
+    }
     setMarkedForDeletion([]); // Reset the marked for deletion list when toggling edit mode
     setEditedItems([...items]); // Set edited items to current items when entering edit mode
   };
@@ -65,34 +99,41 @@ function Itinerary() {
     setEditedItems([...items]); // Reset edited items on cancel
   };
 
-  const handleAddPress = async () => {
+  // const handleAddPress = () => {
+  //   if (editMode) {
+  //     setEditMode(false);
+  //   }
+  //   if (showAddOptions) {
+  //     setShowAddOptions(false);
+  //   } else {
+  //     setShowAddOptions(true);
+  //   }
+  // };
+  const handleAddPress = () => {
+    setShowAddOptions(!showAddOptions);
+    //setShowAddOptions((prevShowAddOptions) => !prevShowAddOptions);
+  };
+
+  const handleCameraPress = async () => {
+    if (showAddOptions) {
+      setShowAddOptions(false);
+    }
     const { status } = await Camera.requestPermissionsAsync();
     if (status === "granted") {
-      Alert.alert(
-        "Add Item",
-        "Choose an option",
-        [
-          {
-            text: "Camera",
-            onPress: async () => {
-              const image = await ImagePicker.launchCameraAsync();
-              console.log("Image captured", image);
-            },
-          },
-          {
-            text: "Gallery",
-            onPress: async () => {
-              const image = await ImagePicker.launchImageLibraryAsync();
-              console.log("Image selected from gallery", image);
-            },
-          },
-          { text: "Cancel", style: "cancel" },
-        ],
-        { cancelable: true }
-      );
+      const image = await ImagePicker.launchCameraAsync();
+      console.log("Image captured", image);
     } else {
       Alert.alert("Permission Denied", "Camera permission is required!");
     }
+  };
+
+  const handleGalleryPress = async () => {
+    const image = await ImagePicker.launchImageLibraryAsync();
+    console.log("Image selected from gallery", image);
+  };
+
+  const handleManualAddPress = () => {
+    setShowManualAddModal(!showManualAddModal);
   };
 
   const handleDeletePress = (index) => {
@@ -117,10 +158,63 @@ function Itinerary() {
     }
   };
 
+  const handleAddNewItem = () => {
+    if (!newItemName) {
+      setItemNameError("Item name is required");
+      return;
+    } else {
+      setItemNameError("");
+    }
+
+    if (!newItemQuantity) {
+      setItemQuantityError("Quantity is required");
+      return;
+    } else {
+      setItemQuantityError("");
+    }
+
+    if (!newItemDaysLeft) {
+      setItemDaysLeftError("Days left is required");
+      return;
+    } else {
+      setItemDaysLeftError("");
+    }
+
+    // All fields are filled, proceed with adding the new item
+    const newItem = {
+      name: newItemName,
+      dateBought: parseInt(newItemQuantity),
+      daysLeft: `${newItemDaysLeft} days`,
+      daysLeftNumber: parseInt(newItemDaysLeft),
+    };
+    setItems([...items, newItem]);
+    setShowManualAddModal(false);
+    setShowAddOptions(false);
+    setNewItemName("");
+    setNewItemQuantity("");
+    setNewItemDaysLeft("");
+  };
+
+  const getFilteredItems = () => {
+    let filteredItems = [...items];
+
+    if (selectedFilter === "expiringSoon") {
+      filteredItems.sort((a, b) => {
+        const aDays = a.daysLeftNumber;
+        const bDays = b.daysLeftNumber;
+        return aDays - bDays;
+      });
+    } else if (selectedFilter === "quantityWise") {
+      filteredItems.sort((a, b) => b.dateBought - a.dateBought);
+    }
+
+    return filteredItems;
+  };
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: COLORS.white,
+      backgroundColor: "white",
       width: "100%",
       alignSelf: "center",
       paddingBottom: 100, // Ensure there is space for the footer
@@ -129,18 +223,19 @@ function Itinerary() {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "2%",
+      paddingHorizontal: "5%",
+      paddingVertical: "2%",
       marginTop: "5%",
       marginVertical: "1.5%",
       width: "100%",
-      backgroundColor: COLORS.dark_green,
+      backgroundColor: "green",
       alignSelf: "center",
       maxWidth: "80%",
       borderRadius: "50%",
     },
     searchText: {
       fontSize: 18,
-      color: COLORS.white,
+      color: "white",
     },
     listContainer: {
       flex: 0.8,
@@ -150,7 +245,7 @@ function Itinerary() {
     itemsHeaderText: {
       fontSize: 20,
       fontWeight: "bold",
-      color: COLORS.dark_green,
+      color: "green",
       marginVertical: "5%",
       textAlign: "center",
     },
@@ -196,27 +291,33 @@ function Itinerary() {
       justifyContent: "center",
       paddingHorizontal: "8%",
       paddingVertical: "3%",
-      backgroundColor: COLORS.dark_green,
+      backgroundColor: "green",
       borderRadius: "50%",
+      bottom: "3%",
     },
     editButtonText: {
       fontSize: 20,
-      color: COLORS.white,
+      color: "white",
       textAlign: "center",
     },
     addButton: {
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: COLORS.dark_green,
+      backgroundColor: "green",
       borderRadius: 35,
       height: 70,
       width: 70,
+      zIndex: 10, // Ensure it is on top
+      position: "absolute", // Ensure it is positioned correctly
+      bottom: 0, // Adjust as needed
+      right: 20, // Adjust as needed
     },
     addButtonText: {
       fontSize: 30,
-      color: COLORS.white,
+      color: "white",
       textAlign: "center",
     },
+    //--------Edit------------
     editButtonsContainer: {
       width: "50%",
       flexDirection: "row",
@@ -225,49 +326,137 @@ function Itinerary() {
       zIndex: 1,
     },
     saveButton: {
-      paddingVertical: "4%",
-      backgroundColor: COLORS.blue,
-      marginHorizontal: 10,
+      paddingVertical: "5%",
+      backgroundColor: "blue",
+      marginHorizontal: "7%",
       left: "40%",
+      bottom: "5%",
     },
     cancelButton: {
-      paddingHorizontal: "10%",
-      backgroundColor: COLORS.red,
-      marginHorizontal: 10,
-      bottom: "-30%",
-      right: "-32%",
+      paddingHorizontal: "6%",
+      backgroundColor: "red",
+      marginHorizontal: "15%",
+      bottom: "-28%",
     },
+
     deleteIcon: {
-      color: COLORS.red,
+      color: "red",
+      marginHorizontal: 10,
     },
     dullText: {
-      color: COLORS.grey,
+      color: "gray",
     },
     quantityButtons: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "center",
     },
     quantityButton: {
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 10,
+      height: 40,
+      width: 40,
       marginHorizontal: 5,
-      paddingVertical: 5,
-      paddingHorizontal: 10,
-      borderRadius: 5,
-    },
-    quantityButtonText: {
-      fontSize: 18,
-    },
-    quantityButtonIncrease: {
-      backgroundColor: COLORS.dark_green,
-    },
-    quantityButtonDecrease: {
-      backgroundColor: COLORS.red,
     },
     quantityButtonTextIncrease: {
-      color: COLORS.white,
+      fontSize: 24,
+      fontWeight: "bold",
+      color: "white",
     },
     quantityButtonTextDecrease: {
-      color: COLORS.white,
+      fontSize: 24,
+      fontWeight: "bold",
+      color: "white",
+    },
+    quantityButtonIncrease: {
+      backgroundColor: "green",
+    },
+    quantityButtonDecrease: {
+      backgroundColor: "red",
+    },
+    addOptionButton: {
+      backgroundColor: "blue",
+      justifyContent: "center",
+      alignItems: "center",
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      //marginBottom: "15%",
+      left: "-130%",
+    },
+    cameraOptionButton: {
+      justifyContent: "center",
+      alignItems: "center",
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      backgroundColor: "red",
+      //marginBottom: "35%",
+      bottom: "12%",
+      left: "-12%",
+    },
+    addOptionsContainer: {
+      position: "absolute",
+      bottom: 5, // Adjust as needed to move options higher up
+      right: 20,
+      alignItems: "flex-end",
+      //borderWidth: 5,
+    },
+
+    searchBar: {
+      backgroundColor: "green",
+      padding: "4%",
+      borderRadius: 20,
+      margin: "5%",
+    },
+
+    //------Modal----------
+    modalContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    modalContent: {
+      width: "80%",
+      backgroundColor: "white",
+      padding: 20,
+      borderRadius: 10,
+    },
+    modalTitle: {
+      fontSize: 18,
+      fontWeight: "bold",
+      marginBottom: 10,
+    },
+    modalInput: {
+      borderWidth: 1,
+      borderColor: "gray",
+      padding: 10,
+      marginVertical: 5,
+      borderRadius: 5,
+    },
+    errorText: {
+      color: "red",
+      marginTop: 5,
+    },
+
+    requiredField: {
+      borderColor: "red",
+      borderWidth: 1,
+    },
+    modalButtonContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginTop: 10,
+    },
+    modalButton: {
+      backgroundColor: "green",
+      padding: 10,
+      borderRadius: 5,
+    },
+    modalButtonText: {
+      color: "white",
+      fontWeight: "bold",
     },
   });
 
@@ -275,13 +464,20 @@ function Itinerary() {
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.searchContainer}>
-        <Text style={styles.searchText}>Search for your grocery</Text>
-        <Image
-          style={{ width: 32, height: 32, marginRight: 10 }}
-          source={require("./../../assets/search-icon.png")}
+        <TextInput
+          placeholder="Search items"
+          placeholderTextColor="white"
+          style={styles.searchText}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
         />
       </View>
+
       <Filter
+        label="Grocery Items"
+        filters={hardcodedFilters}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
       />
@@ -307,70 +503,75 @@ function Itinerary() {
             <Text style={styles.itemsHeaderText}>Expiry</Text>
           </View>
         </View>
-        {editedItems.map((item, index) => (
-          <View key={index} style={styles.flexRow}>
-            <View style={styles.itemFlex}>
-              <Text
-                style={[
-                  styles.itemText,
-                  markedForDeletion.includes(index) && styles.dullText,
-                ]}
-              >
-                {item.name}
-              </Text>
-            </View>
-            <View style={styles.itemFlex}>
-              {editMode ? (
-                <View style={styles.quantityButtons}>
-                  <TouchableOpacity
-                    style={[
-                      styles.quantityButton,
-                      styles.quantityButtonDecrease,
-                    ]}
-                    onPress={() => handleDecreaseQuantity(index)}
-                  >
-                    <Text style={styles.quantityButtonTextDecrease}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.boughtText}>{item.dateBought}</Text>
-                  <TouchableOpacity
-                    style={[
-                      styles.quantityButton,
-                      styles.quantityButtonIncrease,
-                    ]}
-                    onPress={() => handleIncreaseQuantity(index)}
-                  >
-                    <Text style={styles.quantityButtonTextIncrease}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <Text style={styles.boughtText}>{item.dateBought}</Text>
-              )}
-            </View>
-            <View style={styles.itemFlex}>
-              <Text
-                style={[
-                  styles.expiringText,
-                  markedForDeletion.includes(index) && styles.dullText,
-                ]}
-              >
-                {item.daysLeft}
-              </Text>
-            </View>
-            {editMode && (
-              <TouchableOpacity onPress={() => handleDeletePress(index)}>
-                <FontAwesome
-                  name="trash"
-                  size={24}
+        {filteredItems
+          .filter((item) =>
+            item.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+          .map((item, index) => (
+            <View key={index} style={styles.flexRow}>
+              <View style={styles.itemFlex}>
+                <Text
                   style={[
-                    styles.deleteIcon,
+                    styles.itemText,
                     markedForDeletion.includes(index) && styles.dullText,
                   ]}
-                />
-              </TouchableOpacity>
-            )}
-          </View>
-        ))}
+                >
+                  {item.name}
+                </Text>
+              </View>
+              <View style={styles.itemFlex}>
+                {editMode ? (
+                  <View style={styles.quantityButtons}>
+                    <TouchableOpacity
+                      style={[
+                        styles.quantityButton,
+                        styles.quantityButtonDecrease,
+                      ]}
+                      onPress={() => handleDecreaseQuantity(index)}
+                    >
+                      <Text style={styles.quantityButtonTextDecrease}>-</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.boughtText}>{item.dateBought}</Text>
+                    <TouchableOpacity
+                      style={[
+                        styles.quantityButton,
+                        styles.quantityButtonIncrease,
+                      ]}
+                      onPress={() => handleIncreaseQuantity(index)}
+                    >
+                      <Text style={styles.quantityButtonTextIncrease}>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <Text style={styles.boughtText}>{item.dateBought}</Text>
+                )}
+              </View>
+              <View style={styles.itemFlex}>
+                <Text
+                  style={[
+                    styles.expiringText,
+                    markedForDeletion.includes(index) && styles.dullText,
+                  ]}
+                >
+                  {item.daysLeft}
+                </Text>
+              </View>
+              {editMode && (
+                <TouchableOpacity onPress={() => handleDeletePress(index)}>
+                  <FontAwesome
+                    name="trash"
+                    size={24}
+                    style={[
+                      styles.deleteIcon,
+                      markedForDeletion.includes(index) && styles.dullText,
+                    ]}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          ))}
       </ScrollView>
+
       <SafeAreaView style={styles.footer}>
         {editMode && (
           <View style={styles.editButtonsContainer}>
@@ -392,9 +593,84 @@ function Itinerary() {
           <Text style={styles.editButtonText}>{"Edit"}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-          <FontAwesome name="camera" size={30} color={COLORS.white} />
+          <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
+        {showAddOptions && (
+          <View style={styles.addOptionsContainer}>
+            <TouchableOpacity
+              style={styles.cameraOptionButton}
+              onPress={handleCameraPress}
+            >
+              <FontAwesome name="camera" size={30} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.addOptionButton}
+              onPress={handleManualAddPress}
+            >
+              <FontAwesome name="plus" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
+        )}
       </SafeAreaView>
+      <Modal
+        visible={showManualAddModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setShowManualAddModal(false);
+          setShowAddOptions(false); // Ensure that showAddOptions is set to false when the modal is closed
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add New Item</Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Item Name"
+              value={newItemName}
+              onChangeText={setNewItemName}
+            />
+            {itemNameError !== "" && (
+              <Text style={styles.errorText}>{itemNameError}</Text>
+            )}
+
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Quantity"
+              value={newItemQuantity}
+              onChangeText={setNewItemQuantity}
+              keyboardType="numeric"
+            />
+            {itemQuantityError !== "" && (
+              <Text style={styles.errorText}>{itemQuantityError}</Text>
+            )}
+
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Days Left"
+              value={newItemDaysLeft}
+              onChangeText={setNewItemDaysLeft}
+            />
+            {itemDaysLeftError !== "" && (
+              <Text style={styles.errorText}>{itemDaysLeftError}</Text>
+            )}
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleAddNewItem}
+              >
+                <Text style={styles.modalButtonText}>Add</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: "red" }]}
+                onPress={() => setShowManualAddModal(false)}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
