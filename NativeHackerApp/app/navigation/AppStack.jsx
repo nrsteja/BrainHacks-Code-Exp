@@ -3,7 +3,9 @@ import HomeStack from "../screens/HomeStack";
 import Login from "../screens/Login";
 import Signup from "../screens/Signup";
 import CameraScreen from "../screens/CameraScreen";
-import EditPage from "../screens/Admin/EditPage";
+import Home from "../screens/Admin/AdminHome";
+import Profile from "../screens/Admin/AdminProfile";
+import { AdminStack } from "./AdminStack";
 
 const Stack = createStackNavigator();
 
@@ -21,16 +23,16 @@ export const AppStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="AdminStack"
+        component={AdminStack}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Signup"
         component={Signup}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="CameraScreen" component={CameraScreen} />
-      <Stack.Screen
-        name="EditPage"
-        component={EditPage}
-        options={{ headerShown: false }}
-      />
     </Stack.Navigator>
   );
 };

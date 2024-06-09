@@ -56,7 +56,7 @@ const ItemComponent = ({
   </View>
 );
 
-const EditPage = () => {
+const AdminHome = () => {
   const [items, setItems] = useState([
     {
       id: "Gardenia Bread",
@@ -452,4 +452,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditPage;
+export default AdminHome;

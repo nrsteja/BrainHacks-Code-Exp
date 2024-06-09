@@ -2,16 +2,26 @@ import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import COLORS from "../constants/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const AdminNavBar = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.bottomNav}>
-      <TouchableOpacity style={styles.navButton}>
+      <TouchableOpacity
+        style={styles.navButton}
+        onPress={navigation.navigate("AdminHome")}
+      >
         <Ionicons name="home" size={24} color="white" />
         <Text style={styles.navButtonText}>Home</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navButton}>
-        <Ionicons name="person" size={24} color="white" />
+        <Ionicons
+          name="person"
+          size={24}
+          color="white"
+          onPress={navigation.navigate("AdminProfile")}
+        />
         <Text style={styles.navButtonText}>Profile</Text>
       </TouchableOpacity>
     </View>
