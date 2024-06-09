@@ -62,7 +62,6 @@ const GoogleSignIn = ({ navigation }) => (
 const SignUpPrompt = ({ navigation }) => (
   <View style={styles.signUpPromptContainer}>
     <Text style={styles.signUpPromptText}>Don't have an account?</Text>
-
     <Text
       onPress={() => navigation.navigate("Signup")}
       style={styles.signUpPromptLink}
@@ -74,6 +73,8 @@ const SignUpPrompt = ({ navigation }) => (
 
 function Login() {
   const navigation = useNavigation();
+  const [isAdmin, setIsAdmin] = React.useState(false);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
@@ -103,10 +104,34 @@ function Login() {
               secureTextEntry={true}
             />
             <RememberMe />
+            <View style={styles.toggleContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.toggleButton,
+                  { backgroundColor: isAdmin ? COLORS.grey : COLORS.blue },
+                ]}
+                onPress={() => setIsAdmin(false)}
+              >
+                <Text style={styles.toggleButtonText}>User</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.toggleButton,
+                  { backgroundColor: isAdmin ? COLORS.blue : COLORS.grey },
+                ]}
+                onPress={() => setIsAdmin(true)}
+              >
+                <Text style={styles.toggleButtonText}>Admin</Text>
+              </TouchableOpacity>
+            </View>
             <SignInButton
               text="Sign in"
               onPress={() => {
-                navigation.replace("HomeStack");
+                if (isAdmin) {
+                  navigation.replace("AdminStack");
+                } else {
+                  navigation.replace("HomeStack");
+                }
               }}
             />
           </View>
@@ -188,11 +213,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
     backgroundColor: COLORS.blue,
     borderRadius: 8,
-    height: windowHeight * 0.06, // Adjusted for better responsiveness
+    height: windowHeight * 0.06,
   },
   signInButtonText: {
     color: COLORS.white,
-    fontSize: windowWidth * 0.045, // Adjusted for better responsiveness
+    fontSize: windowWidth * 0.045,
   },
   googleSignInContainer: {
     flexDirection: "row",
@@ -211,7 +236,7 @@ const styles = StyleSheet.create({
   googleSignInText: {
     color: COLORS.white,
     marginLeft: 8,
-    fontSize: windowWidth * 0.045, // Adjusted for better responsiveness
+    fontSize: windowWidth * 0.045,
   },
   signUpPromptContainer: {
     marginTop: 16,
@@ -224,6 +249,20 @@ const styles = StyleSheet.create({
   signUpPromptLink: {
     color: "#000",
     marginLeft: 4,
+  },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 16,
+  },
+  toggleButton: {
+    padding: 10,
+    borderRadius: 8,
+    marginHorizontal: 5,
+  },
+  toggleButtonText: {
+    color: COLORS.white,
+    fontSize: windowWidth * 0.045,
   },
 });
 

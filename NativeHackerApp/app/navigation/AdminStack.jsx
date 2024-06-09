@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeStack from "../screens/HomeStack";
-import Login from "../screens/Login";
-import Signup from "../screens/Signup";
-import CameraScreen from "../screens/CameraScreen";
+// import HomeStack from "../screens/HomeStack";
+// import Login from "../screens/Login";
+// import Signup from "../screens/Signup";
+// import CameraScreen from "../screens/CameraScreen";
 import AdminHome from "../screens/Admin/AdminHome";
 import AdminProfile from "../screens/Admin/AdminProfile";
 
