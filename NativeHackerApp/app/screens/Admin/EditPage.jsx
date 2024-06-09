@@ -1,17 +1,24 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   Pressable,
+  TextInput,
   Image,
   StyleSheet,
+  FlatList,
 } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 
-const ItemComponent = ({ emoji, itemName }) => {
-  const handleIncrement = () => {};
-  const handleDecrement = () => {};
-
+const ItemComponent = ({
+  emoji,
+  itemName,
+  quantity,
+  onIncrement,
+  onDecrement,
+  onDelete,
+}) => {
   return (
     <View style={styles.itemContainer}>
       <View style={styles.itemDetails}>
@@ -20,25 +27,69 @@ const ItemComponent = ({ emoji, itemName }) => {
         </View>
         <View style={styles.itemName}>
           <Text>{itemName}</Text>
+          <Text>Quantity: {quantity}</Text>
         </View>
       </View>
       <View style={styles.quantityControls}>
-        <Pressable onPress={handleDecrement} style={styles.controlButton}>
-          <Text>-</Text>
+        <Pressable onPress={onDecrement} style={styles.controlButton}>
+          <FontAwesome name="minus" size={16} color="white" />
         </Pressable>
-        <Pressable onPress={handleIncrement} style={styles.controlButton}>
-          <Text>+</Text>
+        <Pressable onPress={onIncrement} style={styles.controlButton}>
+          <FontAwesome name="plus" size={16} color="white" />
+        </Pressable>
+        <Pressable onPress={onDelete} style={styles.deleteButton}>
+          <FontAwesome name="trash" size={16} color="white" />
         </Pressable>
       </View>
     </View>
   );
 };
 
-function MyComponent() {
-  const handleAddItem = () => {};
-  const handleDeleteItem = () => {};
-  const handleView = () => {};
-  const handleUpdate = () => {};
+function EditPage() {
+  const [items, setItems] = useState([
+    { id: "1", emoji: "🍞", itemName: "Gardenia Bread", quantity: 1 },
+    { id: "2", emoji: "🥚", itemName: "Eggs", quantity: 12 },
+    { id: "3", emoji: "🥛", itemName: "Milk", quantity: 2 },
+    { id: "4", emoji: "🥜", itemName: "Peanut Butter", quantity: 1 },
+    { id: "5", emoji: "🐉", itemName: "Dragon Fruit", quantity: 3 },
+  ]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newItem, setNewItem] = useState({
+    emoji: "",
+    itemName: "",
+    quantity: 1,
+  });
+
+  const handleAddItem = () => {
+    setItems([...items, { ...newItem, id: (items.length + 1).toString() }]);
+    setNewItem({ emoji: "", itemName: "", quantity: 1 });
+  };
+
+  const handleDeleteItem = (id) => {
+    setItems(items.filter((item) => item.id !== id));
+  };
+
+  const handleIncrement = (id) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  const handleDecrement = (id) => {
+    setItems(
+      items.map((item) =>
+        item.id === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
+  const toggleEditMode = () => {
+    setIsEditing(!isEditing);
+  };
 
   return (
     <View style={styles.container}>
@@ -46,52 +97,55 @@ function MyComponent() {
         <Text style={styles.headerText}>GroceryGrabber</Text>
       </View>
       <View style={styles.actionRow}>
-        <TouchableOpacity onPress={handleView}>
-          <Text style={styles.actionText}>View</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
-          <Text style={styles.updateButtonText}>Update</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.actionRow}>
-        <TouchableOpacity onPress={handleAddItem} style={styles.addButton}>
-          <Text>Add Item</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleDeleteItem}
-          style={styles.deleteButton}
-        >
-          <Text>Delete Item</Text>
+        <TouchableOpacity onPress={toggleEditMode} style={styles.updateButton}>
+          <Text style={styles.updateButtonText}>
+            {isEditing ? "Done" : "Update"}
+          </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.itemsContainer}>
-        <View style={styles.itemsHeader}>
-          <Text style={styles.itemsHeaderText}>Items</Text>
-          <Text style={styles.itemsCountText}>5 items</Text>
-        </View>
-        <ItemComponent emoji="🍜" itemName="Gardenia Bread" />
-        <ItemComponent emoji="🍜" itemName="Eggs" />
-        <ItemComponent emoji="🍜" itemName="Milk" />
-        <ItemComponent emoji="🍜" itemName="Peanut butter" />
-        <ItemComponent emoji="🍜" itemName="Dragon Fruit" />
-      </View>
-      <View style={styles.footer}>
-        <View style={styles.footerImageContainer}>
-          <Image
-            source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/0a3a3fe259f6c8ab64003e9294a1c9d48a6cd7609019165cce4a3a33a931cab1?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-            }}
-            style={styles.footerImage}
+      {isEditing && (
+        <View style={styles.editContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Emoji"
+            value={newItem.emoji}
+            onChangeText={(text) => setNewItem({ ...newItem, emoji: text })}
           />
+          <TextInput
+            style={styles.input}
+            placeholder="Item Name"
+            value={newItem.itemName}
+            onChangeText={(text) => setNewItem({ ...newItem, itemName: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Quantity"
+            keyboardType="numeric"
+            value={newItem.quantity.toString()}
+            onChangeText={(text) =>
+              setNewItem({ ...newItem, quantity: parseInt(text) })
+            }
+          />
+          <TouchableOpacity onPress={handleAddItem} style={styles.addButton}>
+            <Text style={styles.addButtonText}>Add Item</Text>
+          </TouchableOpacity>
         </View>
-        <Image
-          source={{
-            uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/30e3d31c19bd0f1572ad7b026331c9ca2f1456fef2f7240082d0d7f41419665f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-          }}
-          style={styles.footerSecondImage}
-        />
-      </View>
+      )}
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ItemComponent
+            emoji={item.emoji}
+            itemName={item.itemName}
+            quantity={item.quantity}
+            onIncrement={() => handleIncrement(item.id)}
+            onDecrement={() => handleDecrement(item.id)}
+            onDelete={() => handleDeleteItem(item.id)}
+          />
+        )}
+        contentContainerStyle={styles.itemsContainer}
+      />
     </View>
   );
 }
@@ -120,16 +174,12 @@ const styles = StyleSheet.create({
   },
   actionRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 8,
     width: "100%",
     marginTop: 16,
-  },
-  actionText: {
-    color: "#4a4a4a",
-    fontSize: 20,
   },
   updateButton: {
     justifyContent: "center",
@@ -142,46 +192,35 @@ const styles = StyleSheet.create({
   updateButtonText: {
     color: "#ececec",
   },
-  divider: {
-    marginTop: 32,
+  editContainer: {
     width: "100%",
-    height: 1,
-    backgroundColor: "black",
+    padding: 16,
+    alignItems: "center",
+  },
+  input: {
+    width: "100%",
+    padding: 8,
+    marginVertical: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
   },
   addButton: {
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 8,
+    paddingHorizontal: 24,
     paddingVertical: 8,
-    backgroundColor: "red",
-    borderRadius: 50,
+    backgroundColor: "green",
+    borderRadius: 100,
+    marginTop: 8,
   },
-  deleteButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    backgroundColor: "red",
-    borderRadius: 50,
+  addButtonText: {
+    color: "white",
   },
   itemsContainer: {
     width: "100%",
-    maxWidth: 335,
-    marginTop: 16,
-  },
-  itemsHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     paddingHorizontal: 16,
-  },
-  itemsHeaderText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#6b6b6b",
-  },
-  itemsCountText: {
-    fontSize: 12,
-    color: "#8c8c8c",
+    marginTop: 16,
   },
   itemContainer: {
     flexDirection: "row",
@@ -218,34 +257,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 8,
     backgroundColor: "#ff4d4d",
-    height: 20,
-    width: 20,
+    height: 32,
+    width: 32,
     marginHorizontal: 4,
+    borderRadius: 16,
   },
-  footer: {
-    flexDirection: "row",
-    paddingLeft: 4,
-    paddingRight: 32,
-    paddingVertical: 1,
-    marginTop: 24,
-    width: "100%",
-    backgroundColor: "#1c1c1c",
-    justifyContent: "space-between",
+  controlButtonText: {
+    color: "white",
+    fontWeight: "bold",
   },
-  footerImageContainer: {
+  deleteButton: {
     justifyContent: "center",
     alignItems: "center",
     padding: 8,
-    backgroundColor: "#6b6b6b",
-  },
-  footerImage: {
-    aspectRatio: 1,
-    width: 38,
-  },
-  footerSecondImage: {
-    aspectRatio: 1,
-    width: 36,
+    backgroundColor: "red",
+    height: 32,
+    width: 32,
+    marginHorizontal: 4,
+    borderRadius: 16,
   },
 });
 
-export default MyComponent;
+export default EditPage;
