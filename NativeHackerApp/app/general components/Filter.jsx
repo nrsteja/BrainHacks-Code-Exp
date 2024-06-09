@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
+import COLORS from "../constants/colors";
 
 const Filter = ({ isDropdownOpen, setIsDropdownOpen }) => {
   return (
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: "2%",
     marginVertical: "1.5%",
-    backgroundColor: "green",
+    backgroundColor: COLORS.green,
     borderRadius: "50%",
     alignSelf: "center",
   },
