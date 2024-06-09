@@ -10,9 +10,10 @@ import {
   StyleSheet,
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import CheckBox from '@react-native-community/checkbox';
-import { useNavigation } from '@react-navigation/native'; 
-import COLORS from "../constants/colors"
+import CheckBox from "@react-native-community/checkbox";
+import { useNavigation } from "@react-navigation/native";
+import COLORS from "../constants/colors";
+import Header from "../general components/header";
 
 const getFontFamily = () => {
   if (Platform.OS === "ios") {
@@ -25,19 +26,19 @@ const getFontFamily = () => {
 
 const ITEMS = [
   {
-    id: '1',
+    id: "1",
     itemName: "White Bread",
     daysLeft: 3,
     used: true,
   },
   {
-    id: '2',
+    id: "2",
     itemName: "Spinach",
     daysLeft: 1,
     used: true,
   },
   {
-    id: '3',
+    id: "3",
     itemName: "Milk - Gardenia",
     daysLeft: 4,
     used: true,
@@ -46,7 +47,7 @@ const ITEMS = [
 
 const PROMOS = [
   {
-    id: '1',
+    id: "1",
     name: "FairPrice",
     location: "Kampung Admiralty",
     itemsOnSale: 11,
@@ -54,7 +55,7 @@ const PROMOS = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/233402a655fce3616d5404a84b9c5cfa3816ca29d7f7e9f57002b53e34d3e79f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
-    id: '2',
+    id: "2",
     name: "ColdStorage",
     location: "Causeway Point",
     itemsOnSale: 2,
@@ -62,7 +63,7 @@ const PROMOS = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/c03b51cecc85bf286bcb805b286071226ee009e347f7e995a30b085156157c0e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
-    id: '3',
+    id: "3",
     name: "Giant",
     location: "Admiralty MRT",
     itemsOnSale: 4,
@@ -70,7 +71,7 @@ const PROMOS = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/c63809a49994ae4e0643f0535a928d4afa6deda515c329258fc88bcd34fb7e4e?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
   },
   {
-    id: '4',
+    id: "4",
     name: "Prime",
     location: "NTU",
     itemsOnSale: 2,
@@ -95,15 +96,15 @@ const MoneySaved = ({ amount }) => (
 
 const Item = ({ itemName, daysLeft, used }) => (
   <View>
-    <View style={{ flexDirection: "row", justifyContent: "center"}}>
+    <View style={{ flexDirection: "row", justifyContent: "center" }}>
       <View style={{ flex: 0.6 }}>
         <Text style={styles.itemsFont}>{itemName}</Text>
       </View>
       <View style={{ flex: 0.2, alignItems: "center" }}>
         <Text style={styles.itemsFont}>{daysLeft}</Text>
       </View>
-      <View style={{ flex: 0.2, alignItems: "flex-end"}}>
-        <Text style = {styles.itemsFont}>Y/N</Text>
+      <View style={{ flex: 0.2, alignItems: "flex-end" }}>
+        <Text style={styles.itemsFont}>Y/N</Text>
       </View>
     </View>
   </View>
@@ -129,12 +130,11 @@ const Promo = ({ name, location, itemsOnSale, image }) => (
 );
 
 function Home() {
-
   const navigation = useNavigation();
 
   const handleTrackerPress = () => {
     console.log("Navigating to GroceryTracker");
-    navigation.navigate("CameraScreen")
+    navigation.navigate("CameraScreen");
   };
 
   const handlePromotionPress = (title) => {
@@ -143,9 +143,7 @@ function Home() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>GroceryGrabber</Text>
-      </View>
+      <Header />
       <View style={styles.welcomeContainer}>
         <Text style={styles.welcomeText}>Welcome Santosh,</Text>
         <View style={styles.savingsContainer}>
@@ -211,19 +209,6 @@ const styles = StyleSheet.create({
     maxWidth: 480,
     backgroundColor: COLORS.white,
     alignSelf: "center",
-  },
-  header: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 16,
-    width: "100%",
-    backgroundColor: COLORS.green,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: COLORS.white,
-    textAlign: "center",
   },
   welcomeContainer: {
     flex: 1,

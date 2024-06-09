@@ -10,7 +10,7 @@ import {
   ImageBackground,
   StyleSheet,
 } from "react-native";
-import COLORS from "../constants/colors"
+import COLORS from "../constants/colors";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -33,7 +33,7 @@ const RememberMe = () => (
       <View style={styles.rememberMeCheckbox} />
       <Text>Remember me</Text>
     </View>
-    <Button title = "Forgot password?"></Button>
+    <Button title="Forgot password?"></Button>
   </View>
 );
 
@@ -43,14 +43,19 @@ const SignInButton = ({ text, onPress }) => (
   </TouchableOpacity>
 );
 
-const GoogleSignIn = () => (
+const GoogleSignIn = ({ navigation }) => (
   <TouchableOpacity style={styles.googleSignInContainer}>
     <Image
-      source={require('../../assets/google.png')}
+      source={require("../../assets/google.png")}
       style={styles.googleSignInImage}
       resizeMode="contain"
     />
-    <Text style={styles.googleSignInText}>Or sign in with Google</Text>
+    <Text
+      style={styles.googleSignInText}
+      onPress={() => navigation.navigate("EditPage")}
+    >
+      Or sign in with Google
+    </Text>
   </TouchableOpacity>
 );
 
@@ -98,10 +103,15 @@ function Login() {
               secureTextEntry={true}
             />
             <RememberMe />
-            <SignInButton text="Sign in" onPress={() => { navigation.replace('HomeStack') }} />
+            <SignInButton
+              text="Sign in"
+              onPress={() => {
+                navigation.replace("HomeStack");
+              }}
+            />
           </View>
           <View style={{ flex: 0.3, width: "80%" }}>
-            <GoogleSignIn />
+            <GoogleSignIn navigation={navigation} />
             <SignUpPrompt navigation={navigation} />
           </View>
         </SafeAreaView>
