@@ -8,10 +8,12 @@ import {
   ScrollView,
   Dimensions,
   Alert,
+  Button
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../general components/header";
 import COLORS from "../constants/colors";
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
@@ -52,7 +54,7 @@ const ToggleItem = ({ label, value, onToggle }) => (
 function Account() {
   const [isDarkMode, setIsDarkMode] = React.useState(false);
   const [isPushNotifications, setIsPushNotifications] = React.useState(false);
-
+  const navigation = useNavigation();
   const handleEditProfile = () => Alert.alert("Edit profile clicked");
   const handleChangePassword = () => Alert.alert("Change password clicked");
   const handleDarkModeToggle = () => {
@@ -81,6 +83,7 @@ function Account() {
             onPress={() => Alert.alert("Account Settings clicked")}
           />
           <Text style={styles.sectionText}>Account Settings</Text>
+          <Button title = "Sign Out" onPress={() => navigation.navigate('Login')}/>
           <TouchableOpacity
             onPress={handleEditProfile}
             style={styles.flexColItem}
