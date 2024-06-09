@@ -166,7 +166,7 @@ const MapScreen = () => {
            >
              <Callout style={styles.callout}>
                <Text style={styles.calloutTitle}>{supermarket.name}</Text>
-               <Text>{supermarket.vicinity}</Text>
+               <Text style = {{alignItems: "center"}}>{supermarket.vicinity}</Text>
                <Button title = "Check Out Items Here" onPress = {() => navigation.navigate('Search')}/>
              </Callout>
            </Marker>
