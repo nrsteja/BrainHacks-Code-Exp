@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import Header from "../general components/header";
 import Filter from "../general components/Filter";
+import { useNavigation } from "@react-navigation/native";
 
 const hardcodedItems = [
   { name: "White Bread", dateBought: 1, daysLeft: "3 days", daysLeftNumber: 3 },
@@ -40,6 +41,7 @@ const hardcodedFilters = [
 ];
 
 function Itinerary() {
+  const navigation = useNavigation();
   const [items, setItems] = useState(hardcodedItems);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
@@ -72,9 +74,7 @@ function Itinerary() {
   };
 
   const handleEditPress = () => {
-    console.log("Before toggle:", editMode);
     setEditMode(!editMode);
-    console.log("After toggle:", editMode);
     if (showAddOptions) {
       setShowAddOptions(false);
     }
@@ -99,32 +99,25 @@ function Itinerary() {
     setEditedItems([...items]); // Reset edited items on cancel
   };
 
-  // const handleAddPress = () => {
-  //   if (editMode) {
-  //     setEditMode(false);
-  //   }
-  //   if (showAddOptions) {
-  //     setShowAddOptions(false);
-  //   } else {
-  //     setShowAddOptions(true);
-  //   }
-  // };
   const handleAddPress = () => {
+    if (editMode) {
+      setEditMode(false);
+    }
     setShowAddOptions(!showAddOptions);
-    //setShowAddOptions((prevShowAddOptions) => !prevShowAddOptions);
   };
 
   const handleCameraPress = async () => {
+    navigation.navigate("CameraScreen");
     if (showAddOptions) {
       setShowAddOptions(false);
     }
-    const { status } = await Camera.requestPermissionsAsync();
-    if (status === "granted") {
-      const image = await ImagePicker.launchCameraAsync();
-      console.log("Image captured", image);
-    } else {
-      Alert.alert("Permission Denied", "Camera permission is required!");
-    }
+    // const { status } = await Camera.requestPermissionsAsync();
+    // if (status === "granted") {
+    //   const image = await ImagePicker.launchCameraAsync();
+    //   console.log("Image captured", image);
+    // } else {
+    //   Alert.alert("Permission Denied", "Camera permission is required!");
+    // }
   };
 
   const handleGalleryPress = async () => {
@@ -217,7 +210,7 @@ function Itinerary() {
       backgroundColor: "white",
       width: "100%",
       alignSelf: "center",
-      paddingBottom: 100, // Ensure there is space for the footer
+      paddingBottom: 100,
     },
     searchContainer: {
       flexDirection: "row",
@@ -307,10 +300,10 @@ function Itinerary() {
       borderRadius: 35,
       height: 70,
       width: 70,
-      zIndex: 10, // Ensure it is on top
-      position: "absolute", // Ensure it is positioned correctly
-      bottom: 0, // Adjust as needed
-      right: 20, // Adjust as needed
+      zIndex: 10,
+      position: "absolute",
+      bottom: 0,
+      right: 20,
     },
     addButtonText: {
       fontSize: 30,
@@ -330,18 +323,18 @@ function Itinerary() {
       backgroundColor: "blue",
       marginHorizontal: "7%",
       left: "40%",
-      bottom: "5%",
+      bottom: "15%",
     },
     cancelButton: {
       paddingHorizontal: "6%",
       backgroundColor: "red",
       marginHorizontal: "15%",
-      bottom: "-28%",
+      bottom: "-17%",
     },
 
     deleteIcon: {
       color: "red",
-      marginHorizontal: 10,
+      marginHorizontal: 3,
     },
     dullText: {
       color: "gray",
@@ -354,9 +347,9 @@ function Itinerary() {
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 10,
-      height: 40,
-      width: 40,
-      marginHorizontal: 5,
+      height: 30,
+      width: 30,
+      margin: 7,
     },
     quantityButtonTextIncrease: {
       fontSize: 24,
@@ -391,16 +384,14 @@ function Itinerary() {
       height: 60,
       borderRadius: 30,
       backgroundColor: "red",
-      //marginBottom: "35%",
       bottom: "12%",
       left: "-12%",
     },
     addOptionsContainer: {
       position: "absolute",
-      bottom: 5, // Adjust as needed to move options higher up
+      bottom: 5,
       right: 20,
       alignItems: "flex-end",
-      //borderWidth: 5,
     },
 
     searchBar: {
@@ -410,7 +401,6 @@ function Itinerary() {
       margin: "5%",
     },
 
-    //------Modal----------
     modalContainer: {
       flex: 1,
       justifyContent: "center",
