@@ -1,11 +1,22 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Modal, TextInput, Clipboard, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  Modal,
+  TextInput,
+  Clipboard,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
 import Header from "../../general components/header";
 import AdminNavBar from "../../general components/AdminNavBar";
 import COLORS from "../../constants/colors";
-import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 
 const ProfileItem = ({ icon, label, value, onEdit }) => (
@@ -30,9 +41,9 @@ const AdminProfile = () => {
     name: "Woodlands Fairprice",
     logo: "👤",
     accountNumber: "1234567890",
-    accountName: "@WoodlandsFairprice",
+    accountName: "Woodlands Fairprice",
     address: "Woodlands, Singapore",
-    phoneNumber: "+65 9235 0345",
+    phoneNumber: "92350345",
     emailAddress: "wdlsFairprice@gmail.com",
     idVerification: "Verified",
     parentCompanyName: "NTUC Fairprice",
@@ -42,21 +53,38 @@ const AdminProfile = () => {
   const [editingField, setEditingField] = useState(null);
   const [newFieldValue, setNewFieldValue] = useState("");
   const [parentCompanyOther, setParentCompanyOther] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [parentCompanyItems, setParentCompanyItems] = useState([
+    { label: "NTUC Fairprice", value: "NTUC Fairprice" },
+    { label: "Prime", value: "Prime" },
+    { label: "Giant", value: "Giant" },
+    { label: "Sheng Siong", value: "Sheng Siong" },
+    { label: "Other", value: "Other" },
+  ]);
+
   const navigation = useNavigation();
 
   const handleCopyAccountNumber = () => {
     Clipboard.setString(user.accountNumber);
     Toast.show({
-      type: 'success',
-      text1: 'Copied',
-      text2: 'Account number copied to clipboard',
+      type: "success",
+      text1: "Copied",
+      text2: "Account number copied to clipboard",
     });
   };
 
   const handleEdit = (field) => {
     setEditingField(field);
+    if (field === "parentCompanyName") {
+      setParentCompanyOther(user[field] === "Other");
+    }
     setNewFieldValue(user[field]);
     setModalVisible(true);
+  };
+
+  const handleParentCompanyChange = (value) => {
+    setNewFieldValue(value);
+    setParentCompanyOther(value === "Other");
   };
 
   const validateEmail = (email) => {
@@ -67,21 +95,25 @@ const AdminProfile = () => {
   const handleSave = () => {
     if (editingField === "phoneNumber" && !/^\+65 \d{8}$/.test(newFieldValue)) {
       Toast.show({
-        type: 'error',
-        text1: 'Invalid Phone Number',
-        text2: 'Phone number must be in the format +65 followed by 8 digits',
+        type: "error",
+        text1: "Invalid Phone Number",
+        text2: "Phone number must be in the format +65 followed by 8 digits",
       });
       return;
     }
     if (editingField === "emailAddress" && !validateEmail(newFieldValue)) {
       Toast.show({
-        type: 'error',
-        text1: 'Invalid Email Address',
-        text2: 'Please enter a valid email address',
+        type: "error",
+        text1: "Invalid Email Address",
+        text2: "Please enter a valid email address",
       });
       return;
     }
-    setUser({ ...user, [editingField]: newFieldValue });
+    setUser((prevUser) => ({
+      ...prevUser,
+      [editingField]: newFieldValue,
+      ...(editingField === "accountName" && { name: newFieldValue }), // Update name if accountName is edited
+    }));
     setModalVisible(false);
   };
 
@@ -89,9 +121,9 @@ const AdminProfile = () => {
     // Add sign-out functionality here
     navigation.navigate("Login");
     Toast.show({
-      type: 'success',
-      text1: 'Signed Out',
-      text2: 'You have been signed out successfully',
+      type: "success",
+      text1: "Signed Out",
+      text2: "You have been signed out successfully",
     });
   };
 
@@ -104,19 +136,54 @@ const AdminProfile = () => {
           <Text style={styles.profileName}>{user.name}</Text>
         </View>
         <View style={styles.accountNumberContainer}>
-          <Text style={styles.profileAccountNumber}>Account Number: {user.accountNumber}</Text>
-          <TouchableOpacity onPress={handleCopyAccountNumber} style={styles.copyButton}>
+          <Text style={styles.profileAccountNumber}>
+            Account Number: {user.accountNumber}
+          </Text>
+          <TouchableOpacity
+            onPress={handleCopyAccountNumber}
+            style={styles.copyButton}
+          >
             <FontAwesome name="copy" size={16} color="#007bff" />
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.profileItemsContainer}>
-        <ProfileItem icon="user" label="Account Name" value={user.accountName} onEdit={() => handleEdit("accountName")} />
-        <ProfileItem icon="map-marker" label="Address" value={user.address} onEdit={() => handleEdit("address")} />
-        <ProfileItem icon="phone" label="Phone Number" value={user.phoneNumber} onEdit={() => handleEdit("phoneNumber")} />
-        <ProfileItem icon="envelope" label="Email Address" value={user.emailAddress} onEdit={() => handleEdit("emailAddress")} />
-        <ProfileItem icon="id-card" label="Identification Verification" value={user.idVerification} onEdit={() => handleEdit("idVerification")} />
-        <ProfileItem icon="building" label="Parent Company Name" value={user.parentCompanyName} onEdit={() => handleEdit("parentCompanyName")} />
+        <ProfileItem
+          icon="user"
+          label="Account Name"
+          value={user.accountName}
+          onEdit={() => handleEdit("accountName")}
+        />
+        <ProfileItem
+          icon="map-marker"
+          label="Address"
+          value={user.address}
+          onEdit={() => handleEdit("address")}
+        />
+        <ProfileItem
+          icon="phone"
+          label="Phone Number"
+          value={user.phoneNumber}
+          onEdit={() => handleEdit("phoneNumber")}
+        />
+        <ProfileItem
+          icon="envelope"
+          label="Email Address"
+          value={user.emailAddress}
+          onEdit={() => handleEdit("emailAddress")}
+        />
+        <ProfileItem
+          icon="id-card"
+          label="Identification Verification"
+          value={user.idVerification}
+          onEdit={() => handleEdit("idVerification")}
+        />
+        <ProfileItem
+          icon="building"
+          label="Parent Company Name"
+          value={user.parentCompanyName}
+          onEdit={() => handleEdit("parentCompanyName")}
+        />
       </View>
       <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>
@@ -129,7 +196,10 @@ const AdminProfile = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalBackground}>
-          <KeyboardAvoidingView style={styles.modalContainer} behavior="padding">
+          <KeyboardAvoidingView
+            style={styles.modalContainer}
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+          >
             <Text style={styles.modalTitle}>Edit {editingField}</Text>
             {editingField === "phoneNumber" ? (
               <View style={styles.phoneNumberContainer}>
@@ -153,44 +223,46 @@ const AdminProfile = () => {
                   setNewFieldValue(text);
                   if (!validateEmail(text)) {
                     Toast.show({
-                      type: 'error',
-                      text1: 'Invalid Email Address',
-                      text2: 'Please enter a valid email address',
+                      type: "error",
+                      text1: "Invalid Email Address",
+                      text2: "Please enter a valid email address",
                     });
                   }
                 }}
                 keyboardType="email-address"
               />
             ) : editingField === "idVerification" ? (
-              <Picker
-                selectedValue={newFieldValue}
-                onValueChange={(itemValue) => setNewFieldValue(itemValue)}
-                style={styles.picker}
-              >
-                <Picker.Item label="Verified" value="Verified" />
-                <Picker.Item label="Unverified" value="Unverified" />
-              </Picker>
+              <DropDownPicker
+                open={dropdownOpen}
+                value={newFieldValue}
+                items={[
+                  { label: "Verified", value: "Verified" },
+                  { label: "Unverified", value: "Unverified" },
+                ]}
+                setOpen={setDropdownOpen}
+                setValue={setNewFieldValue}
+                containerStyle={styles.pickerContainer}
+                dropDownContainerStyle={styles.dropDownContainer}
+                zIndex={1000}
+              />
             ) : editingField === "parentCompanyName" ? (
               <>
-                <Picker
-                  selectedValue={newFieldValue}
-                  onValueChange={(itemValue) => {
-                    setNewFieldValue(itemValue);
-                    setParentCompanyOther(itemValue === "Other");
-                  }}
-                  style={styles.picker}
-                >
-                  <Picker.Item label="NTUC Fairprice" value="NTUC Fairprice" />
-                  <Picker.Item label="Prime" value="Prime" />
-                  <Picker.Item label="Giant" value="Giant" />
-                  <Picker.Item label="Sheng Siong" value="Sheng Siong" />
-                  <Picker.Item label="Other" value="Other" />
-                </Picker>
-                {parentCompanyOther && (
+                <DropDownPicker
+                  open={dropdownOpen}
+                  value={newFieldValue}
+                  items={parentCompanyItems}
+                  setOpen={setDropdownOpen}
+                  setValue={handleParentCompanyChange}
+                  setItems={setParentCompanyItems}
+                  containerStyle={styles.pickerContainer}
+                  dropDownContainerStyle={styles.dropDownContainer}
+                  zIndex={1000}
+                />
+                {newFieldValue === "Other" && (
                   <TextInput
                     style={styles.input}
                     placeholder="Enter Parent Company Name"
-                    value={newFieldValue}
+                    value={parentCompanyOther ? newFieldValue : ""}
                     onChangeText={setNewFieldValue}
                   />
                 )}
@@ -205,13 +277,16 @@ const AdminProfile = () => {
             <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
               <Text style={styles.saveButtonText}>Save</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.cancelButton}
+            >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </View>
       </Modal>
-      <Toast position="bottom" />
+      <Toast position="top" topOffset={50} />
     </SafeAreaView>
   );
 };
@@ -349,10 +424,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: COLORS.white,
   },
-  picker: {
+  pickerContainer: {
     width: "100%",
-    height: 50,
     marginVertical: 8,
+  },
+  dropDownContainer: {
+    borderColor: COLORS.grey,
+    borderWidth: 1,
   },
   saveButton: {
     justifyContent: "center",
