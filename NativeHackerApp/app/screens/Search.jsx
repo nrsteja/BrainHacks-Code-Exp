@@ -15,7 +15,8 @@ import Header from "../general components/header";
 import COLORS from "../constants/colors"
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useState } from "react";
-import { PROMOS, Promo, ITEMS, Item } from "./Home";
+import { Promo, Item } from "./Home";
+import { PROMOS, ITEMS } from "./Lists";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
