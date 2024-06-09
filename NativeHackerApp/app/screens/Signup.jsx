@@ -38,7 +38,7 @@ const MyComponent = () => {
           label={'Name'}
           borderColor={COLORS.green}
           inputPadding={0}
-          backgroundColor={COLORS.white}
+          backgroundColor="transparent"
           style={{ width: 0.85 * width}}
           labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
         />
@@ -48,7 +48,7 @@ const MyComponent = () => {
             label={'Email'}
             borderColor={COLORS.green}
             inputPadding={0}
-            backgroundColor={COLORS.white}
+            backgroundColor="transparent"
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
           />
@@ -58,7 +58,7 @@ const MyComponent = () => {
             label={'Password'}
             borderColor={COLORS.green}
             inputPadding={0}
-            backgroundColor={COLORS.white}
+            backgroundColor="transparent"
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
           />
@@ -68,7 +68,7 @@ const MyComponent = () => {
             label={'Confirm Password'}
             borderColor={COLORS.green}
             inputPadding = {0}
-            backgroundColor={COLORS.white}
+            backgroundColor="transparent"
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
             secureTextEntry = "true"
