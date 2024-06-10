@@ -9,6 +9,7 @@ import {
   TextInput,
   Modal,
   Alert,
+  Dimensions,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
@@ -18,6 +19,10 @@ import Header from "../general components/header";
 import Filter from "../general components/Filter";
 import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
+
+
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 const hardcodedItems = [
   { name: "White Bread", dateBought: 1, daysLeft: "3 days", daysLeftNumber: 3 },
@@ -298,12 +303,12 @@ function Itinerary() {
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: COLORS.green,
-      borderRadius: 35,
-      height: 70,
-      width: 70,
+      borderRadius: 100,
+      height: 0.07 * height,
+      width: 0.07 * height,
       zIndex: 10,
       position: "absolute",
-      bottom: 0,
+      bottom: 0.01 * height,
       right: 20,
     },
     addButtonText: {
@@ -372,21 +377,22 @@ function Itinerary() {
       backgroundColor: "blue",
       justifyContent: "center",
       alignItems: "center",
-      width: 60,
-      height: 60,
-      borderRadius: 30,
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
       //marginBottom: "15%",
-      left: "-130%",
+      right: 0.18 * width,
+      bottom: 0.01 * height
     },
     cameraOptionButton: {
       justifyContent: "center",
       alignItems: "center",
-      width: 60,
-      height: 60,
-      borderRadius: 30,
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
       backgroundColor: "red",
-      bottom: "12%",
-      left: "-12%",
+      right: 0.01 * width,
+      bottom: 0.025 * height
     },
     addOptionsContainer: {
       position: "absolute",
