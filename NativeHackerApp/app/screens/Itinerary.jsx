@@ -230,7 +230,7 @@ function Itinerary() {
       backgroundColor: COLORS.green,
       alignSelf: "center",
       maxWidth: "80%",
-      borderRadius: "50%",
+      borderRadius: width/2
     },
     searchText: {
       fontSize: 18,
@@ -291,8 +291,10 @@ function Itinerary() {
       paddingHorizontal: "8%",
       paddingVertical: "3%",
       backgroundColor: COLORS.green,
-      borderRadius: "50%",
+      borderRadius: 50, // Set to a fixed number for circular shape
       bottom: "3%",
+      width: 100, // Explicitly set width and height to make it circular
+      height: 100,
     },
     editButtonText: {
       fontSize: 20,
