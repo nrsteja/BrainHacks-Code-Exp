@@ -12,10 +12,12 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from "react-native";
+import COLORS from "../../constants/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import Header from "../../general components/header";
 import AdminNavBar from "../../general components/AdminNavBar";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
 const UNSPLASH_API_URL = "https://api.unsplash.com/photos/random";
@@ -83,7 +85,7 @@ const ItemComponent = ({
     {isExpanded && (
       <View style={styles.expandedDetails}>
         <Text style={styles.itemNameOnImage}>{item.itemName}</Text>
-        {item.image && ( // Check if imageUrl exists
+        {item.image && (
           <Image
             source={{
               uri: item.image,
@@ -91,9 +93,10 @@ const ItemComponent = ({
             style={styles.itemImage}
           />
         )}
+
         <Pressable
           onPress={() => setEditableField({ id: item.id, field: "expiryDate" })}
-          style={styles.editableButton} // Add this style
+          style={styles.sliderButton}
         >
           {editableField.id === item.id &&
           editableField.field === "expiryDate" ? (
@@ -127,14 +130,17 @@ const ItemComponent = ({
               </View>
             </Modal>
           ) : (
-            <Text style={styles.itemDetailText}>
-              Expiry Date: {item.expiryDate}
-            </Text>
+            <View style={styles.sliderContainer}>
+              <Text style={styles.sliderLabel}>Expiry Date:</Text>
+              <Text style={styles.sliderValue}>{item.expiryDate}</Text>
+              <Icon name="chevron-right" size={20} color="#888" />
+            </View>
           )}
         </Pressable>
+
         <Pressable
           onPress={() => setEditableField({ id: item.id, field: "price" })}
-          style={styles.editableButton} // Add this style
+          style={styles.sliderButton}
         >
           {editableField.id === item.id && editableField.field === "price" ? (
             <Modal visible={true} transparent={true} animationType="slide">
@@ -168,7 +174,11 @@ const ItemComponent = ({
               </View>
             </Modal>
           ) : (
-            <Text style={styles.itemDetailText}>Price: ${item.price}</Text>
+            <View style={styles.sliderContainer}>
+              <Text style={styles.sliderLabel}>Price:</Text>
+              <Text style={styles.sliderValue}>${item.price}</Text>
+              <Icon name="chevron-right" size={20} color="#888" />
+            </View>
           )}
         </Pressable>
       </View>
@@ -458,15 +468,15 @@ const AdminHome = () => {
 
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Add New Item</Text>
+          <View style={styles.newModalContainer}>
+            <Text style={styles.newModalTitle}>Add New Item</Text>
             <TextInput
               placeholder="Item Name"
               value={newItem.itemName}
               onChangeText={(text) =>
                 setNewItem({ ...newItem, itemName: text })
               }
-              style={styles.input}
+              style={styles.newInput}
             />
             <TextInput
               placeholder="Quantity"
@@ -475,7 +485,7 @@ const AdminHome = () => {
                 setNewItem({ ...newItem, quantity: Number(text) })
               }
               keyboardType="numeric"
-              style={styles.input}
+              style={styles.newInput}
             />
             <TextInput
               placeholder="Price"
@@ -484,27 +494,28 @@ const AdminHome = () => {
                 setNewItem({ ...newItem, price: Number(text) })
               }
               keyboardType="numeric"
-              style={styles.input}
+              style={styles.newInput}
             />
             <TouchableOpacity
               onPress={handleAddItem}
-              style={styles.modalButton}
+              style={styles.newModalButton}
             >
               {loading ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text style={styles.modalButtonText}>Add Item</Text>
+                <Text style={styles.newModalButtonText}>Add Item</Text>
               )}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
-              style={styles.modalButtonCancel}
+              style={styles.newModalButtonCancel}
             >
-              <Text style={styles.modalButtonText}>Cancel</Text>
+              <Text style={styles.newModalButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
+
       <View style={styles.controlsContainer}>
         <TouchableOpacity
           onPress={toggleEditMode}
@@ -567,7 +578,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   expandedContainer: {
-    backgroundColor: "#e6f7ff",
+    marginTop: 10,
+    backgroundColor: "white",
   },
   itemDetails: {
     flexDirection: "row",
@@ -603,10 +615,9 @@ const styles = StyleSheet.create({
   deleteIcon: {
     marginLeft: 10,
   },
-  expandedDetails: {},
   itemImage: {
-    width: 350,
-    height: 250,
+    width: "100%",
+    height: 210,
     alignSelf: "center",
   },
   input: {
@@ -681,6 +692,86 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     marginVertical: 2,
+  },
+  sliderButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "white",
+    borderRadius: 25,
+    marginTop: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  sliderContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+  },
+  sliderLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+    flex: 1,
+    textAlign: "left",
+  },
+  sliderValue: {
+    fontSize: 16,
+    color: "#666",
+    flex: 1,
+    textAlign: "right",
+  },
+
+  newModalContainer: {
+    width: 350,
+    padding: 30,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  newModalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  newInput: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    marginVertical: 10,
+    width: "100%",
+    padding: 10,
+    fontSize: 16,
+  },
+  newModalButton: {
+    padding: 15,
+    backgroundColor: "#28a745",
+    borderRadius: 10,
+    marginTop: 20,
+    width: "100%",
+    alignItems: "center",
+  },
+  newModalButtonCancel: {
+    padding: 15,
+    backgroundColor: "red",
+    borderRadius: 10,
+    marginTop: 10,
+    width: "100%",
+    alignItems: "center",
+  },
+  newModalButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
