@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Dimensions, SafeAreaView, Platform, Button } from "react-native";
+import { Dimensions, SafeAreaView, Platform, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import * as React from "react";
 import {
   View,
@@ -27,12 +27,14 @@ const InputField = ({ label, placeholder, secureTextEntry }) => (
   </View>
 );
 
-const RememberMe = () => (
+const RememberMe = ({ isChecked, onToggle }) => (
   <View style={styles.rememberMeContainer}>
-    <View style={styles.rememberMeOption}>
-      <View style={styles.rememberMeCheckbox} />
+    <TouchableOpacity style={styles.rememberMeOption} onPress={onToggle}>
+      <View style={[styles.rememberMeCheckbox, isChecked && styles.rememberMeChecked]}>
+        {isChecked && <Text style={styles.rememberMeTick}>✓</Text>}
+      </View>
       <Text>Remember me</Text>
-    </View>
+    </TouchableOpacity>
     <Button title="Forgot password?"></Button>
   </View>
 );
@@ -74,73 +76,81 @@ const SignUpPrompt = ({ navigation }) => (
 function Login() {
   const navigation = useNavigation();
   const [isAdmin, setIsAdmin] = React.useState(false);
+  const [rememberMe, setRememberMe] = React.useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ImageBackground
-        source={{
-          uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/838485a2e58427926bfd76783e93dcecc690e4e96073aa11272a2c82be1b4d5b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
-        }}
-        style={{ flex: 1 }}
-      >
-        <View style={styles.logoContainer}>
-          <Image
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : null}
+        >
+          <ImageBackground
             source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/2f297d4157515fd7ed15788f8b23881d06f2f39d15b5fb7ae8e736caf9d91c9c?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/838485a2e58427926bfd76783e93dcecc690e4e96073aa11272a2c82be1b4d5b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
             }}
-            style={styles.logoImage}
-          />
-        </View>
-        <SafeAreaView style={styles.container}>
-          <View style={styles.formContainer}>
-            <InputField
-              label="Email or phone number"
-              placeholder="Email or phone number"
-              secureTextEntry={false}
-            />
-            <InputField
-              label="Enter password"
-              placeholder="Enter password"
-              secureTextEntry={true}
-            />
-            <RememberMe />
-            <View style={styles.toggleContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.toggleButton,
-                  { backgroundColor: isAdmin ? COLORS.grey : COLORS.blue },
-                ]}
-                onPress={() => setIsAdmin(false)}
-              >
-                <Text style={styles.toggleButtonText}>User</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.toggleButton,
-                  { backgroundColor: isAdmin ? COLORS.blue : COLORS.grey },
-                ]}
-                onPress={() => setIsAdmin(true)}
-              >
-                <Text style={styles.toggleButtonText}>Admin</Text>
-              </TouchableOpacity>
+            style={{ flex: 1 }}
+          >
+            <View style={styles.logoContainer}>
+              <Image
+                source={{
+                  uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/2f297d4157515fd7ed15788f8b23881d06f2f39d15b5fb7ae8e736caf9d91c9c?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+                }}
+                style={styles.logoImage}
+              />
             </View>
-            <SignInButton
-              text="Sign in"
-              onPress={() => {
-                if (isAdmin) {
-                  navigation.replace("AdminStack");
-                } else {
-                  navigation.replace("HomeStack");
-                }
-              }}
-            />
-          </View>
-          <View style={{ flex: 0.3, width: "80%" }}>
-            <GoogleSignIn navigation={navigation} />
-            <SignUpPrompt navigation={navigation} />
-          </View>
-        </SafeAreaView>
-      </ImageBackground>
+            <SafeAreaView style={styles.container}>
+              <View style={styles.formContainer}>
+                <InputField
+                  label="Email or phone number"
+                  placeholder="Email or phone number"
+                  secureTextEntry={false}
+                />
+                <InputField
+                  label="Enter password"
+                  placeholder="Enter password"
+                  secureTextEntry={true}
+                />
+                <RememberMe isChecked={rememberMe} onToggle={() => setRememberMe(!rememberMe)} />
+                <View style={styles.toggleContainer}>
+                  <TouchableOpacity
+                    style={[
+                      styles.toggleButton,
+                      { backgroundColor: isAdmin ? COLORS.grey : COLORS.blue },
+                    ]}
+                    onPress={() => setIsAdmin(false)}
+                  >
+                    <Text style={styles.toggleButtonText}>User</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.toggleButton,
+                      { backgroundColor: isAdmin ? COLORS.blue : COLORS.grey },
+                    ]}
+                    onPress={() => setIsAdmin(true)}
+                  >
+                    <Text style={styles.toggleButtonText}>Admin</Text>
+                  </TouchableOpacity>
+                </View>
+                <SignInButton
+                  text="Sign in"
+                  onPress={() => {
+                    if (isAdmin) {
+                      navigation.replace("AdminStack");
+                    } else {
+                      navigation.replace("HomeStack");
+                    }
+                  }}
+                />
+              </View>
+              <View style={{ flex: 0.3, width: "80%" }}>
+                <GoogleSignIn navigation={navigation} />
+                <SignUpPrompt navigation={navigation} />
+              </View>
+            </SafeAreaView>
+          </ImageBackground>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
@@ -205,7 +215,16 @@ const styles = StyleSheet.create({
     height: 24,
     backgroundColor: COLORS.grey,
     borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 8,
+  },
+  rememberMeChecked: {
+    backgroundColor: COLORS.blue,
+  },
+  rememberMeTick: {
+    color: COLORS.white,
+    fontWeight: "bold",
   },
   signInButton: {
     justifyContent: "center",

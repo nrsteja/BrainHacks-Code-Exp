@@ -28,8 +28,10 @@ const styles = StyleSheet.create({
     padding: "2%",
     marginVertical: "1.5%",
     backgroundColor: COLORS.green,
-    borderRadius: "50%",
     alignSelf: "center",
+    borderRadius: 50,
+    width: 100, 
+    height: 100,
   },
   filterText: {
     fontSize: 16,

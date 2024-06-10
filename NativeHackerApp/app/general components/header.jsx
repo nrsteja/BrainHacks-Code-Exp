@@ -1,6 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform, Dimensions } from "react-native";
 import COLORS from "../constants/colors";
+
+const height = Dimensions.get("window").height;
+const width = Dimensions.get("window").width;
 
 const Header = () => {
   return (
@@ -12,11 +15,14 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   header: {
-    padding: "3.5%",
+    paddingTop: Platform.OS == "ios" ? "3.5%" : "7.5%", 
+    paddingBottom: Platform.OS == "ios" ? "3.5%" : null, 
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
     backgroundColor: COLORS.green,
+    // if platform is ios, then ignore... otherwise height = 0.05*height    
+    height: Platform.OS == "ios" ? null : "10%",
   },
   headerText: {
     fontSize: 24,

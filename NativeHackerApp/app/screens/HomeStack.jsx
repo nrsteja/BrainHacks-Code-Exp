@@ -65,8 +65,8 @@ export default function HomeStack() {
             <View style = {{
               top: Platform.OS == "ios" ? -30 : -20,
               width: Platform.OS == "ios" ? 0.2 * width: 0.22 * width,
-              height: Platform.OS == "ios" ? 0.2 * width: 0.22 * width,
-              borderRadius: Platform.OS == "ios" ? "50%" : "50%",
+              height: Platform.OS == "ios" ? 0.2 * width: 0.2 * width,
+              borderRadius: 0.5 * width,
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: "#90dfaa"
