@@ -18,6 +18,7 @@ import axios from "axios";
 import Header from "../../general components/header";
 import AdminNavBar from "../../general components/AdminNavBar";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { generateEmojiForItem } from "../../api/emoji";
 
 const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
 const UNSPLASH_API_URL = "https://api.unsplash.com/photos/random";
@@ -330,56 +331,56 @@ const AdminHome = () => {
     setEditableField({ id: null, field: "", value: "" });
   };
 
-  const getEmojiForItem = (itemName) => {
-    const lowerName = itemName.toLowerCase();
-    const emojiMap = {
-      bread: "🍞",
-      egg: "🥚",
-      milk: "🥛",
-      butter: "🧈",
-      "peanut butter": "🥜",
-      "dragon fruit": "🐉",
-      apple: "🍎",
-      greenapple: "🍏",
-      pineapple: "🍍",
-      banana: "🍌",
-      grape: "🍇",
-      orange: "🍊",
-      watermelon: "🍉",
-    };
+  // const getEmojiForItem = (itemName) => {
+  //   const lowerName = itemName.toLowerCase();
+  //   const emojiMap = {
+  //     bread: "🍞",
+  //     egg: "🥚",
+  //     milk: "🥛",
+  //     butter: "🧈",
+  //     "peanut butter": "🥜",
+  //     "dragon fruit": "🐉",
+  //     apple: "🍎",
+  //     greenapple: "🍏",
+  //     pineapple: "🍍",
+  //     banana: "🍌",
+  //     grape: "🍇",
+  //     orange: "🍊",
+  //     watermelon: "🍉",
+  //   };
 
-    return Object.keys(emojiMap).find((key) => lowerName.includes(key))
-      ? emojiMap[lowerName]
-      : "🛒";
-  };
+  //   return Object.keys(emojiMap).find((key) => lowerName.includes(key))
+  //     ? emojiMap[lowerName]
+  //     : "🛒";
+  // };
 
-  const generateEmojiForItem = async (itemName) => {
-    const emojiFromList = getEmojiForItem(itemName);
-    if (emojiFromList !== "🛒") {
-      return emojiFromList;
-    }
+  // const generateEmojiForItem = async (itemName) => {
+  //   const emojiFromList = getEmojiForItem(itemName);
+  //   if (emojiFromList !== "🛒") {
+  //     return emojiFromList;
+  //   }
 
-    const API_KEY = "WWefpee1V8CnIEPVACBWmg==0ZKBI8hZKGqvHZFE";
-    const url = `https://api.api-ninjas.com/v1/emoji?name=${itemName}`;
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "X-Api-Key": API_KEY,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch emoji");
-      }
-      const data = await response.json();
-      return data[0].character;
-    } catch (error) {
-      console.error("Error fetching emoji:", error);
-      return "🛒";
-    }
-  };
-  const axios = require("axios");
+  //   const API_KEY = "WWefpee1V8CnIEPVACBWmg==0ZKBI8hZKGqvHZFE";
+  //   const url = `https://api.api-ninjas.com/v1/emoji?name=${itemName}`;
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: "GET",
+  //       headers: {
+  //         "X-Api-Key": API_KEY,
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch emoji");
+  //     }
+  //     const data = await response.json();
+  //     return data[0].character;
+  //   } catch (error) {
+  //     console.error("Error fetching emoji:", error);
+  //     return "🛒";
+  //   }
+  // };
+  // const axios = require("axios");
   // const fetchImageFromAPI = async (itemName) => {
   //   const API_URL = `https://api.unsplash.com/search/photos`;
   //   const ACCESS_KEY = "YOUR_UNSPLASH_ACCESS_KEY"; // Replace with your actual Unsplash Access Key
@@ -604,6 +605,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
+    borderWidth: 5,
   },
   controlButton: {
     padding: 5,

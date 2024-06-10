@@ -682,7 +682,7 @@ function Itinerary() {
                         <FontAwesome name="minus" size={16} color="red" />
                       </TouchableOpacity>
                       <Text style={styles.quantityTextBetween}>
-                        {item.dateBought}
+                        {item.quantity}
                       </Text>
                       <TouchableOpacity
                         style={[styles.controlButton]}

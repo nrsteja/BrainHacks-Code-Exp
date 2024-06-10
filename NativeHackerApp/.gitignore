@@ -18,6 +18,7 @@ web-build/
 
 # Metro
 .metro-health-check*
+metro.config.js
 
 # debug
 npm-debug.*
@@ -33,3 +34,4 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
