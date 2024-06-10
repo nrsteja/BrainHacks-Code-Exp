@@ -616,7 +616,7 @@ function Itinerary() {
       <Header />
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Search items"
+          placeholder="Search Items..."
           placeholderTextColor="white"
           style={styles.searchText}
           value={searchQuery}
