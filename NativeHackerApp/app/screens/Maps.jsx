@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useNavigation } from "@react-navigation/native";
 import Entypo from '@expo/vector-icons/Entypo';
+import COLORS from "../constants/colors";
 
 const GOOGLE_PLACES_API_KEY = 'AIzaSyBbcOqj7cnjA-3E_VRsCFyzKjUygMGAQnU';
 const width = Dimensions.get("window").width;
@@ -91,7 +92,7 @@ const MapScreen = () => {
 
      let location = await Location.getCurrentPositionAsync({});
      const { latitude, longitude } = location.coords;
-     setRegion({ latitude, longitude, latitudeDelta: 0.01, longitudeDelta: 0.01 });
+     setRegion({ latitude, longitude, latitudeDelta: calculateDelta(latitude, 150), longitudeDelta: calculateDelta(longitude, 150) });
      fetchSupermarkets(latitude, longitude);
    };
 
@@ -122,11 +123,28 @@ const MapScreen = () => {
          break;
      }
      setRegion(newRegion);
-     mapRef.current.animateToRegion(newRegion, 500); // Adjust the duration as needed
+     mapRef.current.animateToRegion(newRegion, 4000); // Adjust the duration as needed
      fetchSupermarkets(newRegion.latitude, newRegion.longitude);
    }
  };
 
+ const handleMarkerPress = (supermarket) => {
+  const { lat, lng } = supermarket.geometry.location;
+  const padding = 150; 
+
+  mapRef.current.animateToRegion({
+    latitude: lat,
+    longitude: lng,
+    latitudeDelta: calculateDelta(lat, padding),
+    longitudeDelta: calculateDelta(lng, padding),
+  });
+};
+
+const calculateDelta = (coordinate, padding) => {
+  const scale = padding / height;
+  const delta = scale * 0.1; // 0.1 is a zoom level, adjust as needed
+  return delta;
+};
 
  const fetchSupermarkets = async (latitude, longitude) => {
    try {
@@ -163,8 +181,10 @@ const MapScreen = () => {
              }}
              title={supermarket.name}
              description={supermarket.vicinity}
-           >
-             <Callout style={styles.callout}>
+             onPress={() => handleMarkerPress(supermarket)}
+          >
+            <Entypo name="shopping-basket" size={0.12 * width} color = {COLORS.green} />
+             <Callout style={styles.callout} anchor={{ x: 0.5, y: 1 }}>
                <Text style={styles.calloutTitle}>{supermarket.name}</Text>
                <Text style = {{textAlign: "center"}}>{supermarket.vicinity}</Text>
                <Button title = "Check Out Items Here" onPress = {() => navigation.navigate('Search')}/>
