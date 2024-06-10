@@ -11,7 +11,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -20,6 +20,7 @@ import Filter from "../general components/Filter";
 import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import { generateEmojiForItem } from "../api/emoji";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -121,8 +122,39 @@ function Itinerary() {
       );
     }
   };
+  const Filter = ({
+    label,
+    filters,
+    selectedFilter,
+    setSelectedFilter,
+    isDropdownOpen,
+    setIsDropdownOpen,
+  }) => {
+    return (
+      <View style={styles.filterContainer}>
+        <Text style={styles.filterLabel}>{label}</Text>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            isDropdownOpen && styles.filterButtonOpen,
+          ]}
+          onPress={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          <Text style={styles.filterButtonText}>
+            {filters.find((filter) => filter.value === selectedFilter)?.label}
+          </Text>
+          <Ionicons
+            name={isDropdownOpen ? "chevron-up" : "chevron-down"}
+            size={20}
+            color="white"
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const handleEditPress = () => {
+    console.log("pressed");
     setEditMode(!editMode);
     if (showAddOptions) {
       setShowAddOptions(false);
@@ -183,14 +215,14 @@ function Itinerary() {
 
   const handleIncreaseQuantity = (index) => {
     const newItems = [...editedItems];
-    newItems[index].dateBought += 1;
+    newItems[index].quantity += 1;
     setEditedItems(newItems);
   };
 
   const handleDecreaseQuantity = (index) => {
     const newItems = [...editedItems];
-    if (newItems[index].dateBought > 1) {
-      newItems[index].dateBought -= 1;
+    if (newItems[index].quantity > 1) {
+      newItems[index].quantity -= 1;
       setEditedItems(newItems);
     }
   };
@@ -243,7 +275,7 @@ function Itinerary() {
         return aDays - bDays;
       });
     } else if (selectedFilter === "quantityWise") {
-      filteredItems.sort((a, b) => b.dateBought - a.dateBought);
+      filteredItems.sort((a, b) => b.quantity - a.quantity);
     }
 
     return filteredItems;
@@ -269,7 +301,7 @@ function Itinerary() {
       backgroundColor: COLORS.green,
       alignSelf: "center",
       maxWidth: "80%",
-      borderRadius: width/2
+      borderRadius: "50%",
     },
     searchText: {
       fontSize: 18,
@@ -327,13 +359,13 @@ function Itinerary() {
     },
     editButton: {
       justifyContent: "center",
+      position: "absolute",
       paddingHorizontal: "8%",
       paddingVertical: "3%",
       backgroundColor: COLORS.green,
-      borderRadius: 50, // Set to a fixed number for circular shape
+      borderRadius: "50%",
       bottom: "3%",
-      width: 100, // Explicitly set width and height to make it circular
-      height: 100,
+      zIndex: 1,
     },
     editButtonText: {
       fontSize: 20,
@@ -358,25 +390,51 @@ function Itinerary() {
       textAlign: "center",
     },
     //--------Edit------------
-    editButtonsContainer: {
-      width: "50%",
-      flexDirection: "row",
-      position: "absolute",
-      bottom: "90%",
-      zIndex: 1,
-    },
+
     saveButton: {
-      paddingVertical: "5%",
       backgroundColor: "blue",
-      marginHorizontal: "7%",
-      left: "40%",
-      bottom: "15%",
+      justifyContent: "center",
+      position: "absolute",
+      alignItems: "center",
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
+      left: 0.01 * width,
+      bottom: 0.08 * height,
     },
     cancelButton: {
-      paddingHorizontal: "6%",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
       backgroundColor: "red",
-      marginHorizontal: "15%",
-      bottom: "-17%",
+      left: 0.17 * width,
+      bottom: 0.01 * height,
+    },
+    addOptionButton: {
+      backgroundColor: "blue",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
+      //marginBottom: "15%",
+      right: 0.17 * width,
+      bottom: 0.01 * height,
+    },
+    cameraOptionButton: {
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
+      backgroundColor: "red",
+      right: 0.01 * width,
+      bottom: 0.08 * height,
     },
 
     deleteIcon: {
@@ -403,33 +461,6 @@ function Itinerary() {
     },
     quantityButtonDecrease: {
       backgroundColor: "red",
-    },
-    addOptionButton: {
-      backgroundColor: "blue",
-      justifyContent: "center",
-      alignItems: "center",
-      width: 0.06 * height,
-      height: 0.06 * height,
-      borderRadius: 100,
-      //marginBottom: "15%",
-      right: 0.18 * width,
-      bottom: 0.01 * height,
-    },
-    cameraOptionButton: {
-      justifyContent: "center",
-      alignItems: "center",
-      width: 0.06 * height,
-      height: 0.06 * height,
-      borderRadius: 100,
-      backgroundColor: "red",
-      right: 0.01 * width,
-      bottom: 0.025 * height,
-    },
-    addOptionsContainer: {
-      position: "absolute",
-      bottom: 5,
-      right: 20,
-      alignItems: "flex-end",
     },
 
     searchBar: {
@@ -554,10 +585,6 @@ function Itinerary() {
       fontSize: 18,
       marginHorizontal: 10,
     },
-    deleteIcon: {
-      color: "red",
-      marginHorizontal: 3,
-    },
     marginHorizontal: {
       marginHorizontal: 15, // assuming you meant marginHorizontal style
     },
@@ -569,10 +596,6 @@ function Itinerary() {
     editOptions: {
       flexDirection: "row",
       alignItems: "center", // ensures vertical alignment
-    },
-    deleteIcon: {
-      color: "red",
-      marginHorizontal: 3,
     },
     marginHorizontal: {
       marginHorizontal: 15, // assuming you meant marginHorizontal style
@@ -609,6 +632,68 @@ function Itinerary() {
       marginHorizontal: 10,
       fontSize: 16,
     },
+    editButtonsContainer: {
+      //width: "50%",
+      //flexDirection: "row",
+      position: "absolute",
+      bottom: 5,
+      left: 10,
+      alignItems: "flex-end",
+      borderWidth: 2,
+      zIndex: 1,
+    },
+    controlsContainer: {
+      marginBottom: 0.06 * height,
+
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      backgroundColor: "white",
+      zIndex: 10,
+    },
+    smallButton: {
+      backgroundColor: "transparent",
+      justifyContent: "center",
+      paddingHorizontal: 10,
+      borderRadius: 30,
+      marginHorizontal: 10,
+      zIndex: 11,
+    },
+    filterContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 10,
+      backgroundColor: COLORS.green,
+      borderRadius: 10,
+      marginHorizontal: 20,
+      marginVertical: 10,
+    },
+    filterLabel: {
+      color: "white",
+      fontSize: 18,
+      fontWeight: "bold",
+    },
+    filterButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: COLORS.green,
+      padding: 10,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: "white",
+      transition: "all 0.3s ease",
+    },
+    filterButtonOpen: {
+      backgroundColor: COLORS.darkGreen,
+      borderColor: COLORS.darkGreen,
+    },
+    filterButtonText: {
+      color: "white",
+      fontSize: 16,
+      marginRight: 5,
+    },
   });
 
   return (
@@ -616,7 +701,7 @@ function Itinerary() {
       <Header />
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Search Items..."
+          placeholder="Search items"
           placeholderTextColor="white"
           style={styles.searchText}
           value={searchQuery}
@@ -661,7 +746,7 @@ function Itinerary() {
                     {item.name}
                   </Text>
                   <Text style={styles.quantityText}>
-                    Quantity: {item.dateBought}
+                    Quantity: {item.quantity}
                   </Text>
                   <Text
                     style={[
@@ -707,32 +792,44 @@ function Itinerary() {
             </View>
           ))}
       </ScrollView>
-
+      <View style={styles.controlsContainer}>
+        <TouchableOpacity
+          onPress={handleEditPress}
+          style={[
+            styles.smallButton,
+            //isEditing && styles.activeControlButton,
+          ]}
+        >
+          <FontAwesome
+            name="edit"
+            size={35}
+            //color={isEditing ? "white" : "blue"}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleAddPress} style={styles.smallButton}>
+          <Ionicons name="add-circle" size={50} color="green" />
+        </TouchableOpacity>
+      </View>
       <SafeAreaView style={styles.footer}>
         {editMode && (
-          <View style={styles.editButtonsContainer}>
+          <View>
             <TouchableOpacity
-              style={[styles.editButton, styles.saveButton]}
+              style={styles.saveButton}
               onPress={handleSavePress}
             >
-              <Text style={styles.editButtonText}>Save</Text>
+              <FontAwesome name="save" size={30} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.editButton, styles.cancelButton]}
+              style={styles.cancelButton}
               onPress={handleCancelPress}
             >
-              <Text style={styles.editButtonText}>Cancel</Text>
+              <Icon name="times" size={30} color="white" />
             </TouchableOpacity>
           </View>
         )}
-        <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
-          <Text style={styles.editButtonText}>{"Edit"}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
+
         {showAddOptions && (
-          <View style={styles.addOptionsContainer}>
+          <View>
             <TouchableOpacity
               style={styles.cameraOptionButton}
               onPress={handleCameraPress}
@@ -743,10 +840,16 @@ function Itinerary() {
               style={styles.addOptionButton}
               onPress={handleManualAddPress}
             >
-              <FontAwesome name="plus" size={30} color="white" />
+              <Icon name="cart-plus" size={30} color="white" />
             </TouchableOpacity>
           </View>
         )}
+        {/* <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
+          <Text style={styles.editButtonText}>{"Edit"}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity> */}
       </SafeAreaView>
       <Modal
         visible={showManualAddModal}
