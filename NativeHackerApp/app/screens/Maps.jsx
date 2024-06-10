@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Button, Image } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useNavigation } from "@react-navigation/native";
 import Entypo from '@expo/vector-icons/Entypo';
 import COLORS from "../constants/colors";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Feather from '@expo/vector-icons/Feather';
 
 const GOOGLE_PLACES_API_KEY = 'AIzaSyBbcOqj7cnjA-3E_VRsCFyzKjUygMGAQnU';
 const width = Dimensions.get("window").width;
@@ -128,17 +130,32 @@ const MapScreen = () => {
    }
  };
 
- const handleMarkerPress = (supermarket) => {
+ const handleMarkerPress = async (supermarket) => {
   const { lat, lng } = supermarket.geometry.location;
-  const padding = 150; 
+  const padding = 150;
 
-  mapRef.current.animateToRegion({
-    latitude: lat,
-    longitude: lng,
-    latitudeDelta: calculateDelta(lat, padding),
-    longitudeDelta: calculateDelta(lng, padding),
-  });
+  if (mapRef && mapRef.current) {
+    mapRef.current.animateToRegion({
+      latitude: lat,
+      longitude: lng,
+      latitudeDelta: calculateDelta(lat, padding),
+      longitudeDelta: calculateDelta(lng, padding),
+    });
+
+    try {
+      const response = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&type=supermarket&key=${GOOGLE_PLACES_API_KEY}`);
+      const data = await response.json();
+      if (data.status === 'OK') {
+        setSupermarkets(data.results);
+      } else {
+        console.error('Error fetching supermarkets:', data.status, data.error_message);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  }
 };
+
 
 const calculateDelta = (coordinate, padding) => {
   const scale = padding / height;
@@ -183,7 +200,7 @@ const calculateDelta = (coordinate, padding) => {
              description={supermarket.vicinity}
              onPress={() => handleMarkerPress(supermarket)}
           >
-            <Entypo name="shopping-basket" size={0.12 * width} color = {COLORS.green} />
+            <MaterialIcons name = "shopping-cart" size={0.08 * width} color = {COLORS.brown}/> 
              <Callout style={styles.callout} anchor={{ x: 0.5, y: 1 }}>
                <Text style={styles.calloutTitle}>{supermarket.name}</Text>
                <Text style = {{textAlign: "center"}}>{supermarket.vicinity}</Text>
