@@ -10,6 +10,7 @@ import Account from './Account';
 import Home from './Home';
 import COLORS from "../constants/colors"
 import { SupermarketsProvider } from './MapContext';
+import ListItems from './ListItems';
 
 const Tab = createBottomTabNavigator();
 const height = Dimensions.get("window").height;
