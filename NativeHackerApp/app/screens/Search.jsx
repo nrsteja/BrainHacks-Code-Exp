@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -17,7 +17,8 @@ import COLORS from "../constants/colors"
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useState } from "react";
 import { Promo } from "./Home";
-import { PROMOS, MARKETITEMS, RECIPES } from "./Lists";
+import { MARKETITEMS, RECIPES } from "./Lists";
+import { SupermarketsContext } from './MapContext';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -114,6 +115,33 @@ export const Recipe = ({ rating, location, name, numIng, time, image }) => (
 const Search = () => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [searchText, setSearchText] = useState('');
+  const [promos, setPromos] = useState([]);
+  const { supermarkets } = useContext(SupermarketsContext);
+
+  let allMarkets = []
+
+  useEffect(() => {
+    generatePromos();
+  }, [supermarkets]);
+
+  const generatePromos = () => {
+    let id = 1;
+    const newPromos = supermarkets.map(s => ({
+      id: id++,
+      name: s.name,
+      location: s.vicinity,
+      itemsOnSale: Math.floor(Math.random() * 2) + 1,
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/233402a655fce3616d5404a84b9c5cfa3816ca29d7f7e9f57002b53e34d3e79f?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
+    }));
+
+    for (let index = 0; index < newPromos.length; index++) {
+      if(!allMarkets.includes(newPromos[index]))
+        allMarkets.push(newPromos[index]);
+    }
+    console.log(allMarkets.length);
+
+    setPromos(newPromos);
+  };
 
   const handlePress = (button) => {
     setSelectedButton(button);
@@ -178,10 +206,10 @@ const Search = () => {
         <View style = {{flex: 0.1}}>
           <Text style = {styles.resultsText}>Results</Text>
         </View>
-        <View style = {{flex: 0.9}}>
+        <View style = {{flex: 0.9, marginBottom: 0.05 * height}}>
           {selectedButton === 'button1' && (
           <FlatList
-            data={filterData(PROMOS)}
+            data={filterData(promos)}
             renderItem={renderPromo}
             keyExtractor={(item) => item.id}
             persistentScrollbar={true}

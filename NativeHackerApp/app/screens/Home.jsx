@@ -8,6 +8,7 @@ import {
   FlatList,
   Platform,
   StyleSheet,
+  Dimensions
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckBox from "@react-native-community/checkbox";
@@ -15,6 +16,10 @@ import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import Header from "../general components/header";
 import { PROMOS, ITEMS } from "./Lists";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 const getFontFamily = () => {
   if (Platform.OS === "ios") {
@@ -60,12 +65,7 @@ export const Promo = ({ name, location, itemsOnSale, image }) => (
     style={styles.promotionBox}
     onPress={() => handlePromotionPress(name)}
   >
-    <Image
-      source={{
-        uri: image,
-      }}
-      style={styles.promotionImage}
-    />
+    <FontAwesome5 name = "store" size = {0.04 * height} style = {{paddingRight: 0.02 * width}} color = {COLORS.brown}/>
     <View style={styles.promotionDetails}>
       <Text style={styles.promotionTitle}>{name}</Text>
       <Text style={styles.promotionSubtitle}>{location}</Text>

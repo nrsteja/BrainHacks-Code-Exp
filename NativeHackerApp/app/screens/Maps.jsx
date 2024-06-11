@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Button, Image } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -7,6 +7,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import COLORS from "../constants/colors";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
+import { SupermarketsContext } from './MapContext';
 
 const GOOGLE_PLACES_API_KEY = 'AIzaSyBbcOqj7cnjA-3E_VRsCFyzKjUygMGAQnU';
 const width = Dimensions.get("window").width;
@@ -62,7 +63,7 @@ const mapJson = [
 ]
 
 const MapScreen = () => {
- const [supermarkets, setSupermarkets] = useState([]);
+ const { supermarkets, setSupermarkets } = useContext(SupermarketsContext);
  const [region, setRegion] = useState(null);
  const mapRef = useRef(null);
  const navigation = useNavigation();
