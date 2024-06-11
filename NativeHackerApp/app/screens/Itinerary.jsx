@@ -245,12 +245,14 @@ function Itinerary() {
   const getFilteredItems = () => {
     let filteredItems = [...inventory];
 
+    if (searchQuery.trim() !== "") {
+      filteredItems = filteredItems.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
     if (selectedFilter === "expiringSoon") {
-      filteredItems.sort((a, b) => {
-        const aDays = a.daysLeftNumber;
-        const bDays = b.daysLeftNumber;
-        return aDays - bDays;
-      });
+      filteredItems.sort((a, b) => a.daysLeftNumber - b.daysLeftNumber);
     } else if (selectedFilter === "quantityWise") {
       filteredItems.sort((a, b) => b.quantity - a.quantity);
     }
