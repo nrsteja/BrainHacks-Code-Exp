@@ -60,10 +60,10 @@ export const Item = ({ name, daysLeft, used }) => (
   </View>
 );
 
-export const Promo = ({ name, location, itemsOnSale, image }) => (
+export const Promo = ({ name, location, itemsOnSale, onPress }) => (
   <TouchableOpacity
     style={styles.promotionBox}
-    onPress={() => handlePromotionPress(name)}
+    onPress = {onPress}
   >
     <FontAwesome5 name = "store" size = {0.04 * height} style = {{paddingRight: 0.02 * width}} color = {COLORS.brown}/>
     <View style={styles.promotionDetails}>
@@ -80,10 +80,6 @@ function Home() {
   const handleTrackerPress = () => {
     console.log("Navigating to GroceryTracker");
     navigation.navigate("CameraScreen");
-  };
-
-  const handlePromotionPress = (title) => {
-    console.log("Viewing promotion:", title);
   };
 
   return (
@@ -136,6 +132,7 @@ function Home() {
                 location={item.location}
                 itemsOnSale={item.itemsOnSale}
                 image={item.image}
+                onPress={() => navigation.navigate("ListItems")}
               />
             )}
             keyExtractor={(item) => item.id}

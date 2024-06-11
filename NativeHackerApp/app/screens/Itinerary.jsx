@@ -25,7 +25,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-const hardcodedItems = [
+export const hardcodedItems = [
   {
     id: 1,
     name: "White Bread",
@@ -90,7 +90,7 @@ const hardcodedItems = [
     daysLeftNumber: 7,
     emoji: "🥛",
   },
-];
+]
 
 const hardcodedFilters = [
   { label: "All", value: "all" },

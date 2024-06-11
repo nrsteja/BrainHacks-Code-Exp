@@ -115,6 +115,73 @@ export const RECIPES = [
   }
 ]
 
+export const ALLITEMS = [
+  {
+    id: 1,
+    name: "White Bread",
+    quantity: 1,
+    daysLeft: "3 days",
+    daysLeftNumber: 3,
+    emoji: "🍞",
+  },
+  {
+    id: 2,
+    name: "Eggs",
+    quantity: 2,
+    daysLeft: "2 days",
+    daysLeftNumber: 2,
+    emoji: "🥚",
+  },
+  {
+    id: 3,
+    name: "Almonds",
+    quantity: 1,
+    daysLeft: "14 days",
+    daysLeftNumber: 14,
+    emoji: "🌰",
+  },
+  {
+    id: 4,
+    name: "Spinach",
+    quantity: 1,
+    daysLeft: "5 days",
+    daysLeftNumber: 5,
+    emoji: "🌿",
+  },
+  {
+    id: 5,
+    name: "Cabbage",
+    quantity: 2,
+    daysLeft: "5 days",
+    daysLeftNumber: 5,
+    emoji: "🥬",
+  },
+  {
+    id: 6,
+    name: "Bananas",
+    quantity: 6,
+    daysLeft: "2 days",
+    daysLeftNumber: 2,
+    emoji: "🍌",
+  },
+  {
+    id: 7,
+    name: "Fresh Orange Juice",
+    quantity: 2,
+    daysLeft: "14 days",
+    daysLeftNumber: 14,
+    emoji: "🧃",
+  },
+  {
+    id: 8,
+    name: "Milk",
+    quantity: 3,
+    daysLeft: "7 days",
+    daysLeftNumber: 7,
+    emoji: "🥛",
+  },
+]
+
 
 function Lists() {
 

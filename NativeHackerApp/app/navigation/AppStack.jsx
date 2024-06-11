@@ -3,6 +3,7 @@ import HomeStack from "../screens/HomeStack";
 import Login from "../screens/Login";
 import Signup from "../screens/Signup";
 import CameraScreen from "../screens/CameraScreen";
+import ListItems from "../screens/ListItems";
 import Home from "../screens/Admin/AdminHome";
 import Profile from "../screens/Admin/AdminProfile";
 import { AdminStack } from "./AdminStack";
@@ -33,6 +34,7 @@ export const AppStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="CameraScreen" component={CameraScreen} />
+      <Stack.Screen name="ListItems" component={ListItems} />
     </Stack.Navigator>
   );
 };
