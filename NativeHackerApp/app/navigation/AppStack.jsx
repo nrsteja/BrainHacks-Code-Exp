@@ -7,11 +7,13 @@ import ListItems from "../screens/ListItems";
 import Home from "../screens/Admin/AdminHome";
 import Profile from "../screens/Admin/AdminProfile";
 import { AdminStack } from "./AdminStack";
+import { SupermarketsProvider } from "../screens/MapContext";
 
 const Stack = createStackNavigator();
 
 export const AppStack = () => {
   return (
+    <SupermarketsProvider>
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
@@ -36,5 +38,6 @@ export const AppStack = () => {
       <Stack.Screen name="CameraScreen" component={CameraScreen} />
       <Stack.Screen name="ListItems" component={ListItems} />
     </Stack.Navigator>
+    </SupermarketsProvider>
   );
 };

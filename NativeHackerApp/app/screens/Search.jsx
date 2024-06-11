@@ -131,6 +131,8 @@ const Search = () => {
 
   useEffect(() => {
     generatePromos();
+    //console.log(generateItemsArray(items))
+    //setRecipes(recipeGenerator(groupIngredientsBySupermarket(generateItemsArray(items))));
   }, [supermarkets]);
 
   const groupIngredientsBySupermarket = (itemsArray) => {
@@ -169,8 +171,6 @@ const Search = () => {
       }
       return accumulator;
     }, []);
-    output = groupIngredientsBySupermarket(itemsArray)[0];
-    result = recipeResults(output);
 
     return itemsArray;
   };
@@ -188,7 +188,6 @@ const Search = () => {
       const result = await getRecipeFromChatGPT(prompt);
       result['marketName'] = item['marketName']
       result['location'] = item['location']
-      console.log(result);
       return result;
     } catch (error) {
       console.error("Error fetching recipe results:", error);
@@ -196,7 +195,18 @@ const Search = () => {
     }
   };
 
-  const generatePromos = () => {
+  const recipeGenerator = async (supermarketArray) => {
+    const allRecipes = []
+    for (let index = 0; index < 3; index++) {
+      const recipe = await recipeResults(supermarketArray[index]);
+
+      allRecipes.push(recipe);
+    }
+
+    return allRecipes;
+  }
+
+  const generatePromos = async () => {
     let id = 1;
     let marketId = 1;
     const newPromos = supermarkets.map((s) => ({
@@ -237,6 +247,12 @@ const Search = () => {
     }));
 
     setItems(allItems);
+
+    const genRecipes = await recipeGenerator(groupIngredientsBySupermarket(appendItems));
+
+    console.log(genRecipes);
+
+    setRecipes(genRecipes);
   };
 
   const handlePress = (button) => {
