@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -21,76 +21,11 @@ import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import { generateEmojiForItem } from "../api/emoji";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { SupermarketsContext } from "./MapContext";
+import { ALLITEMS } from "./Lists";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
-
-export const hardcodedItems = [
-  {
-    id: 1,
-    name: "White Bread",
-    quantity: 1,
-    daysLeft: "3 days",
-    daysLeftNumber: 3,
-    emoji: "🍞",
-  },
-  {
-    id: 2,
-    name: "Eggs",
-    quantity: 12,
-    daysLeft: "10 days",
-    daysLeftNumber: 10,
-    emoji: "🥚",
-  },
-  {
-    id: 3,
-    name: "Almonds",
-    quantity: 1,
-    daysLeft: "14 days",
-    daysLeftNumber: 14,
-    emoji: "🌰",
-  },
-  {
-    id: 4,
-    name: "Spinach",
-    quantity: 1,
-    daysLeft: "5 days",
-    daysLeftNumber: 5,
-    emoji: "🌿",
-  },
-  {
-    id: 5,
-    name: "Cabbage",
-    quantity: 2,
-    daysLeft: "5 days",
-    daysLeftNumber: 5,
-    emoji: "🥬",
-  },
-  {
-    id: 6,
-    name: "Bananas",
-    quantity: 6,
-    daysLeft: "2 days",
-    daysLeftNumber: 2,
-    emoji: "🍌",
-  },
-  {
-    id: 7,
-    name: "Fresh Orange Juice",
-    quantity: 2,
-    daysLeft: "14 days",
-    daysLeftNumber: 14,
-    emoji: "🧃",
-  },
-  {
-    id: 8,
-    name: "Milk",
-    quantity: 3,
-    daysLeft: "7 days",
-    daysLeftNumber: 7,
-    emoji: "🥛",
-  },
-]
 
 const hardcodedFilters = [
   { label: "All", value: "all" },
@@ -100,12 +35,12 @@ const hardcodedFilters = [
 
 function Itinerary() {
   const navigation = useNavigation();
-  const [items, setItems] = useState(hardcodedItems);
+  const { inventory, setInventory } = useContext(SupermarketsContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [editMode, setEditMode] = useState(false);
   const [markedForDeletion, setMarkedForDeletion] = useState([]);
-  const [editedItems, setEditedItems] = useState([...hardcodedItems]);
+  const [editedItems, setEditedItems] = useState([...ALLITEMS]);
   const [showAddOptions, setShowAddOptions] = useState(false);
   const [showManualAddModal, setShowManualAddModal] = useState(false);
   const [newItemName, setNewItemName] = useState("");
@@ -115,18 +50,18 @@ function Itinerary() {
   const [itemQuantityError, setItemQuantityError] = useState("");
   const [itemDaysLeftError, setItemDaysLeftError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredItems, setFilteredItems] = useState([...items]);
+  const [filteredItems, setFilteredItems] = useState([...inventory]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setFilteredItems(getFilteredItems());
-  }, [searchQuery, selectedFilter, items]);
+  }, [searchQuery, selectedFilter, inventory]);
 
   const filterItems = () => {
     if (searchQuery.trim() === "") {
-      return items;
+      return inventory;
     } else {
-      return items.filter((item) =>
+      return inventory.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
@@ -169,7 +104,7 @@ function Itinerary() {
       setShowAddOptions(false);
     }
     setMarkedForDeletion([]); // Reset the marked for deletion list when toggling edit mode
-    setEditedItems([...items]); // Set edited items to current items when entering edit mode
+    setEditedItems([...inventory]); // Set edited items to current items when entering edit mode
   };
 
   const handleSavePress = () => {
@@ -177,7 +112,7 @@ function Itinerary() {
     const newItems = editedItems.filter(
       (item, index) => !markedForDeletion.includes(index)
     );
-    setItems(newItems);
+    setInventory(newItems);
     setEditMode(false);
     setMarkedForDeletion([]); // Clear marked items after saving
     setEditedItems(newItems); // Update edited items to the new saved items
@@ -298,7 +233,8 @@ function Itinerary() {
       daysLeftNumber: parseInt(newItemDaysLeft),
       emoji: await generateEmojiForItem(newItemName),
     };
-    setItems([...items, newItem]);
+    
+    setInventory([...inventory, newItem]);
     setShowManualAddModal(false);
     setShowAddOptions(false);
     setNewItemName("");
@@ -307,7 +243,7 @@ function Itinerary() {
   };
 
   const getFilteredItems = () => {
-    let filteredItems = [...items];
+    let filteredItems = [...inventory];
 
     if (selectedFilter === "expiringSoon") {
       filteredItems.sort((a, b) => {
