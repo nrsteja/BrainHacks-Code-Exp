@@ -24,6 +24,7 @@ import {
   getRecipeFromChatGPT,
   generateRecipePrompt,
 } from "../api/recipeGenerator";
+import { fetchImageFromUnsplash } from '../api/image';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -78,65 +79,26 @@ export const Recipe = ({ location, name, image, marketName }) => {
       // onPressIn={() => setIsFocused(true)}
       // onPressOut={() => setIsFocused(false)}
     >
-      {/* <ImageBackground
-        source={{ uri: image }}
-        style={[styles.mainImage, isFocused && styles.imageFocused]}
-      > */}
+      {image && (
+        <ImageBackground
+          source={{ uri: image }}
+          style={[styles.mainImage, isFocused && styles.imageFocused]}
+        >
+          <View style={styles.textContainer}>
+            <Text style={styles.nameText}>{name}</Text>
+            <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
+          </View>
+        </ImageBackground>
+      )}
+      {!image && (
         <View style={styles.textContainer}>
           <Text style={styles.nameText}>{name}</Text>
           <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
         </View>
-      {/* </ImageBackground> */}
+      )}
     </TouchableOpacity>
   );
 };
-
-  /*
-  <ImageBackground resizeMode="cover" source = {{uri: image}} styles = {styles.mainImage}>
-    <View style = {styles.topContainer}>
-      <View style={styles.ratingContainer}>
-        <Image resizeMode="auto" source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/d3913b1093e0c08a10080c42e0862e7b7345f97e27196d420585ed33eac1d0c5?apiKey=59cb32cf54144d2a81842acbd6f14d63&" }} style={styles.starIcon} />
-        <View>
-          <Text>5,0</Text>
-        </View>
-      </View>
-    </View>
-    <View style={styles.locationContainer}>
-      <Image resizeMode="auto" source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/64bb241643aabe308381e900f07e87004b2ea8930b8a7b7960983a7a9183556a?apiKey=59cb32cf54144d2a81842acbd6f14d63&" }} style={styles.locationIcon} />
-      <View>
-        <Text>{location}</Text>
-      </View>
-    </View>
-    <View style={styles.titleContainer}>
-      <Text>{name}</Text>
-    </View>
-    <View style={styles.infoContainer}>
-      <InfoItem>{numIng}</InfoItem>
-      <View style={styles.divider} />
-      <InfoItem>{time}</InfoItem>
-    </View>
-  </ImageBackground>
-  */
-  /*
-  <TouchableOpacity
-    style={styles.marketCard}
-    onPress={() => handlePromotionPress(name)}
-  >
-    <Image
-      source={{
-        uri: image,
-      }}
-      style={styles.marketImage}
-    />
-    <View style={styles.marketContent}>
-      <Text style={styles.marketTitle}>{name}</Text>
-      <Text style={styles.marketExpiry}>{expiryDate}</Text>
-      <Text style={styles.marketSale}>Items On Sale: {itemsOnSale}</Text>
-    </View>
-  </TouchableOpacity>
-  
-);
-*/
 
 const Search = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -192,19 +154,31 @@ const Search = () => {
     return itemsArray;
   };
 
+  const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
+
+
   const recipeResults = async (item) => {
     const ingredient = item["ingredients"];
-
     const inventoryIngredients = inventory.map(item => item.name); //Adding the current inventory ingredients.
 
-    ingredient.push(inventoryIngredients); //Pushing the inventory to the list of ingredients.
+    ingredient.push(...inventoryIngredients); //Pushing the inventory to the list of ingredients.
 
     const prompt = generateRecipePrompt(ingredient);
-    //;
     try {
       const result = await getRecipeFromChatGPT(prompt);
-      result['marketName'] = item['marketName']
-      result['location'] = item['location']
+      result['marketName'] = item['marketName'];
+      result['location'] = item['location'];
+      result['name'] = result.name; 
+
+      // Fetch image from Unsplash
+      try {
+        const imageUrl = await fetchImageFromUnsplash(result.name, UNSPLASH_API_KEY);
+        result['image'] = imageUrl;
+      } catch (error) {
+        console.error("Error fetching recipe image:", error);
+        result['image'] = null; // Fallback in case of error
+      }
+      console.log(result);
       return result;
     } catch (error) {
       console.error("Error fetching recipe results:", error);
@@ -232,9 +206,9 @@ const Search = () => {
       location: s.vicinity,
       itemsOnSale: Math.floor(Math.random() * 2) + 1,
     }));
-
+  
     setPromos(newPromos);
-
+  
     const newItems = newPromos.map((item) => ({
       item1: [
         item.name,
@@ -250,9 +224,9 @@ const Search = () => {
             ]
           : 0,
     }));
-
+  
     const appendItems = generateItemsArray(newItems);
-
+  
     const allItems = appendItems.map((item) => ({
       id: marketId++,
       marketName: item[0],
@@ -262,15 +236,12 @@ const Search = () => {
       expiryDate: item[2].daysLeft,
       itemsOnSale: item[2].quantity,
     }));
-
+  
     setItems(allItems);
-
+  
     const genRecipes = await recipeGenerator(groupIngredientsBySupermarket(appendItems));
-
-    console.log(genRecipes);
-
     setRecipes(genRecipes);
-  };
+  };  
 
   const handlePress = (button) => {
     setSelectedButton(button);
