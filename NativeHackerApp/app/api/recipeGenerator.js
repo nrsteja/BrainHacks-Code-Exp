@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const OPENAI_API_KEY =
-  "";
+  "sk-proj-XAQDiO4DNGm8IgtlUhAlT3BlbkFJawbSn5zurWLzCigcmyno";
 
 function generateRecipePrompt(ingredients) {
   const ingredientsList = ingredients
@@ -33,7 +33,7 @@ async function getRecipeFromChatGPT(prompt) {
     const recipeText = response.data.choices[0].message.content.trim();
 
     // Extracting the recipe name, ingredients, and instructions
-    const [_, recipeName, ingredientsText, instructionsText] = recipeText.match(
+    const [_, name, ingredientsText, instructionsText] = recipeText.match(
       /Recipe Name:\s*(.*?)\n\nIngredients:\s*((?:-.*\n?)*)\n\nInstructions:\s*((?:\d\..*\n?)*)/s
     );
 
@@ -46,7 +46,7 @@ async function getRecipeFromChatGPT(prompt) {
       .split("\n")
       .map((line) => line.slice(3));
 
-    return { recipeName, ingredients, instructions };
+    return { name, ingredients, instructions };
   } catch (error) {
     console.error("Error fetching recipe from ChatGPT:", error);
     throw error;

@@ -605,7 +605,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
-    borderWidth: 5,
   },
   controlButton: {
     padding: 5,

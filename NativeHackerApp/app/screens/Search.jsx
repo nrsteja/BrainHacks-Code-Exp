@@ -69,11 +69,27 @@ export const MarketItem = ({
   </TouchableOpacity>
 );
 
-export const Recipe = ({ rating, location, name, numIng, time, image }) => (
-  <TouchableOpacity style={styles.recipeContainer}>
-    <Image source={{ uri: image }} style={styles.mainImage}></Image>
-    <Text></Text>
-  </TouchableOpacity>
+export const Recipe = ({ location, name, image, marketName }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  return (
+    <TouchableOpacity
+      style={styles.recipeContainer}
+      // onPressIn={() => setIsFocused(true)}
+      // onPressOut={() => setIsFocused(false)}
+    >
+      {/* <ImageBackground
+        source={{ uri: image }}
+        style={[styles.mainImage, isFocused && styles.imageFocused]}
+      > */}
+        <View style={styles.textContainer}>
+          <Text style={styles.nameText}>{name}</Text>
+          <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
+        </View>
+      {/* </ImageBackground> */}
+    </TouchableOpacity>
+  );
+};
 
   /*
   <ImageBackground resizeMode="cover" source = {{uri: image}} styles = {styles.mainImage}>
@@ -118,8 +134,9 @@ export const Recipe = ({ rating, location, name, numIng, time, image }) => (
       <Text style={styles.marketSale}>Items On Sale: {itemsOnSale}</Text>
     </View>
   </TouchableOpacity>
-  */
+  
 );
+*/
 
 const Search = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -188,7 +205,6 @@ const Search = () => {
       const result = await getRecipeFromChatGPT(prompt);
       result['marketName'] = item['marketName']
       result['location'] = item['location']
-      console.log(result);
       return result;
     } catch (error) {
       console.error("Error fetching recipe results:", error);
@@ -270,13 +286,12 @@ const Search = () => {
     />
   );
 
-  const renderRecipe = ({ item }) => (
+  const renderRecipe = ({ item }) => ( // { location, name, image, marketName }
     <Recipe
-      rating={item.rating}
+      // rating={item.rating}
       location={item.location}
       name={item.name}
-      numIng={item.numIng}
-      time={item.time}
+      marketName={item.marketName}
       image={item.image}
     />
   );
@@ -370,7 +385,7 @@ const Search = () => {
           )}
           {selectedButton === "button3" && (
             <FlatList
-              data={filterData(RECIPES)}
+              data={filterData(recipes)}
               renderItem={renderRecipe}
               keyExtractor={(item) => item.id}
               persistentScrollbar={true}
@@ -638,6 +653,34 @@ const styles = StyleSheet.create({
     width: 1,
     flexShrink: 0,
     height: 18,
+  },
+  recipeContainer: {
+    marginBottom: 15,
+  },
+  mainImage: {
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageFocused: {
+    opacity: 0.7,
+  },
+  textContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Translucent background for better readability
+    padding: 10,
+    borderRadius: 10,
+  },
+  nameText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  locationText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
 export default Search;
