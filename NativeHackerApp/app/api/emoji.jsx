@@ -29,7 +29,7 @@ export const generateEmojiForItem = async (itemName) => {
     return emojiFromList;
   }
 
-  const API_KEY = "";
+  const API_KEY = "WWefpee1V8CnIEPVACBWmg==0ZKBI8hZKGqvHZFE";
   const url = `https://api.api-ninjas.com/v1/emoji?name=${itemName}`;
   try {
     const response = await fetch(url, {

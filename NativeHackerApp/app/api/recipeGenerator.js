@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const OPENAI_API_KEY =
-  "";
+  "sk-proj-XAQDiO4DNGm8IgtlUhAlT3BlbkFJawbSn5zurWLzCigcmyno";
+
 function generateRecipePrompt(ingredients) {
   const ingredientsList = ingredients
     .map((ingredient) => `- ${ingredient}`)

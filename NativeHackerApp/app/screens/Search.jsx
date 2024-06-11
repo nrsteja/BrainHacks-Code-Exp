@@ -154,7 +154,8 @@ const Search = () => {
     return itemsArray;
   };
 
-  const UNSPLASH_API_KEY = "";
+  const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
+
 
   const recipeResults = async (item) => {
     const ingredient = item["ingredients"];
