@@ -17,6 +17,7 @@ export const getEmojiForItem = (itemName) => {
     orange: "🍊",
     watermelon: "🍉",
   };
+  //Hello!
 
   return Object.keys(emojiMap).find((key) => lowerName.includes(key))
     ? emojiMap[lowerName]
