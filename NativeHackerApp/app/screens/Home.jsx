@@ -105,15 +105,15 @@ function Home() {
     navigation.navigate("Itinerary");
   };
 
-  const amount = loggedInUser ? getUserAmount(loggedInUser.email) : 10;
-  const weight = loggedInUser ? getUserWeight(loggedInUser.email) : 1;
+  const amount = loggedInUser ? getUserAmount(loggedInUser.email) : 50;
+  const weight = loggedInUser ? getUserWeight(loggedInUser.email) : 16;
   const name = loggedInUser ? getUserName(loggedInUser.email) : "";
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>Welcome {name},</Text>
+        <Text style={styles.welcomeText}>Welcome Grabber 👋 </Text>
         <View style={styles.savingsContainer}>
           <FoodSaved amount={weight} />
           <MoneySaved amount={amount} />
