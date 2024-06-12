@@ -2,9 +2,41 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import { useState, useRef } from "react";
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import COLORS from "../constants/colors";
+import { REACT_APP_OPENAI_API } from '@env';
+import * as FileSystem from "expo-file-system";
+import axios from "axios";
+import OpenAI from "openai";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
+const openai = new OpenAI({apiKey: REACT_APP_OPENAI_API});
+
+const sendToOpenAI = async (uri) => {
+  
+  const base64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' }); 
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: `Given this image of a receipt, extract the items that have been bought and the quantity bought.
+          The return value must be in the format: {"item1": quantity1, "item2": quantity2, ...}
+          If an item cannot be identified, it should not be included in the output.
+          If a quantity cannot be determined for an identified item, it should be marked as 0.` },
+          {
+            type: "image_url",
+            image_url: {
+              "url": `data:image/jpeg;base64,${base64}`,
+            },
+          },
+        ],
+      },
+    ],
+  });
+  console.log(response.choices[0]);
+};
+
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState("back");
@@ -43,6 +75,7 @@ export default function CameraScreen() {
         console.log("-----------------------")
         console.log(photo.uri);
         setPhotoUri(photo.uri); // Store the captured photo URI in the state
+        await sendToOpenAI(photo.uri);
       } catch (error) {
         console.error("Error taking picture:", error);
       }
