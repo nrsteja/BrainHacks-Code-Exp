@@ -71,16 +71,16 @@ export const MarketItem = ({
   </TouchableOpacity>
 );
 
-export const Recipe = ({ location, name, image, marketName }) => {
+export const Recipe = ({ location, name, image, marketName, ingredients, instructions }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={styles.recipeContainer}
-      // onPressIn={() => setIsFocused(true)}
-      // onPressOut={() => setIsFocused(false)}
+      onPress={() => navigation.navigate('ShowRecipe', { location, name, image, marketName, ingredients, instructions })}
     >
-      {image && (
+      {image ? (
         <ImageBackground
           source={{ uri: image }}
           style={[styles.mainImage, isFocused && styles.imageFocused]}
@@ -90,8 +90,7 @@ export const Recipe = ({ location, name, image, marketName }) => {
             <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
           </View>
         </ImageBackground>
-      )}
-      {!image && (
+      ) : (
         <View style={styles.textContainer}>
           <Text style={styles.nameText}>{name}</Text>
           <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
@@ -172,8 +171,9 @@ const Search = () => {
 
       // Fetch image from Unsplash
       try {
-        const imageUrl = await fetchImageFromUnsplash(result.name, REACT_APP_UNSPLASH_API);
-        result['image'] = imageUrl;
+        //const imageUrl = await fetchImageFromUnsplash(result.name, REACT_APP_UNSPLASH_API);
+        //result['image'] = imageUrl;
+        result['image'] = 'https://hips.hearstapps.com/hmg-prod/images/types-of-bread-1666723473.jpg'
       } catch (error) {
         console.error("Error fetching recipe image:", error);
         result['image'] = null; // Fallback in case of error
@@ -281,6 +281,8 @@ const Search = () => {
       name={item.name}
       marketName={item.marketName}
       image={item.image}
+      ingredients={item.ingredients}
+      instructions={item.instructions}
     />
   );
 

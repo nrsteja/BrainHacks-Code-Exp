@@ -4,7 +4,9 @@ export const getEmojiForItem = (itemName) => {
   const lowerName = itemName.toLowerCase();
   const emojiMap = {
     bread: "🍞",
+    "white bread": "🍞",
     egg: "🥚",
+    eggs: "🥚",
     milk: "🥛",
     butter: "🧈",
     "peanut butter": "🥜",
@@ -13,9 +15,12 @@ export const getEmojiForItem = (itemName) => {
     greenapple: "🍏",
     pineapple: "🍍",
     banana: "🍌",
+    bananas: "🍌",
     grape: "🍇",
     orange: "🍊",
     watermelon: "🍉",
+    strawberry: "🍓",
+    strawberries: "🍓",
   };
 
   return Object.keys(emojiMap).find((key) => lowerName.includes(key))

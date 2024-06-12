@@ -149,11 +149,11 @@ export const ALLITEMS = [
   },
   {
     id: 4,
-    name: "Spinach",
+    name: "Strawberry",
     quantity: 1,
     daysLeft: "5 days",
     daysLeftNumber: 5,
-    emoji: "🌿",
+    emoji: "🍓",
   },
   {
     id: 5,

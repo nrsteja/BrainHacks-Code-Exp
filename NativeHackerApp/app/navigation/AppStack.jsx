@@ -8,6 +8,7 @@ import Home from "../screens/Admin/AdminHome";
 import Profile from "../screens/Admin/AdminProfile";
 import { AdminStack } from "./AdminStack";
 import { SupermarketsProvider } from "../screens/MapContext";
+import ShowRecipe from "../screens/ShowRecipe"
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,7 @@ export const AppStack = () => {
       />
       <Stack.Screen name="CameraScreen" component={CameraScreen} />
       <Stack.Screen name="ListItems" component={ListItems} />
+      <Stack.Screen name="ShowRecipe" component={ShowRecipe} />
     </Stack.Navigator>
     </SupermarketsProvider>
   );
