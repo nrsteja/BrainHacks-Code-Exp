@@ -179,7 +179,6 @@ const Search = () => {
         console.error("Error fetching recipe image:", error);
         result['image'] = null; // Fallback in case of error
       }
-      console.log(result);
       return result;
     } catch (error) {
       console.error("Error fetching recipe results:", error);
@@ -678,5 +677,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 0.2 * height
+  }
 });
 export default Search;
