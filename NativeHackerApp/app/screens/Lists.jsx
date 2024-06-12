@@ -189,6 +189,30 @@ export const ALLITEMS = [
   },
 ];
 
+// list.jsx
+export const USERLIST = [
+  {
+    name: 'John Doe',
+    email: 'John.doe@example.com',
+    password: 'password123'
+  },
+  {
+    name: 'Jane Smith',
+    email: 'Jane.smith@example.com',
+    password: 'Password456'
+  },
+  {
+    name: 'Alice Johnson',
+    email: 'alice.johnson@example.com',
+    password: 'password789'
+  },
+  {
+    name: 'Bob Brown',
+    email: 'Bob.brown@example.com',
+    password: 'password101'
+  }
+];
+
 function Lists() {}
 
 export default Lists;
