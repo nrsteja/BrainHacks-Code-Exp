@@ -300,7 +300,7 @@ function Itinerary() {
       backgroundColor: COLORS.green,
       alignSelf: "center",
       maxWidth: "80%",
-      borderRadius: "50%",
+      borderRadius: 40,
     },
     // searchText: {
     //   fontSize: 18,
@@ -362,7 +362,7 @@ function Itinerary() {
       paddingHorizontal: "8%",
       paddingVertical: "3%",
       backgroundColor: COLORS.green,
-      borderRadius: "50%",
+      borderRadius: 1000,
       bottom: "3%",
       zIndex: 1,
     },
