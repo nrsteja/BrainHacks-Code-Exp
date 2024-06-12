@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
   },
   marketPrice: {
     fontSize: width * 0.03,
-    fontWeight: 500
+    fontWeight: "500"
   },
   marketLocation: {
     fontSize: 0.03 * width,
