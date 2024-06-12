@@ -65,10 +65,7 @@ const GoogleSignIn = ({ navigation }) => (
       style={styles.googleSignInImage}
       resizeMode="contain"
     />
-    <Text
-      style={styles.googleSignInText}
-      onPress={() => navigation.navigate("AdminHome")}
-    >
+    <Text style={styles.googleSignInText} onPress={() => {}}>
       Or sign in with Google
     </Text>
   </TouchableOpacity>
@@ -261,7 +258,7 @@ const styles = StyleSheet.create({
     paddingVertical: "4%",
     backgroundColor: COLORS.black,
     borderRadius: 8,
-    marginTop: 12,
+    marginTop: 0.045 * windowHeight,
   },
   googleSignInImage: {
     resizeMode: "contain",
