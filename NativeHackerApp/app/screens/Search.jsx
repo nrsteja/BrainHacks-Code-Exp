@@ -305,7 +305,7 @@ const Search = () => {
       <Header />
       <View style={styles.inputView}>
         <TextInput
-          defaultValue="Enter a location"
+          placeholder = {(selectedButton === 'button1') ? "Search Locations..." : ((selectedButton === 'button2') ? "Search Items..." : "Search Recipes...")}
           style={styles.input}
           value={searchText}
           onChangeText={setSearchText}

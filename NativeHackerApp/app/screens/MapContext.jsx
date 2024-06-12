@@ -1,7 +1,7 @@
 // MapContext.jsx
 import React, { createContext, useState, useEffect } from 'react';
 import * as Location from 'expo-location';
-import { ALLITEMS, USERLIST } from './Lists'; // Import the user list
+import { ALLITEMS, USERLIST, USER_INVENTORY } from './Lists'; // Import the user list
 
 // Create the context
 const SupermarketsContext = createContext();
@@ -9,7 +9,7 @@ const SupermarketsContext = createContext();
 const SupermarketsProvider = ({ children }) => {
   const [supermarkets, setSupermarkets] = useState([]);
   const [items, setItems] = useState([]);
-  const [inventory, setInventory] = useState(ALLITEMS);
+  const [inventory, setInventory] = useState(USER_INVENTORY);
   const [isMapInitialized, setIsMapInitialized] = useState(false);
   const [selectedMarket, setSelectedMarket] = useState("");
   const [users, setUsers] = useState(USERLIST); // Initialize with USERLIST
