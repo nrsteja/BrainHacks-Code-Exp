@@ -73,7 +73,7 @@ export const MarketItem = ({
   </TouchableOpacity>
 );
 
-export const Recipe = ({ location, name, image, marketName, ingredients, instructions }) => {
+export const Recipe = ({ location, name, image, marketName, ingredients, instructions, price }) => {
   const [isFocused, setIsFocused] = useState(false);
   const navigation = useNavigation();
 
@@ -90,13 +90,15 @@ export const Recipe = ({ location, name, image, marketName, ingredients, instruc
           <View style={styles.textContainer}>
             <Text style={styles.nameText}>{name}</Text>
             <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
+            <Text style = {styles.locationText}>You can make this recipe for just ${Math.round(price * 10)/10}!</Text>
           </View>
         </ImageBackground>
       ) : (
         <View style={styles.textContainer}>
           <Text style={styles.nameText}>{name}</Text>
           <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
-        </View>
+          <Text style = {styles.locationText}>You can make this recipe for just ${Math.round(price * 10)/10}!</Text>
+       </View>
       )}
     </TouchableOpacity>
   );
@@ -121,23 +123,28 @@ const Search = () => {
     const supermarketIngredients = {};
 
     itemsArray.forEach((item) => {
-      const [marketName, location, ingredient] = item;
+      const [marketName, location, ingredient, price] = item;
       const key = `${marketName} - ${location}`;
 
       if (!supermarketIngredients[key]) {
-        supermarketIngredients[key] = [];
+        supermarketIngredients[key] = {
+          ingredients: [],
+          totalPrice: 0.0
+        };
       }
 
-      supermarketIngredients[key].push(ingredient.name);
+      supermarketIngredients[key].ingredients.push(ingredient.name);
+      supermarketIngredients[key].totalPrice = (supermarketIngredients[key].totalPrice + price)
     });
 
     return Object.entries(supermarketIngredients).map(
-      ([marketLocation, ingredients]) => {
+      ([marketLocation, {ingredients, totalPrice}]) => {
         const [marketName, location] = marketLocation.split(" - ");
         return {
           marketName,
           location,
           ingredients,
+          totalPrice
         };
       }
     );
@@ -169,7 +176,8 @@ const Search = () => {
       const result = await getRecipeFromChatGPT(prompt);
       result['marketName'] = item['marketName'];
       result['location'] = item['location'];
-      result['name'] = result.name; 
+      result['price'] = item['totalPrice']
+      result['name'] = result.name;
 
       // Fetch image from Unsplash
       try {
@@ -215,7 +223,7 @@ const Search = () => {
         item.name,
         item.location,
         ALLITEMS[Math.floor(Math.random() * ALLITEMS.length)],
-        (Math.floor(Math.random() * 50) * 0.1).toFixed(1)
+        parseFloat((Math.floor(Math.random() * 50) * 0.1).toFixed(1))
       ],
       item2:
         item.itemsOnSale > 1
@@ -223,7 +231,7 @@ const Search = () => {
               item.name,
               item.location,
               ALLITEMS[Math.floor(Math.random() * ALLITEMS.length)],
-              (Math.floor(Math.random() * 50) * 0.1).toFixed(1)
+              parseFloat((Math.floor(Math.random() * 50) * 0.1).toFixed(1))
             ]
           : 0,
     }));
@@ -290,6 +298,7 @@ const Search = () => {
       image={item.image}
       ingredients={item.ingredients}
       instructions={item.instructions}
+      price={item.price}
     />
   );
 
