@@ -520,7 +520,7 @@ function Itinerary() {
       backgroundColor: "#f8f9fa",
       borderRadius: 15,
       padding: 15,
-      marginVertical: 10,
+      marginVertical: 3,
       marginHorizontal: 15,
       shadowColor: "#000",
       shadowOffset: {
@@ -528,7 +528,7 @@ function Itinerary() {
         height: 2,
       },
       shadowOpacity: 0.1,
-      shadowRadius: 3.84,
+      shadowRadius: 1.5,
       elevation: 5,
     },
     itemDetails: {

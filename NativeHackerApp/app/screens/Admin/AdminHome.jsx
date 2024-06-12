@@ -19,7 +19,7 @@ import Header from "../../general components/header";
 import AdminNavBar from "../../general components/AdminNavBar";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { generateEmojiForItem } from "../../api/emoji";
-import { REACT_APP_UNSPLASH_API } from '@env';
+import { REACT_APP_UNSPLASH_API } from "@env";
 
 const UNSPLASH_API_KEY = REACT_APP_UNSPLASH_API;
 const UNSPLASH_API_URL = "https://api.unsplash.com/photos/random";
@@ -485,11 +485,11 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: "#ffffff",
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 3,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
-    shadowRadius: 1.41,
+    shadowRadius: 1.5,
     elevation: 2,
   },
   expandedContainer: {
