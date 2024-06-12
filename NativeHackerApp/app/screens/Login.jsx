@@ -145,7 +145,7 @@ function Login() {
                     ]}
                     onPress={() => setIsAdmin(true)}
                   >
-                    <Text style={styles.toggleButtonText}>Admin</Text>
+                    <Text style={styles.toggleButtonText}>Supermarket</Text>
                   </TouchableOpacity>
                 </View>
                 <SignInButton
