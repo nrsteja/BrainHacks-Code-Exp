@@ -405,6 +405,58 @@ export const ALLITEMS = [
   }
 ];
 
+export const USER_INVENTORY = [
+  {
+    id: 1,
+    name: "White Bread",
+    quantity: 1,
+    daysLeftNumber: 3,
+    daysLeft: `3 days`,
+    emoji: "🍞"
+  },
+  {
+    id: 2,
+    name: "Cucumber",
+    quantity: 4,
+    daysLeftNumber: 3,
+    daysLeft: `3 days`,
+    emoji: "🥒"
+  },
+  {
+    id: 3,
+    name: "Blueberries",
+    quantity: 10,
+    daysLeftNumber: 7,
+    daysLeft: `7 days`,
+    emoji: "🫐"
+  },
+  {
+    id: 4,
+    name: "Yogurt",
+    quantity: 1,
+    daysLeftNumber: 4,
+    daysLeft: `4 days`,
+    emoji: "🥣"
+  },
+  {
+    id: 5,
+    name: "Bananas",
+    quantity: 6,
+    daysLeftNumber: 3,
+    daysLeft: `3 days`,
+    emoji: "🍌",
+  },
+  {
+    id: 6,
+    name: "Bell Peppers",
+    quantity: 2,
+    daysLeftNumber: 2,
+    daysLeft: `2 days`,
+    emoji: "🌶️"
+  },
+
+]
+
 
 // list.jsx
 export const USERLIST = [
