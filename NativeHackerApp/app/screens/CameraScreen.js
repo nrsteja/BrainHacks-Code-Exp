@@ -1,11 +1,12 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useState, useRef } from "react";
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
+import { useState, useRef, useContext } from "react";
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View, Dimensions, Alert } from "react-native";
 import COLORS from "../constants/colors";
 import { REACT_APP_OPENAI_API } from '@env';
 import * as FileSystem from "expo-file-system";
 import axios from "axios";
 import OpenAI from "openai";
+import { SupermarketsContext } from "./MapContext";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -21,9 +22,11 @@ const sendToOpenAI = async (uri) => {
         role: "user",
         content: [
           { type: "text", text: `Given this image of a receipt, extract the items that have been bought and the quantity bought.
+          If the item is quite large, try to find the important part which defines the food before adding item.
           The return value must be in the format: {"item1": quantity1, "item2": quantity2, ...}
           If an item cannot be identified, it should not be included in the output.
-          If a quantity cannot be determined for an identified item, it should be marked as 0.` },
+          If a quantity cannot be determined for an identified item, it should be marked as 1. Note that 
+          price must be ignored, so if price is there but quantity isn't, the quantity must be one` },
           {
             type: "image_url",
             image_url: {
@@ -34,7 +37,13 @@ const sendToOpenAI = async (uri) => {
       },
     ],
   });
-  console.log(response.choices[0]);
+  const jsonString = response.choices[0].message.content.match(/\{[^}]*\}/)[0];
+
+  
+  // Parse the JSON string to convert it to a JavaScript object (dictionary)
+  const dictionary = JSON.parse(jsonString);
+  
+  return dictionary;
 };
 
 
@@ -42,6 +51,7 @@ export default function CameraScreen() {
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [photoUri, setPhotoUri] = useState(null); // State to store the captured photo URI
+  const {inventory, setInventory} = useContext(SupermarketsContext); 
   const cameraRef = useRef(null);
 
   if (!permission) {
@@ -75,7 +85,31 @@ export default function CameraScreen() {
         console.log("-----------------------")
         console.log(photo.uri);
         setPhotoUri(photo.uri); // Store the captured photo URI in the state
-        await sendToOpenAI(photo.uri);
+        const values = await sendToOpenAI(photo.uri);
+        console.log(values)
+        let i = 0;
+        for (const [newItemName, newItemQuantity] of Object.entries(values)) {
+          // Convert newItemName to lowercase for case-insensitive comparison
+          const lowercaseNewItemName = newItemName.toLowerCase();
+          
+          // Check if the lowercaseNewItemName already exists in the current inventory
+          if (!inventory.some(item => item.name.toLowerCase() === lowercaseNewItemName)) {
+            // If the item doesn't exist, proceed with adding it
+            i++;
+            const uniqueId = `${newItemName}-${Date.now()}`;
+            const newItem = {
+              id: uniqueId, 
+              name: newItemName,
+              quantity: parseInt(newItemQuantity),
+              daysLeft: "N/A", // Default value for now
+              daysLeftNumber: 0, // Default value for now
+              emoji: "🛒",
+            };
+            setInventory((prevInventory) => [...prevInventory, newItem]);
+          }
+        }
+        Alert.alert(`Added ${i} items to your inventory!`)
+
       } catch (error) {
         console.error("Error taking picture:", error);
       }
