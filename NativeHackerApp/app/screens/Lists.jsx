@@ -149,11 +149,11 @@ export const ALLITEMS = [
   },
   {
     id: 4,
-    name: "Strawberry",
+    name: "Spinach",
     quantity: 1,
     daysLeft: "5 days",
     daysLeftNumber: 5,
-    emoji: "🍓",
+    emoji: "🌿",
   },
   {
     id: 5,
@@ -189,6 +189,7 @@ export const ALLITEMS = [
   },
 ];
 
+
 // list.jsx
 export const USERLIST = [
   {
@@ -212,6 +213,8 @@ export const USERLIST = [
     password: 'password101'
   }
 ];
+
+
 
 function Lists() {}
 

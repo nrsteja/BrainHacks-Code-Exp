@@ -1,4 +1,6 @@
 import * as React from "react";
+import { USERLIST } from "./Lists";
+
 import {
   View,
   Text,
@@ -49,13 +51,13 @@ const MoneySaved = ({ amount }) => (
 export const Item = ({ name, daysLeft, quantity }) => (
   <View>
     <View style={{ flexDirection: "row", justifyContent: "center" }}>
-      <View style={{ flex: 0.6 }}>
+      <View style={{ flex: 0.5 }}>
         <Text style={styles.itemsFont}>{name}</Text>
       </View>
-      <View style={{ flex: 0.2, alignItems: "center" }}>
+      <View style={{ flex: 0.4, alignItems: "center" }}>
         <Text style={styles.itemsFont}>{daysLeft}</Text>
       </View>
-      <View style={{ flex: 0.2, alignItems: "flex-end" }}>
+      <View style={{ flex: 0.1, alignItems: "center" }}>
         <Text style={styles.itemsFont}>{quantity}</Text>
       </View>
     </View>
@@ -77,36 +79,55 @@ export const Promo = ({ name, location, itemsOnSale, onPress }) => (
     </View>
   </TouchableOpacity>
 );
+const getUserAmount = (email) => {
+  const user = USERLIST.find((user) => user.email === email);
+  return user ? user.amount : 0; // Assuming 'amount' is a property in the user object
+};
+
+const getUserWeight = (email) => {
+  const user = USERLIST.find((user) => user.email === email);
+  return user ? user.weight : 0; // Assuming 'weight' is a property in the user object
+};
+
+const getUserName = (email) => {
+  const user = USERLIST.find((user) => user.email === email);
+  return user ? user.name : "";
+};
 
 function Home() {
   const navigation = useNavigation();
   const { inventory } = useContext(SupermarketsContext);
+  const { loggedInUser } = useContext(SupermarketsContext);
   const filteredInventory = inventory.filter((item) => item.daysLeftNumber < 5);
 
   const handleTrackerPress = () => {
     console.log("Navigating to GroceryTracker");
-    navigation.navigate("CameraScreen");
+    navigation.navigate("Itinerary");
   };
+
+  const amount = loggedInUser ? getUserAmount(loggedInUser.email) : 10;
+  const weight = loggedInUser ? getUserWeight(loggedInUser.email) : 1;
+  const name = loggedInUser ? getUserName(loggedInUser.email) : "";
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.welcomeContainer}>
-        <Text style={styles.welcomeText}>Welcome Santosh,</Text>
+        <Text style={styles.welcomeText}>Welcome {name},</Text>
         <View style={styles.savingsContainer}>
-          <FoodSaved amount="15.5" />
-          <MoneySaved amount="30" />
+          <FoodSaved amount={weight} />
+          <MoneySaved amount={amount} />
         </View>
         <Text style={styles.expiringText}>Food Expiring Soon:</Text>
         <View>
           <View style={{ flexDirection: "row" }}>
-            <View style={{ flex: 0.6 }}>
+            <View style={{ flex: 0.5 }}>
               <Text style={styles.expiryFont}>Item</Text>
             </View>
-            <View style={{ flex: 0.2 }}>
+            <View style={{ flex: 0.4, alignItems: "center" }}>
               <Text style={styles.expiryFont}>Days Left</Text>
             </View>
-            <View style={{ flex: 0.2, alignItems: "flex-end" }}>
+            <View style={{ flex: 0.1, alignItems: "center" }}>
               <Text style={styles.expiryFont}>Qty.</Text>
             </View>
           </View>
@@ -129,7 +150,7 @@ function Home() {
           <Text style={styles.trackerText}>Go to GroceryTracker &gt;&gt;</Text>
         </TouchableOpacity>
         <Text style={styles.promotionsText}>Promotions:</Text>
-        <View style={{ flex: 0.7, marginBottom: 0.05 * height }}>
+        <View style={{ flex: 0.7 }}>
           <FlatList
             data={PROMOS}
             renderItem={({ item }) => (
@@ -138,6 +159,7 @@ function Home() {
                 location={item.location}
                 itemsOnSale={item.itemsOnSale}
                 image={item.image}
+                onPress={() => navigation.navigate("ListItems")}
               />
             )}
             keyExtractor={(item) => item.id}

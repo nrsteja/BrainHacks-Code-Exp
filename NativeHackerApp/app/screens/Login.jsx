@@ -19,13 +19,11 @@ import {
   StyleSheet,
 } from "react-native";
 import COLORS from "../constants/colors";
-import { useState, useContext } from "react";
-import { SupermarketsContext } from './MapContext';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const InputField = ({ label, placeholder, secureTextEntry, value, onChangeText }) => (
+const InputField = ({ label, placeholder, secureTextEntry }) => (
   <View style={styles.inputFieldContainer}>
     <Text style={styles.srOnly}>{label}</Text>
     <TextInput
@@ -33,12 +31,9 @@ const InputField = ({ label, placeholder, secureTextEntry, value, onChangeText }
       secureTextEntry={secureTextEntry}
       accessibilityLabel={label}
       style={styles.textInput}
-      value={value}
-      onChangeText={onChangeText}
     />
   </View>
 );
-
 
 const RememberMe = ({ isChecked, onToggle }) => (
   <View style={styles.rememberMeContainer}>
@@ -95,20 +90,6 @@ function Login() {
   const navigation = useNavigation();
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [rememberMe, setRememberMe] = React.useState(false);
-  const [email, setEmail] = React.useState(''); // Define email state
-  const [password, setPassword] = React.useState('');
-  const { login } = useContext(SupermarketsContext);
-  const [error, setError] = React.useState('');
-
-  const handleLogin = () => {
-    if (login(email, password)) {
-      setError('');
-      // Redirect to a different component or page after successful login
-      navigation.replace("HomeStack"); // Replace 'Home' with your desired route
-    } else {
-      setError('Invalid email or password');
-    }
-  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -137,15 +118,11 @@ function Login() {
                   label="Email or phone number"
                   placeholder="Email or phone number"
                   secureTextEntry={false}
-                  value={email}
-                  onChangeText={(text) => setEmail(text)}
                 />
                 <InputField
                   label="Enter password"
                   placeholder="Enter password"
                   secureTextEntry={true}
-                  value={password}
-                  onChangeText={(text) => setPassword(text)}
                 />
                 <RememberMe
                   isChecked={rememberMe}
@@ -177,8 +154,7 @@ function Login() {
                     if (isAdmin) {
                       navigation.replace("AdminStack");
                     } else {
-
-                      handleLogin();
+                      navigation.replace("HomeStack");
                     }
                   }}
                 />
@@ -208,7 +184,7 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
   },
   container: {
-    flex: 0.6,
+    flex: 0.5,
     alignItems: "center",
     paddingHorizontal: "5%",
     justifyContent: "space-between",
@@ -285,6 +261,7 @@ const styles = StyleSheet.create({
     paddingVertical: "4%",
     backgroundColor: COLORS.black,
     borderRadius: 8,
+    marginTop: 12,
   },
   googleSignInImage: {
     resizeMode: "contain",
