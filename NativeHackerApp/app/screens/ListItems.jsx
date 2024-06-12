@@ -6,7 +6,8 @@ import { SupermarketsContext } from './MapContext';
 
 export default function ListItems() {
     const { items } = useContext(SupermarketsContext);
-
+    console.log(items);
+    
     return (
         <SafeAreaView>
             <Text>

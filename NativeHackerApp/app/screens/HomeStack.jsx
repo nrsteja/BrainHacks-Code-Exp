@@ -9,7 +9,6 @@ import Maps from './Maps';
 import Account from './Account';
 import Home from './Home';
 import COLORS from "../constants/colors"
-import { SupermarketsProvider } from './MapContext';
 import ListItems from './ListItems';
 
 const Tab = createBottomTabNavigator();
@@ -31,7 +30,6 @@ const screenOptions = {
 
 export default function HomeStack() {
   return (
-    <SupermarketsProvider>
     <Tab.Navigator screenOptions = {screenOptions} initialRouteName={"Home"}>
       <Tab.Screen 
       name = "Home" 
@@ -106,6 +104,5 @@ export default function HomeStack() {
           )
         } }}/>
     </Tab.Navigator>
-    </SupermarketsProvider>
   );
 }
