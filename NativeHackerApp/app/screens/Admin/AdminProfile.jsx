@@ -249,7 +249,6 @@ const AdminProfile = () => {
                 zIndex={1000}
               />
             ) : editingField === "parentCompanyName" ? (
-              <>
                 <DropDownPicker
                   open={dropdownOpen}
                   value={newFieldValue}
@@ -261,15 +260,6 @@ const AdminProfile = () => {
                   dropDownContainerStyle={styles.dropDownContainer}
                   zIndex={1000}
                 />
-                {newFieldValue === "Other" && (
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Enter Parent Company Name"
-                    value={parentCompanyOther ? newFieldValue : ""}
-                    onChangeText={setNewFieldValue}
-                  />
-                )}
-              </>
             ) : (
               <TextInput
                 style={styles.input}
