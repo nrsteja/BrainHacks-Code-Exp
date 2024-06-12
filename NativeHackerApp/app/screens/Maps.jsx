@@ -106,6 +106,9 @@ const MapScreen = () => {
    getLocation();
  }, []);
 
+ const navigateToSearch = (supermarketName) => {
+  navigation.navigate('Search', { supermarketName });
+};
 
  const handleNavigation = (direction) => {
    if (mapRef.current) {
@@ -208,7 +211,7 @@ const calculateDelta = (coordinate, padding) => {
              <Callout style={styles.callout} anchor={{ x: 0.5, y: 1 }}>
                <Text style={styles.calloutTitle}>{supermarket.name}</Text>
                <Text style = {{textAlign: "center"}}>{supermarket.vicinity}</Text>
-               <Button title = "Check Out Items Here" onPress = {() => navigation.navigate('Search')}/>
+               <Button title = "Check Out Items Here" onPress = {() => navigateToSearch(supermarket.name)}/>
              </Callout>
            </Marker>
          ))}
