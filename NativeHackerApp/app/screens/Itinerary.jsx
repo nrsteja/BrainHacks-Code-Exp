@@ -352,7 +352,7 @@ function Itinerary() {
       alignItems: "center",
       paddingHorizontal: 20,
       paddingBottom: 20,
-      zIndex: 10,
+      zIndex: 20,
       backgroundColor: "transparent",
       bottom: "11%",
     },

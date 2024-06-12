@@ -129,7 +129,7 @@ function Home() {
           <Text style={styles.trackerText}>Go to GroceryTracker &gt;&gt;</Text>
         </TouchableOpacity>
         <Text style={styles.promotionsText}>Promotions:</Text>
-        <View style={{ flex: 0.7 }}>
+        <View style={{ flex: 0.7, marginBottom: 0.05 * height }}>
           <FlatList
             data={PROMOS}
             renderItem={({ item }) => (
@@ -138,7 +138,6 @@ function Home() {
                 location={item.location}
                 itemsOnSale={item.itemsOnSale}
                 image={item.image}
-                onPress={() => navigation.navigate("ListItems")}
               />
             )}
             keyExtractor={(item) => item.id}
