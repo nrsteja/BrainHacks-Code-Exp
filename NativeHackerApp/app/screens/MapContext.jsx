@@ -9,6 +9,7 @@ const SupermarketsProvider = ({ children }) => {
     const [items, setItems] = useState([]);
     const [inventory, setInventory] = useState(ALLITEMS);
     const [isMapInitialized, setIsMapInitialized] = useState(false);
+    const [selectedMarket, setSelectedMarket] = useState("");
 
     const addMarkets = (newMarkets) => {
         setAllMarkets((prevMarkets) => {
@@ -23,7 +24,7 @@ const SupermarketsProvider = ({ children }) => {
       };
 
     return (
-        <SupermarketsContext.Provider value = {{supermarkets, setSupermarkets, items, setItems, inventory, setInventory, isMapInitialized, setIsMapInitialized}}>
+        <SupermarketsContext.Provider value = {{supermarkets, setSupermarkets, items, setItems, inventory, setInventory, isMapInitialized, setIsMapInitialized, selectedMarket, setSelectedMarket}}>
             {children}
         </SupermarketsContext.Provider>
     )

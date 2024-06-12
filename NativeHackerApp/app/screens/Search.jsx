@@ -58,7 +58,6 @@ export const MarketItem = ({
 }) => (
   <TouchableOpacity
     style={styles.marketCard}
-    onPress={() => handlePromotionPress(name)}
   >
     <Text style={styles.marketImage}>{image}</Text>
     <View style={styles.marketContent}>
@@ -107,7 +106,7 @@ const Search = () => {
   const [searchText, setSearchText] = useState("");
   const [promos, setPromos] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const { supermarkets, items, setItems, inventory, isMapInitialized } = useContext(SupermarketsContext);
+  const { supermarkets, items, setItems, inventory, isMapInitialized, setSelectedMarket } = useContext(SupermarketsContext);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
@@ -260,7 +259,7 @@ const Search = () => {
       location={item.location}
       itemsOnSale={item.itemsOnSale}
       image={item.image}
-      onPress={() => navigation.navigate("ListItems")}
+      onPress={() => (setSelectedMarket(item.location), navigation.navigate("ListItems"))}
     />
   );
 
