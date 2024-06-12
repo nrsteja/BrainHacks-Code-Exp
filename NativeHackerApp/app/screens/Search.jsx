@@ -11,6 +11,7 @@ import {
   Dimensions,
   FlatList,
   ImageBackground,
+  ActivityIndicator
 } from "react-native";
 import Header from "../general components/header";
 import COLORS from "../constants/colors";
@@ -107,6 +108,7 @@ const Search = () => {
   const [promos, setPromos] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const { supermarkets, items, setItems, inventory } = useContext(SupermarketsContext);
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -237,9 +239,10 @@ const Search = () => {
     }));
   
     setItems(allItems);
-  
+    setIsLoading(true);
     const genRecipes = await recipeGenerator(groupIngredientsBySupermarket(appendItems));
     setRecipes(genRecipes);
+    setIsLoading(false);
   };  
 
   const handlePress = (button) => {
@@ -353,7 +356,7 @@ const Search = () => {
         <View style={{ flex: 0.1 }}>
           <Text style={styles.resultsText}>Results</Text>
         </View>
-        <View style={{ flex: 0.9, marginBottom: 0.05 * height }}>
+        <View style={{ flex: 0.9, marginBottom: 0.1 * height }}>
           {selectedButton === "button1" && (
             <FlatList
               data={filterData(promos)}
@@ -371,12 +374,18 @@ const Search = () => {
             />
           )}
           {selectedButton === "button3" && (
-            <FlatList
-              data={filterData(recipes)}
-              renderItem={renderRecipe}
-              keyExtractor={(item) => item.id}
-              persistentScrollbar={true}
-            />
+            isLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={COLORS.green} />
+              </View>
+            ) : (
+              <FlatList
+                data={filterData(recipes)}
+                renderItem={renderRecipe}
+                keyExtractor={(item) => item.id}
+                persistentScrollbar={true}
+              />
+            )
           )}
         </View>
       </View>

@@ -1,13 +1,13 @@
 import axios from "axios";
 import { REACT_APP_OPENAI_API } from '@env';
-const OPENAI_API_KEY =
-  REACT_APP_OPENAI_API;
+
+const OPENAI_API_KEY = REACT_APP_OPENAI_API;
 
 function generateRecipePrompt(ingredients) {
   const ingredientsList = ingredients
     .map((ingredient) => `- ${ingredient}`)
     .join(", ");
-  const prompt = `Using a subset of the following ingredients:\n${ingredientsList}\n\nProvide a recipe name, a list of ingredients, and step-by-step cooking instructions. Please format the response as follows:\n\nRecipe Name: [recipe name]\n\nIngredients:\n- [ingredient 1]\n- [ingredient 2]\n- ...\n\nInstructions:\n1. [step 1]\n2. [step 2]\n- ...`;
+  const prompt = `Using the following ingredients:\n${ingredientsList}\n\nProvide a recipe name, a list of ingredients, and step-by-step cooking instructions. Please format the response as follows:\n\nRecipe Name: [recipe name]\n\nIngredients:\n- [ingredient 1]\n- [ingredient 2]\n- ...\n\nInstructions:\n1. [step 1]\n2. [step 2]\n- ...`;
   return prompt;
 }
 
