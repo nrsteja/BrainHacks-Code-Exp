@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
   },
   container: {
-    flex: 0.5,
+    flex: 0.6,
     alignItems: "center",
     paddingHorizontal: "5%",
     justifyContent: "space-between",
@@ -261,7 +261,6 @@ const styles = StyleSheet.create({
     paddingVertical: "4%",
     backgroundColor: COLORS.black,
     borderRadius: 8,
-    marginTop: 32,
   },
   googleSignInImage: {
     resizeMode: "contain",

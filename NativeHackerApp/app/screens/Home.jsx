@@ -17,6 +17,8 @@ import COLORS from "../constants/colors";
 import Header from "../general components/header";
 import { PROMOS, ITEMS } from "./Lists";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { SupermarketsContext } from "./MapContext";
+import { useContext } from "react";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -44,7 +46,7 @@ const MoneySaved = ({ amount }) => (
   </View>
 );
 
-export const Item = ({ name, daysLeft, used }) => (
+export const Item = ({ name, daysLeft, quantity }) => (
   <View>
     <View style={{ flexDirection: "row", justifyContent: "center" }}>
       <View style={{ flex: 0.6 }}>
@@ -53,8 +55,8 @@ export const Item = ({ name, daysLeft, used }) => (
       <View style={{ flex: 0.2, alignItems: "center" }}>
         <Text style={styles.itemsFont}>{daysLeft}</Text>
       </View>
-      <View style={{ flex: 0.2, alignItems: "flex-end" }}>
-        <Text style={styles.itemsFont}>Y/N</Text>
+      <View style={{ flex: 0.2, alignItems: "flex-end"}}>
+        <Text style={styles.itemsFont}>{quantity}</Text>
       </View>
     </View>
   </View>
@@ -76,6 +78,8 @@ export const Promo = ({ name, location, itemsOnSale, onPress }) => (
 
 function Home() {
   const navigation = useNavigation();
+  const { inventory } = useContext(SupermarketsContext);
+  const filteredInventory = inventory.filter(item => item.daysLeftNumber < 5);
 
   const handleTrackerPress = () => {
     console.log("Navigating to GroceryTracker");
@@ -101,18 +105,18 @@ function Home() {
               <Text style={styles.expiryFont}>Days Left</Text>
             </View>
             <View style={{ flex: 0.2, alignItems: "flex-end" }}>
-              <Text style={styles.expiryFont}>Used</Text>
+              <Text style={styles.expiryFont}>Qty.</Text>
             </View>
           </View>
         </View>
         <View style={{ flex: 0.2 }}>
           <FlatList
-            data={ITEMS}
+            data={filteredInventory}
             renderItem={({ item }) => (
               <Item
                 name={item.name}
                 daysLeft={item.daysLeft}
-                used={item.used}
+                quantity={item.quantity}
               />
             )}
             keyExtractor={(item) => item.id}
