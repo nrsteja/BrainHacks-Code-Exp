@@ -55,6 +55,7 @@ export const MarketItem = ({
   name,
   expiryDate,
   itemsOnSale,
+  price
 }) => (
   <TouchableOpacity
     style={styles.marketCard}
@@ -62,8 +63,9 @@ export const MarketItem = ({
     <Text style={styles.marketImage}>{image}</Text>
     <View style={styles.marketContent}>
       <Text style={styles.marketTitle}>{name}</Text>
-      <Text style={styles.marketExpiry}>{expiryDate}</Text>
+      <Text style={styles.marketExpiry}>Expiring in: {expiryDate}</Text>
       <Text style={styles.marketSale}>Quantity: {itemsOnSale}</Text>
+      <Text style={styles.marketPrice}>Price: ${price}</Text>
       <Text style={styles.marketLocation}>
         {marketName} {location}
       </Text>
@@ -213,6 +215,7 @@ const Search = () => {
         item.name,
         item.location,
         ALLITEMS[Math.floor(Math.random() * ALLITEMS.length)],
+        (Math.floor(Math.random() * 50) * 0.1).toFixed(1)
       ],
       item2:
         item.itemsOnSale > 1
@@ -220,6 +223,7 @@ const Search = () => {
               item.name,
               item.location,
               ALLITEMS[Math.floor(Math.random() * ALLITEMS.length)],
+              (Math.floor(Math.random() * 50) * 0.1).toFixed(1)
             ]
           : 0,
     }));
@@ -234,9 +238,11 @@ const Search = () => {
       name: item[2].name,
       expiryDate: item[2].daysLeft,
       itemsOnSale: item[2].quantity,
+      price: item[3]
     }));
   
     setItems(allItems);
+
     setIsLoading(true);
     const genRecipes = await recipeGenerator(groupIngredientsBySupermarket(appendItems));
     setRecipes(genRecipes);
@@ -271,6 +277,7 @@ const Search = () => {
       name={item.name}
       expiryDate={item.expiryDate}
       itemsOnSale={item.itemsOnSale}
+      price={item.price}
     />
   );
 
@@ -356,7 +363,7 @@ const Search = () => {
         <View style={{ flex: 0.1 }}>
           <Text style={styles.resultsText}>Results</Text>
         </View>
-        <View style={{ flex: 0.9, marginBottom: 0.1 * height }}>
+        <View style={{ flex: 0.9, marginBottom: 0.07 * height }}>
           {selectedButton === "button1" && (
             !isMapInitialized ? (
               <View style={styles.loadingContainer}>
@@ -570,6 +577,10 @@ const styles = StyleSheet.create({
   marketSale: {
     fontSize: width * 0.03,
     color: "#999",
+  },
+  marketPrice: {
+    fontSize: width * 0.03,
+    fontWeight: 500
   },
   marketLocation: {
     fontSize: 0.03 * width,

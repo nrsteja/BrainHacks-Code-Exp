@@ -37,7 +37,7 @@ export const AppStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="CameraScreen" component={CameraScreen} />
-      <Stack.Screen name="ListItems" component={ListItems} />
+      <Stack.Screen name="ListItems" component={ListItems} options={{ headerShown: false }} />
       <Stack.Screen name="ShowRecipe" component={ShowRecipe} />
     </Stack.Navigator>
     </SupermarketsProvider>
