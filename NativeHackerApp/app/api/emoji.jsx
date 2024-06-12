@@ -1,5 +1,5 @@
 import React from "react";
-
+import { REACT_APP_EMOJI_API } from '@env';
 export const getEmojiForItem = (itemName) => {
   const lowerName = itemName.toLowerCase();
   const emojiMap = {
@@ -29,7 +29,7 @@ export const generateEmojiForItem = async (itemName) => {
     return emojiFromList;
   }
 
-  const API_KEY = "WWefpee1V8CnIEPVACBWmg==0ZKBI8hZKGqvHZFE";
+  const API_KEY = REACT_APP_EMOJI_API;
   const url = `https://api.api-ninjas.com/v1/emoji?name=${itemName}`;
   try {
     const response = await fetch(url, {

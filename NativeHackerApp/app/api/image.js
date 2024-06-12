@@ -1,6 +1,3 @@
-const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
-const UNSPLASH_API_URL = "https://api.unsplash.com/photos/random";
-
 export const fetchImageFromUnsplash = async (itemName, accessKey) => {
   const url = `https://api.unsplash.com/search/photos?page=1&query=${encodeURIComponent(
     itemName

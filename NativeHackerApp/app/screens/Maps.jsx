@@ -8,8 +8,9 @@ import COLORS from "../constants/colors";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import { SupermarketsContext } from './MapContext';
+import { REACT_APP_MAPS_API } from '@env';
 
-const GOOGLE_PLACES_API_KEY = 'AIzaSyBbcOqj7cnjA-3E_VRsCFyzKjUygMGAQnU';
+const GOOGLE_PLACES_API_KEY = REACT_APP_MAPS_API;
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
@@ -168,6 +169,7 @@ const calculateDelta = (coordinate, padding) => {
    try {
      const response = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1500&type=supermarket&key=${GOOGLE_PLACES_API_KEY}`);
      const data = await response.json();
+     console.log('Google Places API Key:', GOOGLE_PLACES_API_KEY);
      if (data.status === 'OK') {
        setSupermarkets(data.results);
      } else {

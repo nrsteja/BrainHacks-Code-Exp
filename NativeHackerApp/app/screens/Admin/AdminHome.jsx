@@ -19,8 +19,9 @@ import Header from "../../general components/header";
 import AdminNavBar from "../../general components/AdminNavBar";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { generateEmojiForItem } from "../../api/emoji";
+import { REACT_APP_UNSPLASH_API } from '@env';
 
-const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
+const UNSPLASH_API_KEY = REACT_APP_UNSPLASH_API;
 const UNSPLASH_API_URL = "https://api.unsplash.com/photos/random";
 
 const ItemComponent = ({

@@ -25,6 +25,7 @@ import {
   generateRecipePrompt,
 } from "../api/recipeGenerator";
 import { fetchImageFromUnsplash } from '../api/image';
+import { REACT_APP_UNSPLASH_API } from '@env';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -154,8 +155,6 @@ const Search = () => {
     return itemsArray;
   };
 
-  const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
-
 
   const recipeResults = async (item) => {
     const ingredient = item["ingredients"];
@@ -172,7 +171,7 @@ const Search = () => {
 
       // Fetch image from Unsplash
       try {
-        const imageUrl = await fetchImageFromUnsplash(result.name, UNSPLASH_API_KEY);
+        const imageUrl = await fetchImageFromUnsplash(result.name, REACT_APP_UNSPLASH_API);
         result['image'] = imageUrl;
       } catch (error) {
         console.error("Error fetching recipe image:", error);

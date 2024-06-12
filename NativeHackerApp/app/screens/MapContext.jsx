@@ -8,7 +8,6 @@ const SupermarketsProvider = ({ children }) => {
     const [supermarkets, setSupermarkets] = useState([]);
     const [items, setItems] = useState([]);
     const [inventory, setInventory] = useState(ALLITEMS);
-    const GOOGLE_PLACES_API_KEY = 'YAIzaSyBbcOqj7cnjA-3E_VRsCFyzKjUygMGAQnU';
 
     const addMarkets = (newMarkets) => {
         setAllMarkets((prevMarkets) => {
