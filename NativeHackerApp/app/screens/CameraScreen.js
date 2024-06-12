@@ -87,34 +87,55 @@ export default function CameraScreen() {
         setPhotoUri(photo.uri); // Store the captured photo URI in the state
         const values = await sendToOpenAI(photo.uri);
         console.log(values)
-        let i = 0;
         for (const [newItemName, newItemQuantity] of Object.entries(values)) {
           // Convert newItemName to lowercase for case-insensitive comparison
           const lowercaseNewItemName = newItemName.toLowerCase();
+        
+          // Generate a random number between 1 and 10
+          const randomDays = Math.floor(Math.random() * 10) + 1;
+        
+          // Calculate the new date based on today's date and the random number
+          const today = new Date('2024-06-13'); // Start date
+          const futureDate = new Date(today);
+          futureDate.setDate(today.getDate() + randomDays);
+          const formattedFutureDate = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
           
-          // Check if the lowercaseNewItemName already exists in the current inventory
-          if (!inventory.some(item => item.name.toLowerCase() === lowercaseNewItemName)) {
-            // If the item doesn't exist, proceed with adding it
-            i++;
-            const uniqueId = `${newItemName}-${Date.now()}`;
-            const newItem = {
-              id: uniqueId, 
-              name: newItemName,
-              quantity: parseInt(newItemQuantity),
-              daysLeft: "N/A", // Default value for now
-              daysLeftNumber: 0, // Default value for now
-              emoji: "🛒",
-            };
-            setInventory((prevInventory) => [...prevInventory, newItem]);
-          }
+          // Define the new item with the generated values
+          const uniqueId = `${newItemName}-${Date.now()}`;
+          const newItem = {
+            id: uniqueId, 
+            name: newItemName,
+            quantity: parseInt(newItemQuantity),
+            daysLeft: `${randomDays} days`, // New date string
+            daysLeftNumber: formattedFutureDate, // Random number of days
+            emoji: "🛒",
+          };
+        
+          // Find the index of the existing item, if any
+          const existingItemIndex = inventory.findIndex(item => item.name.toLowerCase() === lowercaseNewItemName);
+        
+          setInventory((prevInventory) => {
+            // Create a new array to avoid mutating the existing state
+            const updatedInventory = [...prevInventory];
+        
+            if (existingItemIndex !== -1) {
+              // If the item exists, remove the existing item
+              updatedInventory.splice(existingItemIndex, 1);
+            }
+        
+            // Add the new item
+            updatedInventory.push(newItem);
+            
+            return updatedInventory;
+          });
         }
-        Alert.alert(`Added ${i} items to your inventory!`)
+        Alert.alert(`Added ${Object.keys(values).length} items to your inventory!`)
 
       } catch (error) {
-        console.error("Error taking picture:", error);
+        console.log("Error taking picture:", error);
       }
     } else {
-      console.warn("Camera reference is null.");
+      console.log("Camera reference is null.");
     }
   };
 

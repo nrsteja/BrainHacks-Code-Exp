@@ -286,7 +286,7 @@ const AdminHome = () => {
         setNewItem({ itemName: "", quantity: 1, price: "" });
         setModalVisible(false);
       } catch (error) {
-        console.error("Error fetching emoji or image:", error);
+        console.log("Error fetching emoji or image:", error);
       } finally {
         setLoading(false);
       }
@@ -351,7 +351,7 @@ const AdminHome = () => {
         throw new Error("No image found for the given item.");
       }
     } catch (error) {
-      console.error("Error fetching image:", error);
+      console.log("Error fetching image:", error);
       throw error;
     }
   };

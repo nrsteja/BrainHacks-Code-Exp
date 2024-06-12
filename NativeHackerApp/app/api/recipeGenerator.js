@@ -6,8 +6,8 @@ const OPENAI_API_KEY = REACT_APP_OPENAI_API;
 function generateRecipePrompt(ingredients) {
   const ingredientsList = ingredients
     .map((ingredient) => `- ${ingredient}`)
-    .join(", ");
-  const prompt = `Using the following ingredients:\n${ingredientsList}\n\nProvide a recipe name, a list of ingredients, and step-by-step cooking instructions. Please format the response as follows:\n\nRecipe Name: [recipe name]\n\nIngredients:\n- [ingredient 1]\n- [ingredient 2]\n- ...\n\nInstructions:\n1. [step 1]\n2. [step 2]\n- ...`;
+    .join("\n");
+  const prompt = `Using the following ingredients:\n${ingredientsList}\n\nProvide a recipe name, a list of ingredients, and step-by-step cooking instructions. Please format the response strictly as follows:\n\nRecipe Name: [recipe name]\n\nIngredients:\n- [ingredient 1]\n- [ingredient 2]\n- ...\n\nInstructions:\n1. [step 1]\n2. [step 2]\n- ...`;
   return prompt;
 }
 
@@ -32,23 +32,36 @@ async function getRecipeFromChatGPT(prompt) {
     );
     const recipeText = response.data.choices[0].message.content.trim();
 
-    // Extracting the recipe name, ingredients, and instructions
-    const [_, name, ingredientsText, instructionsText] = recipeText.match(
-      /Recipe Name:\s*(.*?)\n\nIngredients:\s*((?:-.*\n?)*)\n\nInstructions:\s*((?:\d\..*\n?)*)/s
-    );
+    // Improved extraction logic
+    const recipeSections = recipeText.split(/\n\n/);
+
+    let name = "";
+    let ingredientsText = "";
+    let instructionsText = "";
+    
+    for (const section of recipeSections) {
+      if (section.startsWith("Recipe Name:")) {
+        name = section.replace("Recipe Name:", "").trim();
+      } else if (section.startsWith("Ingredients:")) {
+        ingredientsText = section.replace("Ingredients:", "").trim();
+      } else if (section.startsWith("Instructions:")) {
+        instructionsText = section.replace("Instructions:", "").trim();
+      }
+    }
 
     const ingredients = ingredientsText
-      .trim()
       .split("\n")
-      .map((line) => line.slice(2));
+      .map((line) => line.replace(/^-\s*/, "").trim())
+      .filter(Boolean);
+    
     const instructions = instructionsText
-      .trim()
       .split("\n")
-      .map((line) => line.slice(3));
+      .map((line) => line.replace(/^\d+\.\s*/, "").trim())
+      .filter(Boolean);
 
     return { name, ingredients, instructions };
   } catch (error) {
-    console.error("Error fetching recipe from ChatGPT:", error);
+    console.log("Error fetching recipe from ChatGPT:", error);
     throw error;
   }
 }

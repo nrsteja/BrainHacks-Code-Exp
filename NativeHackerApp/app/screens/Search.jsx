@@ -180,16 +180,16 @@ const Search = () => {
 
       // Fetch image from Unsplash
       try {
-        //const imageUrl = await fetchImageFromUnsplash(result.name, REACT_APP_UNSPLASH_API);
-        //result['image'] = imageUrl;
-        result['image'] = 'https://hips.hearstapps.com/hmg-prod/images/types-of-bread-1666723473.jpg'
+        const imageUrl = await fetchImageFromUnsplash(result.name, REACT_APP_UNSPLASH_API);
+        result['image'] = imageUrl;
+        // result['image'] = 'https://hips.hearstapps.com/hmg-prod/images/types-of-bread-1666723473.jpg'
       } catch (error) {
-        console.error("Error fetching recipe image:", error);
+        console.log("Error fetching recipe image:", error);
         result['image'] = null; // Fallback in case of error
       }
       return result;
     } catch (error) {
-      console.error("Error fetching recipe results:", error);
+      console.log("Error fetching recipe results:", error);
       throw error;
     }
   };
@@ -406,7 +406,7 @@ const Search = () => {
               isLoading ? (
                 <View style={styles.loadingContainer}>
                   <ActivityIndicator size="large" color={COLORS.green} />
-                  <Text style = {{fontSize: 0.05 * width, fontWeight: 200}}>Generating...</Text>
+                  <Text style = {{fontSize: 0.05 * width, fontWeight: 200}}>Customizing a recipe for you...</Text>
                 </View>
               ) : (
                 <FlatList

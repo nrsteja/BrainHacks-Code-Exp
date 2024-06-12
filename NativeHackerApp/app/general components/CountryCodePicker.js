@@ -32,7 +32,7 @@ const CountryCodePicker = ({ selectedCountryCode, setSelectedCountryCode }) => {
 
         setCountryCodes(codes);
       } catch (error) {
-        console.error("Error fetching country codes:", error);
+        console.log("Error fetching country codes:", error);
       } finally {
         setLoading(false);
       }

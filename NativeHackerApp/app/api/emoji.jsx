@@ -51,7 +51,7 @@ export const generateEmojiForItem = async (itemName) => {
     //console.log(data[0].character);
     return data[0].character;
   } catch (error) {
-    console.error("Error fetching emoji:", error);
+    console.log("Error fetching emoji:", error);
     return "🛒";
   }
 };

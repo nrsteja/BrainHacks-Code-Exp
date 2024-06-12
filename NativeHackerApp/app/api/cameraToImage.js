@@ -48,7 +48,7 @@ async function getRecipeFromChatGPT(prompt) {
 
     return { name, ingredients, instructions };
   } catch (error) {
-    console.error("Error fetching recipe from ChatGPT:", error);
+    console.log("Error fetching recipe from ChatGPT:", error);
     throw error;
   }
 }

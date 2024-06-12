@@ -80,10 +80,10 @@ const MapScreen = () => {
        if (data.status === 'OK') {
          setSupermarkets(data.results);
        } else {
-         console.error('Error fetching supermarkets:', data.status, data.error_message);
+         console.log('Error fetching supermarkets:', data.status, data.error_message);
        }
      } catch (error) {
-       console.error('Network error:', error);
+       console.log('Network error:', error);
      }
    };
 
@@ -152,10 +152,10 @@ const MapScreen = () => {
       if (data.status === 'OK') {
         setSupermarkets(data.results);
       } else {
-        console.error('Error fetching supermarkets:', data.status, data.error_message);
+        console.log('Error fetching supermarkets:', data.status, data.error_message);
       }
     } catch (error) {
-      console.error('Network error:', error);
+      console.log('Network error:', error);
     }
   }
 };
@@ -174,10 +174,10 @@ const calculateDelta = (coordinate, padding) => {
      if (data.status === 'OK') {
        setSupermarkets(data.results);
      } else {
-       console.error('Error fetching supermarkets:', data.status, data.error_message);
+       console.log('Error fetching supermarkets:', data.status, data.error_message);
      }
    } catch (error) {
-     console.error('Network error:', error);
+     console.log('Network error:', error);
    }
  };
 

@@ -16,7 +16,7 @@ export const fetchImageFromUnsplash = async (itemName, accessKey) => {
       throw new Error("No image found for the given item.");
     }
   } catch (error) {
-    console.error("Error fetching image:", error);
+    console.log("Error fetching image:", error);
     throw error;
   }
 };
