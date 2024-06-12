@@ -67,16 +67,24 @@ function Itinerary() {
     }
   };
   const Filter = ({
-    label,
     filters,
     selectedFilter,
     setSelectedFilter,
     isDropdownOpen,
     setIsDropdownOpen,
   }) => {
+    const [isSearchFocused, setIsSearchFocused] = useState(false);
     return (
       <View style={styles.filterContainer}>
-        <Text style={styles.filterLabel}>{label}</Text>
+        <TextInput
+          placeholder="Search items"
+          placeholderTextColor="white"
+          style={styles.searchText}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoFocus={isSearchFocused}
+          onFocus={() => setIsSearchFocused(true)}
+        />
         <TouchableOpacity
           style={[
             styles.filterButton,
@@ -108,9 +116,8 @@ function Itinerary() {
   };
 
   const handleSavePress = () => {
-    // Perform save operation
     const newItems = editedItems.filter(
-      (item, index) => !markedForDeletion.includes(index)
+      (item) => !markedForDeletion.includes(item.id)
     );
     setInventory(newItems);
     setEditMode(false);
@@ -121,7 +128,7 @@ function Itinerary() {
   const handleCancelPress = () => {
     setEditMode(false);
     setMarkedForDeletion([]); // Clear marked items on cancel
-    setEditedItems([...items]); // Reset edited items on cancel
+    setEditedItems([...inventory]); // Reset edited items on cancel
   };
 
   const handleAddPress = () => {
@@ -177,6 +184,7 @@ function Itinerary() {
       setMarkedForDeletion([...markedForDeletion, id]);
     }
   };
+
   const handleIncreaseQuantity = (id) => {
     const newItems = [...editedItems];
     const itemIndex = newItems.findIndex((item) => item.id === id);
@@ -227,13 +235,14 @@ function Itinerary() {
 
     // All fields are filled, proceed with adding the new item
     const newItem = {
+      id: newItemName,
       name: newItemName,
       quantity: parseInt(newItemQuantity),
       daysLeft: `${newItemDaysLeft} days`,
       daysLeftNumber: parseInt(newItemDaysLeft),
       emoji: await generateEmojiForItem(newItemName),
     };
-    
+
     setInventory([...inventory, newItem]);
     setShowManualAddModal(false);
     setShowAddOptions(false);
@@ -282,10 +291,10 @@ function Itinerary() {
       maxWidth: "80%",
       borderRadius: "50%",
     },
-    searchText: {
-      fontSize: 18,
-      color: "white",
-    },
+    // searchText: {
+    //   fontSize: 18,
+    //   color: "white",
+    // },
     listContainer: {
       flex: 0.8,
       paddingHorizontal: 10,
@@ -653,6 +662,22 @@ function Itinerary() {
       fontSize: 18,
       fontWeight: "bold",
     },
+    searchText: {
+      fontSize: 18,
+      color: "white",
+      flex: 1,
+      paddingRight: 10, // Add padding to avoid text overlap with the filter button
+    },
+    filterContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 10,
+      backgroundColor: COLORS.green,
+      borderRadius: 20,
+      marginHorizontal: 20,
+      marginVertical: 10,
+    },
     filterButton: {
       flexDirection: "row",
       alignItems: "center",
@@ -662,7 +687,6 @@ function Itinerary() {
       borderRadius: 10,
       borderWidth: 1,
       borderColor: "white",
-      transition: "all 0.3s ease",
     },
     filterButtonOpen: {
       backgroundColor: COLORS.darkGreen,
@@ -678,18 +702,7 @@ function Itinerary() {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Search items"
-          placeholderTextColor="white"
-          style={styles.searchText}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-      </View>
-
       <Filter
-        label="Grocery Items"
         filters={hardcodedFilters}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
@@ -826,45 +839,53 @@ function Itinerary() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Add New Item</Text>
             <TextInput
-              style={styles.modalInput}
               placeholder="Item Name"
               value={newItemName}
               onChangeText={setNewItemName}
+              style={[styles.modalInput, itemNameError && styles.requiredField]}
             />
-            {itemNameError !== "" && (
+            {itemNameError ? (
               <Text style={styles.errorText}>{itemNameError}</Text>
-            )}
-
+            ) : null}
             <TextInput
-              style={styles.modalInput}
               placeholder="Quantity"
               value={newItemQuantity}
               onChangeText={setNewItemQuantity}
               keyboardType="numeric"
+              style={[
+                styles.modalInput,
+                itemQuantityError && styles.requiredField,
+              ]}
             />
-            {itemQuantityError !== "" && (
+            {itemQuantityError ? (
               <Text style={styles.errorText}>{itemQuantityError}</Text>
-            )}
-
+            ) : null}
             <TextInput
-              style={styles.modalInput}
               placeholder="Days Left"
               value={newItemDaysLeft}
               onChangeText={setNewItemDaysLeft}
+              keyboardType="numeric"
+              style={[
+                styles.modalInput,
+                itemDaysLeftError && styles.requiredField,
+              ]}
             />
-            {itemDaysLeftError !== "" && (
+            {itemDaysLeftError ? (
               <Text style={styles.errorText}>{itemDaysLeftError}</Text>
-            )}
+            ) : null}
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={handleAddNewItem}
               >
-                <Text style={styles.modalButtonText}>Add</Text>
+                <Text style={styles.modalButtonText}>Add Item</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, { backgroundColor: "red" }]}
-                onPress={() => setShowManualAddModal(false)}
+                onPress={() => {
+                  setShowManualAddModal(false);
+                  setShowAddOptions(false);
+                }}
               >
                 <Text style={styles.modalButtonText}>Cancel</Text>
               </TouchableOpacity>

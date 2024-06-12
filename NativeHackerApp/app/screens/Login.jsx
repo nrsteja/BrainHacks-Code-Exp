@@ -1,5 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
-import { Dimensions, SafeAreaView, Platform, Button, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
+import {
+  Dimensions,
+  SafeAreaView,
+  Platform,
+  Button,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import * as React from "react";
 import {
   View,
@@ -30,7 +38,12 @@ const InputField = ({ label, placeholder, secureTextEntry }) => (
 const RememberMe = ({ isChecked, onToggle }) => (
   <View style={styles.rememberMeContainer}>
     <TouchableOpacity style={styles.rememberMeOption} onPress={onToggle}>
-      <View style={[styles.rememberMeCheckbox, isChecked && styles.rememberMeChecked]}>
+      <View
+        style={[
+          styles.rememberMeCheckbox,
+          isChecked && styles.rememberMeChecked,
+        ]}
+      >
         {isChecked && <Text style={styles.rememberMeTick}>✓</Text>}
       </View>
       <Text>Remember me</Text>
@@ -111,7 +124,10 @@ function Login() {
                   placeholder="Enter password"
                   secureTextEntry={true}
                 />
-                <RememberMe isChecked={rememberMe} onToggle={() => setRememberMe(!rememberMe)} />
+                <RememberMe
+                  isChecked={rememberMe}
+                  onToggle={() => setRememberMe(!rememberMe)}
+                />
                 <View style={styles.toggleContainer}>
                   <TouchableOpacity
                     style={[
@@ -245,7 +261,7 @@ const styles = StyleSheet.create({
     paddingVertical: "4%",
     backgroundColor: COLORS.black,
     borderRadius: 8,
-    marginTop: 12,
+    marginTop: 32,
   },
   googleSignInImage: {
     resizeMode: "contain",
