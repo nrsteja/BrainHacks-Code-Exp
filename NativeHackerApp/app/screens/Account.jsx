@@ -8,7 +8,7 @@ import {
   ScrollView,
   Dimensions,
   Alert,
-  Button
+  Button,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../general components/header";
@@ -34,6 +34,34 @@ const SettingItem = ({ iconUrl, label, onPress }) => (
     <Text style={styles.settingItemText}>{label}</Text>
   </TouchableOpacity>
 );
+
+function calculateEarthSurvivalHours(foodWasteSavedKg) {
+  // Constants
+  const CO2eAvoidedPerKg = 2.5; // kg of CO2 avoided per kg of food waste
+  const CH4AvoidedPerKg = 18.5; // grams of CH4 avoided per kg of food waste
+  const CH4ToCO2eConversionFactor = 25; // 1 gram of CH4 is equivalent to 25 grams of CO2e
+  const MealsSavedPerKg = 4; // meals saved per kg of food waste
+  const EnvironmentalWeight = 0.7; // weight for environmental impact
+  const SocialWeight = 0.3; // weight for social impact
+
+  // Calculate total CO2e avoided per kg of food waste
+  const CH4AvoidedCO2e = (CH4AvoidedPerKg * CH4ToCO2eConversionFactor) / 1000; // convert grams to kg
+  const totalCO2eAvoidedPerKg = CO2eAvoidedPerKg + CH4AvoidedCO2e;
+
+  // Calculate weighted impacts
+  const environmentalImpact = totalCO2eAvoidedPerKg * EnvironmentalWeight;
+  const socialImpact = MealsSavedPerKg * SocialWeight;
+
+  // Total impact in hours of Earth survival per kg of food waste saved
+  const hoursOfEarthSurvivalPerKg = environmentalImpact + socialImpact;
+
+  // Calculate the total hours of Earth survival for the given input
+  const totalHoursOfEarthSurvival =
+    foodWasteSavedKg * hoursOfEarthSurvivalPerKg;
+  const totalDaysOfEarthSurvival = totalHoursOfEarthSurvival / 24;
+
+  return `${totalDaysOfEarthSurvival.toFixed(2)}`;
+}
 
 const CustomSwitch = ({ value, onValueChange }) => (
   <TouchableOpacity
@@ -73,7 +101,7 @@ function Account() {
         <ProfileCard
           imageUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/7611a6a8b21db1ffd7d72b26deed298c206723f270e908d33d06ecc90f247e9a?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
           name="Kaliraj Santosh"
-          daysSaved="330"
+          daysSaved={calculateEarthSurvivalHours(15.5)}
         />
         <Text style={styles.settingsTitle}>Settings</Text>
         <View style={styles.settingsContainer}>
@@ -83,7 +111,10 @@ function Account() {
             onPress={() => Alert.alert("Account Settings clicked")}
           />
           <Text style={styles.sectionText}>Account Settings</Text>
-          <Button title = "Sign Out" onPress={() => navigation.navigate('Login')}/>
+          <Button
+            title="Sign Out"
+            onPress={() => navigation.navigate("Login")}
+          />
           <TouchableOpacity
             onPress={handleEditProfile}
             style={styles.flexColItem}

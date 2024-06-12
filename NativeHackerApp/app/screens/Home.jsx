@@ -8,7 +8,7 @@ import {
   FlatList,
   Platform,
   StyleSheet,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CheckBox from "@react-native-community/checkbox";
@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import Header from "../general components/header";
 import { PROMOS, ITEMS } from "./Lists";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { SupermarketsContext } from "./MapContext";
 import { useContext } from "react";
 
@@ -55,7 +55,7 @@ export const Item = ({ name, daysLeft, quantity }) => (
       <View style={{ flex: 0.2, alignItems: "center" }}>
         <Text style={styles.itemsFont}>{daysLeft}</Text>
       </View>
-      <View style={{ flex: 0.2, alignItems: "flex-end"}}>
+      <View style={{ flex: 0.2, alignItems: "flex-end" }}>
         <Text style={styles.itemsFont}>{quantity}</Text>
       </View>
     </View>
@@ -63,11 +63,13 @@ export const Item = ({ name, daysLeft, quantity }) => (
 );
 
 export const Promo = ({ name, location, itemsOnSale, onPress }) => (
-  <TouchableOpacity
-    style={styles.promotionBox}
-    onPress = {onPress}
-  >
-    <FontAwesome5 name = "store" size = {0.04 * height} style = {{paddingRight: 0.02 * width}} color = {COLORS.brown}/>
+  <TouchableOpacity style={styles.promotionBox} onPress={onPress}>
+    <FontAwesome5
+      name="store"
+      size={0.04 * height}
+      style={{ paddingRight: 0.02 * width }}
+      color={COLORS.brown}
+    />
     <View style={styles.promotionDetails}>
       <Text style={styles.promotionTitle}>{name}</Text>
       <Text style={styles.promotionSubtitle}>{location}</Text>
@@ -79,7 +81,7 @@ export const Promo = ({ name, location, itemsOnSale, onPress }) => (
 function Home() {
   const navigation = useNavigation();
   const { inventory } = useContext(SupermarketsContext);
-  const filteredInventory = inventory.filter(item => item.daysLeftNumber < 5);
+  const filteredInventory = inventory.filter((item) => item.daysLeftNumber < 5);
 
   const handleTrackerPress = () => {
     console.log("Navigating to GroceryTracker");
@@ -92,7 +94,7 @@ function Home() {
       <View style={styles.welcomeContainer}>
         <Text style={styles.welcomeText}>Welcome Santosh,</Text>
         <View style={styles.savingsContainer}>
-          <FoodSaved amount="3.3" />
+          <FoodSaved amount="15.5" />
           <MoneySaved amount="30" />
         </View>
         <Text style={styles.expiringText}>Food Expiring Soon:</Text>
