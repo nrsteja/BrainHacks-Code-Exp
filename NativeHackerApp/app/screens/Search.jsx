@@ -103,11 +103,11 @@ export const Recipe = ({ location, name, image, marketName }) => {
 };
 
 const Search = () => {
-  const [selectedButton, setSelectedButton] = useState(null);
+  const [selectedButton, setSelectedButton] = useState("button1");
   const [searchText, setSearchText] = useState("");
   const [promos, setPromos] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const { supermarkets, items, setItems, inventory } = useContext(SupermarketsContext);
+  const { supermarkets, items, setItems, inventory, isMapInitialized } = useContext(SupermarketsContext);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
@@ -357,35 +357,51 @@ const Search = () => {
         </View>
         <View style={{ flex: 0.9, marginBottom: 0.1 * height }}>
           {selectedButton === "button1" && (
+            !isMapInitialized ? (
+              <View style={styles.loadingContainer}>
+                <Text>Proceed to the map page to initialize your choices!</Text>
+              </View>
+            ) : (
             <FlatList
               data={filterData(promos)}
               renderItem={renderPromo}
               keyExtractor={(item) => item.id}
               persistentScrollbar={true}
             />
-          )}
+          ))}
           {selectedButton === "button2" && (
-            <FlatList
-              data={filterData(items)}
-              renderItem={renderMarket}
-              keyExtractor={(item) => item.id}
-              persistentScrollbar={true}
-            />
-          )}
-          {selectedButton === "button3" && (
-            isLoading ? (
+            !isMapInitialized ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color={COLORS.green} />
+                <Text>Proceed to the map page to initialize your choices!</Text>
               </View>
             ) : (
               <FlatList
-                data={filterData(recipes)}
-                renderItem={renderRecipe}
+                data={filterData(items)}
+                renderItem={renderMarket}
                 keyExtractor={(item) => item.id}
                 persistentScrollbar={true}
               />
-            )
-          )}
+            ))}
+          {selectedButton === "button3" && (
+            !isMapInitialized ? (
+              <View style={styles.loadingContainer}>
+                <Text>Proceed to the map page to initialize your choices!</Text>
+              </View>
+            ) : (
+              isLoading ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color={COLORS.green} />
+                  <Text style = {{fontSize: 0.05 * width, fontWeight: 200}}>Generating...</Text>
+                </View>
+              ) : (
+                <FlatList
+                  data={filterData(recipes)}
+                  renderItem={renderRecipe}
+                  keyExtractor={(item) => item.id}
+                  persistentScrollbar={true}
+                />
+              )
+          ))}
         </View>
       </View>
     </SafeAreaView>
