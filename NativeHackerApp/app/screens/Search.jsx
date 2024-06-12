@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
   Dimensions,
   FlatList,
   ImageBackground,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import Header from "../general components/header";
 import COLORS from "../constants/colors";
@@ -20,13 +20,15 @@ import { useState, useRef } from "react";
 import { Promo } from "./Home";
 import { MARKETITEMS, RECIPES, ALLITEMS } from "./Lists";
 import { SupermarketsContext } from "./MapContext";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   getRecipeFromChatGPT,
   generateRecipePrompt,
 } from "../api/recipeGenerator";
-import { fetchImageFromUnsplash } from '../api/image';
-import { REACT_APP_UNSPLASH_API } from '@env';
+import { fetchImageFromUnsplash } from "../api/image";
+import { REACT_APP_UNSPLASH_API } from "@env";
+import { Ionicons } from "@expo/vector-icons";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -55,11 +57,9 @@ export const MarketItem = ({
   name,
   expiryDate,
   itemsOnSale,
-  price
+  price,
 }) => (
-  <TouchableOpacity
-    style={styles.marketCard}
-  >
+  <TouchableOpacity style={styles.marketCard}>
     <Text style={styles.marketImage}>{image}</Text>
     <View style={styles.marketContent}>
       <Text style={styles.marketTitle}>{name}</Text>
@@ -73,14 +73,31 @@ export const MarketItem = ({
   </TouchableOpacity>
 );
 
-export const Recipe = ({ location, name, image, marketName, ingredients, instructions, price }) => {
+export const Recipe = ({
+  location,
+  name,
+  image,
+  marketName,
+  ingredients,
+  instructions,
+  price,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={styles.recipeContainer}
-      onPress={() => navigation.navigate('ShowRecipe', { location, name, image, marketName, ingredients, instructions })}
+      onPress={() =>
+        navigation.navigate("ShowRecipe", {
+          location,
+          name,
+          image,
+          marketName,
+          ingredients,
+          instructions,
+        })
+      }
     >
       {image ? (
         <ImageBackground
@@ -89,35 +106,114 @@ export const Recipe = ({ location, name, image, marketName, ingredients, instruc
         >
           <View style={styles.textContainer}>
             <Text style={styles.nameText}>{name}</Text>
-            <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
-            <Text style = {styles.locationText}>You can make this recipe for just ${Math.round(price * 10)/10}!</Text>
+            <Text style={styles.locationText}>
+              Find in {marketName}, {location}
+            </Text>
+            <Text style={styles.locationText}>
+              You can make this recipe for just ${Math.round(price * 10) / 10}!
+            </Text>
           </View>
         </ImageBackground>
       ) : (
         <View style={styles.textContainer}>
           <Text style={styles.nameText}>{name}</Text>
-          <Text style={styles.locationText}>Find in {marketName}, {location}</Text>
-          <Text style = {styles.locationText}>You can make this recipe for just ${Math.round(price * 10)/10}!</Text>
-       </View>
+          <Text style={styles.locationText}>
+            Find in {marketName}, {location}
+          </Text>
+          <Text style={styles.locationText}>
+            You can make this recipe for just ${Math.round(price * 10) / 10}!
+          </Text>
+        </View>
       )}
     </TouchableOpacity>
   );
 };
+const hardcodedFilters = [
+  { label: "All", value: "all" },
+  { label: "Expiring", value: "expiringSoon" },
+  { label: "Quantity", value: "quantityWise" },
+  { label: "Price", value: "priceWise" },
+];
 
 const Search = () => {
   const [selectedButton, setSelectedButton] = useState("button1");
   const [searchText, setSearchText] = useState("");
   const [promos, setPromos] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const { supermarkets, items, setItems, inventory, isMapInitialized, setSelectedMarket } = useContext(SupermarketsContext);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const searchInputRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const route = useRoute();
+
+  // State for selected filter
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  // Function to handle filter change
+  const handleFilterChange = (value) => {
+    setSelectedFilter(value);
+    // You can add further logic here based on the selected filter
+  };
+
+  useEffect(() => {
+    if (isDropdownOpen && searchInputRef.current) {
+      searchInputRef.current.blur();
+    }
+  }, [isDropdownOpen]);
+  const {
+    supermarkets,
+    items,
+    setItems,
+    inventory,
+    isMapInitialized,
+    setSelectedMarket,
+  } = useContext(SupermarketsContext);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
+    const { supermarketName } = route.params || {};
+    if (supermarketName) {
+      setSearchText(supermarketName);
+      setSelectedButton("button1");
+    }
     generatePromos();
     //console.log(generateItemsArray(items))
     //setRecipes(recipeGenerator(groupIngredientsBySupermarket(generateItemsArray(items))));
-  }, [supermarkets]);
+  }, [supermarkets, route.params]);
+
+  const filterData = (data) => {
+    let filteredData = data;
+    console.log(data);
+    if (searchQuery) {
+      filteredData = filteredData.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    switch (selectedFilter) {
+      case "expiringSoon":
+        filteredData = filteredData.sort((a, b) => {
+          // Extract numeric part from the "expiryDate" strings
+          const daysA = parseInt(a.expiryDate.split(" ")[0]);
+          const daysB = parseInt(b.expiryDate.split(" ")[0]);
+
+          // Compare the numeric values
+          return daysA - daysB;
+        });
+      case "quantityWise":
+        filteredData = filteredData.sort(
+          (a, b) => b.itemsOnSale - a.itemsOnSale
+        );
+        break;
+      case "priceWise":
+        filteredData = filteredData.sort((a, b) => a.price - b.price);
+        break;
+      default:
+        break;
+    }
+
+    return filteredData;
+  };
 
   const groupIngredientsBySupermarket = (itemsArray) => {
     const supermarketIngredients = {};
@@ -129,22 +225,23 @@ const Search = () => {
       if (!supermarketIngredients[key]) {
         supermarketIngredients[key] = {
           ingredients: [],
-          totalPrice: 0.0
+          totalPrice: 0.0,
         };
       }
 
       supermarketIngredients[key].ingredients.push(ingredient.name);
-      supermarketIngredients[key].totalPrice = (supermarketIngredients[key].totalPrice + price)
+      supermarketIngredients[key].totalPrice =
+        supermarketIngredients[key].totalPrice + price;
     });
 
     return Object.entries(supermarketIngredients).map(
-      ([marketLocation, {ingredients, totalPrice}]) => {
+      ([marketLocation, { ingredients, totalPrice }]) => {
         const [marketName, location] = marketLocation.split(" - ");
         return {
           marketName,
           location,
           ingredients,
-          totalPrice
+          totalPrice,
         };
       }
     );
@@ -163,29 +260,33 @@ const Search = () => {
     return itemsArray;
   };
 
-
   const recipeResults = async (item) => {
     const ingredient = item["ingredients"];
-    const inventoryIngredients = inventory.map(item => item.name); //Adding the current inventory ingredients.
+    const inventoryIngredients = inventory.map((item) => item.name); //Adding the current inventory ingredients.
 
     ingredient.push(...inventoryIngredients); //Pushing the inventory to the list of ingredients.
 
     const prompt = generateRecipePrompt(ingredient);
     try {
       const result = await getRecipeFromChatGPT(prompt);
-      result['marketName'] = item['marketName'];
-      result['location'] = item['location'];
-      result['price'] = item['totalPrice']
-      result['name'] = result.name;
+      result["marketName"] = item["marketName"];
+      result["location"] = item["location"];
+      result["price"] = item["totalPrice"];
+      result["name"] = result.name;
 
       // Fetch image from Unsplash
       try {
-        const imageUrl = await fetchImageFromUnsplash(result.name, REACT_APP_UNSPLASH_API);
-        result['image'] = imageUrl;
-        // result['image'] = 'https://hips.hearstapps.com/hmg-prod/images/types-of-bread-1666723473.jpg'
+        const imageUrl = await fetchImageFromUnsplash(
+          result.name,
+          REACT_APP_UNSPLASH_API
+        );
+        result["image"] = imageUrl;
+        // result["image"] =
+        //   "https://hips.hearstapps.com/hmg-prod/images/types-of-bread-1666723473.jpg";
       } catch (error) {
         console.log("Error fetching recipe image:", error);
-        result['image'] = null; // Fallback in case of error
+        result["image"] =
+          "https://hips.hearstapps.com/hmg-prod/images/types-of-bread-1666723473.jpg";
       }
       return result;
     } catch (error) {
@@ -195,7 +296,7 @@ const Search = () => {
   };
 
   const recipeGenerator = async (supermarketArray) => {
-    const allRecipes = []
+    const allRecipes = [];
     for (let index = 0; index < 3; index++) {
       const recipe = await recipeResults(supermarketArray[index]);
 
@@ -203,7 +304,7 @@ const Search = () => {
     }
 
     return allRecipes;
-  }
+  };
 
   const generatePromos = async () => {
     let id = 1;
@@ -214,9 +315,9 @@ const Search = () => {
       location: s.vicinity,
       itemsOnSale: Math.floor(Math.random() * 4) + 2,
     }));
-  
+
     setPromos(newPromos);
-  
+
     const newItems = newPromos.map((item) => {
       let items = [];
 
@@ -225,17 +326,17 @@ const Search = () => {
           item.name,
           item.location,
           ALLITEMS[Math.floor(Math.random() * ALLITEMS.length)],
-          parseFloat((Math.floor(Math.random() * 50) * 0.1).toFixed(1))
+          parseFloat((Math.random() * 4 + 1).toFixed(1)),
         ]);
       }
-    
+
       return {
-        items: items
+        items: items,
       };
     });
-  
+
     const appendItems = generateItemsArray(newItems);
-  
+
     const allItems = appendItems.map((item) => ({
       id: marketId++,
       marketName: item[0],
@@ -244,22 +345,24 @@ const Search = () => {
       name: item[2].name,
       expiryDate: item[2].daysLeft,
       itemsOnSale: item[2].quantity,
-      price: item[3]
+      price: item[3],
     }));
-  
+
     setItems(allItems);
 
     setIsLoading(true);
-    const genRecipes = await recipeGenerator(groupIngredientsBySupermarket(appendItems));
+    const genRecipes = await recipeGenerator(
+      groupIngredientsBySupermarket(appendItems)
+    );
     setRecipes(genRecipes);
     setIsLoading(false);
-  };  
+  };
 
   const handlePress = (button) => {
     setSelectedButton(button);
   };
 
-  const filterData = (data) => {
+  const filterDataRecipe = (data) => {
     return data.filter((item) =>
       item.name.toLowerCase().includes(searchText.toLowerCase())
     );
@@ -271,7 +374,9 @@ const Search = () => {
       location={item.location}
       itemsOnSale={item.itemsOnSale}
       image={item.image}
-      onPress={() => (setSelectedMarket(item.location), navigation.navigate("ListItems"))}
+      onPress={() => (
+        setSelectedMarket(item.location), navigation.navigate("ListItems")
+      )}
     />
   );
 
@@ -287,7 +392,9 @@ const Search = () => {
     />
   );
 
-  const renderRecipe = ({ item }) => ( // { location, name, image, marketName }
+  const renderRecipe = (
+    { item } // { location, name, image, marketName }
+  ) => (
     <Recipe
       // rating={item.rating}
       location={item.location}
@@ -303,15 +410,41 @@ const Search = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View style={styles.inputView}>
+      <View style={styles.searchContainer}>
         <TextInput
-          placeholder = {(selectedButton === 'button1') ? "Search Locations..." : ((selectedButton === 'button2') ? "Search Items..." : "Search Recipes...")}
-          style={styles.input}
-          value={searchText}
-          onChangeText={setSearchText}
+          placeholder="Search items"
+          placeholderTextColor={"white"}
+          style={styles.searchText}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
         />
+        <TouchableOpacity onPress={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <Ionicons
+            name="options-outline"
+            size={24}
+            color="white"
+            style={{ marginLeft: 10 }}
+          />
+        </TouchableOpacity>
       </View>
-      <View style={{ flex: 0.15, justifyContent: "center", marginTop: "1%" }}>
+      {isDropdownOpen && (
+        <DropDownPicker
+          open={isDropdownOpen}
+          items={hardcodedFilters}
+          setOpen={setIsDropdownOpen}
+          value={selectedFilter}
+          setValue={setSelectedFilter}
+          onChangeValue={handleFilterChange}
+          onSelectItem={(item) => console.log(item)}
+        />
+      )}
+      <View
+        style={{
+          flex: 0.15,
+          justifyContent: "center",
+          marginTop: "1%",
+        }}
+      >
         <View
           style={{ flex: 0.3, flexDirection: "row", justifyContent: "center" }}
         >
@@ -364,28 +497,28 @@ const Search = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 0.7 }}></View>
+        <View style={{ flex: 0.55 }}></View>
       </View>
-      <View style={{ flex: 0.75, paddingHorizontal: 0.04 * width }}>
+      <View style={{ flex: 0.8, paddingHorizontal: 0.04 * width }}>
         <View style={{ flex: 0.1 }}>
           <Text style={styles.resultsText}>Results</Text>
         </View>
-        <View style={{ flex: 0.9, marginBottom: 0.09 * height }}>
-          {selectedButton === "button1" && (
-            !isMapInitialized ? (
+        <View style={{ flex: 0.9, marginBottom: 0.05 * height }}>
+          {selectedButton === "button1" &&
+            (!isMapInitialized ? (
               <View style={styles.loadingContainer}>
                 <Text>Proceed to the map page to initialize your choices!</Text>
               </View>
             ) : (
-            <FlatList
-              data={filterData(promos)}
-              renderItem={renderPromo}
-              keyExtractor={(item) => item.id}
-              persistentScrollbar={true}
-            />
-          ))}
-          {selectedButton === "button2" && (
-            !isMapInitialized ? (
+              <FlatList
+                data={filterDataRecipe(promos)}
+                renderItem={renderPromo}
+                keyExtractor={(item) => item.id}
+                persistentScrollbar={true}
+              />
+            ))}
+          {selectedButton === "button2" &&
+            (!isMapInitialized ? (
               <View style={styles.loadingContainer}>
                 <Text>Proceed to the map page to initialize your choices!</Text>
               </View>
@@ -397,26 +530,26 @@ const Search = () => {
                 persistentScrollbar={true}
               />
             ))}
-          {selectedButton === "button3" && (
-            !isMapInitialized ? (
+          {selectedButton === "button3" &&
+            (!isMapInitialized ? (
               <View style={styles.loadingContainer}>
                 <Text>Proceed to the map page to initialize your choices!</Text>
               </View>
+            ) : isLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={COLORS.green} />
+                <Text style={{ fontSize: 0.05 * width, fontWeight: 200 }}>
+                  Cooking up a recipe for you...
+                </Text>
+              </View>
             ) : (
-              isLoading ? (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color={COLORS.green} />
-                  <Text style = {{fontSize: 0.05 * width, fontWeight: 200}}>Customizing a recipe for you...</Text>
-                </View>
-              ) : (
-                <FlatList
-                  data={filterData(recipes)}
-                  renderItem={renderRecipe}
-                  keyExtractor={(item) => item.id}
-                  persistentScrollbar={true}
-                />
-              )
-          ))}
+              <FlatList
+                data={filterDataRecipe(recipes)}
+                renderItem={renderRecipe}
+                keyExtractor={(item) => item.id}
+                persistentScrollbar={true}
+              />
+            ))}
         </View>
       </View>
     </SafeAreaView>
@@ -430,12 +563,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: "center",
   },
-  inputView: {
-    flex: 0.1,
-    justifyContent: "center",
-    paddingHorizontal: width * 0.05,
-    marginTop: height * 0.01,
-  },
+
   input: {
     flex: 0.8,
     height: height * 0.06,
@@ -587,7 +715,7 @@ const styles = StyleSheet.create({
   },
   marketPrice: {
     fontSize: width * 0.03,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   marketLocation: {
     fontSize: 0.03 * width,
@@ -688,34 +816,61 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   mainImage: {
-    width: '100%',
+    width: "100%",
     height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   imageFocused: {
     opacity: 0.7,
   },
   textContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Translucent background for better readability
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Translucent background for better readability
     padding: 10,
     borderRadius: 10,
   },
   nameText: {
-    color: 'white',
+    color: "white",
     fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   locationText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   loadingContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 0.2 * height
-  }
+    marginTop: 0.2 * height,
+  },
+  // inputView: {
+  //   flex: 0.1,
+  //   justifyContent: "center",
+
+  //   marginTop: height * 0.01,
+  // },
+  searchContainer: {
+    flex: 0.05,
+
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: width * 0.05,
+    marginTop: "5%",
+    marginVertical: "1.5%",
+    width: "100%",
+    backgroundColor: COLORS.green,
+    alignSelf: "center",
+    maxWidth: "80%",
+    borderRadius: 40,
+  },
+  searchText: {
+    fontSize: 18,
+    color: "white",
+    flex: 1,
+    paddingRight: 10,
+  },
 });
 export default Search;
