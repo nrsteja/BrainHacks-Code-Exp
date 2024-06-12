@@ -127,7 +127,7 @@ export const ALLITEMS = [
     id: 1,
     name: "White Bread",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -141,7 +141,7 @@ export const ALLITEMS = [
     id: 2,
     name: "Eggs",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -155,7 +155,7 @@ export const ALLITEMS = [
     id: 3,
     name: "Almonds",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -169,7 +169,7 @@ export const ALLITEMS = [
     id: 4,
     name: "Spinach",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -183,7 +183,7 @@ export const ALLITEMS = [
     id: 5,
     name: "Cabbage",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -197,7 +197,7 @@ export const ALLITEMS = [
     id: 6,
     name: "Bananas",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -211,7 +211,7 @@ export const ALLITEMS = [
     id: 7,
     name: "Fresh Orange Juice",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -225,7 +225,7 @@ export const ALLITEMS = [
     id: 8,
     name: "Milk",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -239,7 +239,7 @@ export const ALLITEMS = [
     id: 9,
     name: "Cheese",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -253,7 +253,7 @@ export const ALLITEMS = [
     id: 10,
     name: "Carrots",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -267,7 +267,7 @@ export const ALLITEMS = [
     id: 11,
     name: "Tomatoes",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -281,7 +281,7 @@ export const ALLITEMS = [
     id: 12,
     name: "Lettuce",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -295,7 +295,7 @@ export const ALLITEMS = [
     id: 13,
     name: "Chicken Breast",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -309,7 +309,7 @@ export const ALLITEMS = [
     id: 14,
     name: "Yogurt",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -323,7 +323,7 @@ export const ALLITEMS = [
     id: 15,
     name: "Potatoes",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -337,7 +337,7 @@ export const ALLITEMS = [
     id: 16,
     name: "Bell Peppers",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -351,7 +351,7 @@ export const ALLITEMS = [
     id: 17,
     name: "Blueberries",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -365,7 +365,7 @@ export const ALLITEMS = [
     id: 18,
     name: "Broccoli",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -393,7 +393,7 @@ export const ALLITEMS = [
     id: 20,
     name: "Cucumber",
     get quantity() {
-      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
     },
     get daysLeftNumber() {
       return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
