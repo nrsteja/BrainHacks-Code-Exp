@@ -18,6 +18,7 @@ import AdminNavBar from "../../general components/AdminNavBar";
 import COLORS from "../../constants/colors";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ProfileItem = ({ icon, label, value, onEdit }) => (
   <View style={styles.profileItemContainer}>
@@ -147,6 +148,7 @@ const AdminProfile = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <ScrollView>
       <View style={styles.profileItemsContainer}>
         <ProfileItem
           icon="user"
@@ -185,6 +187,7 @@ const AdminProfile = () => {
           onEdit={() => handleEdit("parentCompanyName")}
         />
       </View>
+      </ScrollView>
       <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>
       </TouchableOpacity>
