@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, Image, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Text, Image, ScrollView, StyleSheet, ImageBackground } from 'react-native';
 import COLORS from '../constants/colors'; // Assuming COLORS is exported from this path
 import { generateEmojiForItem } from '../api/emoji';
 
@@ -21,11 +21,17 @@ const ShowRecipe = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ImageBackground
+        source={{
+          uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/838485a2e58427926bfd76783e93dcecc690e4e96073aa11272a2c82be1b4d5b?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&",
+        }}
+        style={{ flex: 1 }}>
       <ScrollView style={styles.scrollContainer}>
-        {image && <Image source={{ uri: image }} style={styles.image} />}
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.location}>Find in {marketName}, {location}</Text>
-
+        <View style = {{alignItems: "center"}}>
+          {image && <Image source={{ uri: image }} style={styles.image} />}
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.location}>Find in {marketName}, {location}</Text>
+        </View>
         <View style={styles.section}>
           <Text style={styles.heading}>Ingredients</Text>
           <View style={styles.list}>
@@ -59,6 +65,7 @@ const ShowRecipe = ({ route }) => {
           </View>
         </View>
       </ScrollView>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -82,11 +89,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: COLORS.black,
+    textAlign: "center"
   },
   location: {
     fontSize: 18,
-    color: "#555555",
+    color: COLORS.brown,
     marginBottom: 20,
+    textAlign: "center"
   },
   section: {
     backgroundColor: COLORS.white,
