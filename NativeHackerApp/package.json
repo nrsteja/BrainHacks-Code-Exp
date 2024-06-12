@@ -23,7 +23,7 @@
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "expo": "^51.0.8",
-    "expo-camera": "^15.0.10",
+    "expo-camera": "~15.0.10",
     "expo-checkbox": "^3.0.0",
     "expo-constants": "^16.0.1",
     "expo-google-fonts": "^0.0.0",
@@ -51,7 +51,8 @@
     "react-native-toast-message": "^2.2.0",
     "react-native-web": "~0.19.10",
     "stack": "^0.1.0",
-    "stack-navigator": "^0.0.0"
+    "stack-navigator": "^0.0.0",
+    "expo-media-library": "~16.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
