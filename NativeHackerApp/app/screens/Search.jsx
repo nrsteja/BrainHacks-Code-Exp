@@ -356,7 +356,7 @@ const Search = () => {
         <View style={{ flex: 0.1 }}>
           <Text style={styles.resultsText}>Results</Text>
         </View>
-        <View style={{ flex: 0.9, marginBottom: 0.1 * height }}>
+        <View style={{ flex: 0.9, marginBottom: 0.07 * height }}>
           {selectedButton === "button1" && (
             !isMapInitialized ? (
               <View style={styles.loadingContainer}>
