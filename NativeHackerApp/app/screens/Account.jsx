@@ -16,6 +16,7 @@ import COLORS from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 const ProfileCard = ({ imageUrl, name, daysSaved }) => (
   <View style={styles.profileContainer}>
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     padding: 10,
     borderRadius: 10,
-    marginBottom: 20, // add margin to prevent overlap
+    marginBottom: 0.08 * height, // add margin to prevent overlap
   },
   settingItem: {
     flexDirection: "row",
