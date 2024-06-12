@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   View,
   Text,
@@ -29,8 +29,8 @@ const height = Dimensions.get("window").height;
 
 const hardcodedFilters = [
   { label: "All", value: "all" },
-  { label: "Expiring Soon", value: "expiringSoon" },
-  { label: "Quantity Wise", value: "quantityWise" },
+  { label: "Expiring", value: "expiringSoon" },
+  { label: "Quantity", value: "quantityWise" },
 ];
 
 function Itinerary() {
@@ -52,6 +52,7 @@ function Itinerary() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState([...inventory]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   useEffect(() => {
     setFilteredItems(getFilteredItems());
@@ -66,6 +67,9 @@ function Itinerary() {
       );
     }
   };
+  //const [isSearchFocused, setIsSearchFocused] = useState(false);
+  //const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef(null);
   const Filter = ({
     filters,
     selectedFilter,
@@ -73,18 +77,24 @@ function Itinerary() {
     isDropdownOpen,
     setIsDropdownOpen,
   }) => {
-    const [isSearchFocused, setIsSearchFocused] = useState(false);
+    // useEffect(() => {
+    //   // Focus the input when the component mounts
+    //   // if (isSearchFocused && searchInputRef.current) {
+    //   //   searchInputRef.current.focus();
+    //   // }
+    // }, [isSearchFocused]);
+
+    const handleKeyPress = (event) => {
+      if (event.nativeEvent.key === "Enter") {
+        setIsSearchFocused(false); // Remove focus only when Enter is pressed
+        if (searchInputRef.current) {
+          searchInputRef.current.blur();
+        }
+      }
+    };
+
     return (
       <View style={styles.filterContainer}>
-        <TextInput
-          placeholder="Search items"
-          placeholderTextColor="white"
-          style={styles.searchText}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          autoFocus={isSearchFocused}
-          onFocus={() => setIsSearchFocused(true)}
-        />
         <TouchableOpacity
           style={[
             styles.filterButton,
@@ -227,6 +237,7 @@ function Itinerary() {
 
     const handleSearchChange = (e) => {
       setSearchTerm(e.target.value);
+      //autoFocus;
     };
 
     const filteredItems = editedItems.filter((item) =>
@@ -647,16 +658,16 @@ function Itinerary() {
       marginHorizontal: 10,
       zIndex: 11,
     },
-    filterContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: 10,
-      backgroundColor: COLORS.green,
-      borderRadius: 10,
-      marginHorizontal: 20,
-      marginVertical: 10,
-    },
+    // filterContainer: {
+    //   flexDirection: "row",
+    //   alignItems: "center",
+    //   justifyContent: "col",
+    //   padding: 10,
+    //   backgroundColor: COLORS.green,
+    //   borderRadius: 10,
+    //   marginHorizontal: 20,
+    //   marginVertical: 10,
+    // },
     filterLabel: {
       color: "white",
       fontSize: 18,
@@ -668,47 +679,85 @@ function Itinerary() {
       flex: 1,
       paddingRight: 10, // Add padding to avoid text overlap with the filter button
     },
-    filterContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: 10,
-      backgroundColor: COLORS.green,
-      borderRadius: 20,
-      marginHorizontal: 20,
-      marginVertical: 10,
-    },
+    // filterContainer: {
+    //   flexDirection: "row",
+    //   alignItems: "center",
+    //   paddingHorizontal: 20,
+    //   paddingVertical: 10,
+    //   backgroundColor: COLORS.green,
+    //   borderRadius: 20,
+    //   marginHorizontal: 20,
+    //   marginBottom: 10,
+    //   width: 150, // Adjust the width as per your preference
+    //   justifyContent: "flex-start", // Positioning the button at the end of the row
+    // },
     filterButton: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "center",
+      paddingHorizontal: 20,
+      paddingVertical: 10,
       backgroundColor: COLORS.green,
-      padding: 10,
-      borderRadius: 10,
-      borderWidth: 1,
-      borderColor: "white",
-    },
-    filterButtonOpen: {
-      backgroundColor: COLORS.darkGreen,
-      borderColor: COLORS.darkGreen,
+      borderRadius: 20,
+      marginHorizontal: 20,
+      marginBottom: 10,
+      marginLeft: "auto", // Push the button to the right end
     },
     filterButtonText: {
       color: "white",
       fontSize: 16,
       marginRight: 5,
     },
+    filterButtonIcon: {
+      marginLeft: "auto", // Push the icon to the right end
+    },
+
+    filterButtonOpen: {
+      borderColor: COLORS.darkGreen, // Change border color when dropdown is open
+    },
+    // filterButtonText: {
+    //   color: "white",
+    //   fontSize: 16,
+    //   marginRight: 5,
+    // },
+
+    input: {
+      flex: 0.8,
+      height: height * 0.06,
+      borderRadius: 20,
+      paddingLeft: width * 0.05,
+      fontSize: width * 0.04,
+      color: COLORS.white,
+      backgroundColor: COLORS.green,
+    },
+    inputView: {
+      flex: 0.2,
+      justifyContent: "center",
+      paddingHorizontal: width * 0.05,
+      marginTop: height * 0.01,
+    },
   });
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <Filter
-        filters={hardcodedFilters}
-        selectedFilter={selectedFilter}
-        setSelectedFilter={setSelectedFilter}
-        isDropdownOpen={isDropdownOpen}
-        setIsDropdownOpen={setIsDropdownOpen}
-      />
+      <View style={styles.searchContainer}>
+        <TextInput
+          placeholder="Search items"
+          placeholderTextColor={"white"}
+          style={styles.searchText}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        <TouchableOpacity onPress={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <Ionicons
+            name="options-outline"
+            size={24}
+            color="white"
+            style={{ marginLeft: 10 }}
+          />
+        </TouchableOpacity>
+      </View>
+
       {isDropdownOpen && (
         <DropDownPicker
           open={isDropdownOpen}
