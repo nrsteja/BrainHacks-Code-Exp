@@ -169,7 +169,6 @@ const calculateDelta = (coordinate, padding) => {
    try {
      const response = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1500&type=supermarket&key=${GOOGLE_PLACES_API_KEY}`);
      const data = await response.json();
-     console.log('Google Places API Key:', GOOGLE_PLACES_API_KEY);
      if (data.status === 'OK') {
        setSupermarkets(data.results);
      } else {
