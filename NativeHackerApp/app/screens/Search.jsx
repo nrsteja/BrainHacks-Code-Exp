@@ -20,7 +20,11 @@ import { useState, useRef } from "react";
 import { Promo } from "./Home";
 import { MARKETITEMS, RECIPES, ALLITEMS } from "./Lists";
 import { SupermarketsContext } from "./MapContext";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from "@react-navigation/native";
 import {
   getRecipeFromChatGPT,
   generateRecipePrompt,
@@ -142,7 +146,6 @@ const Search = () => {
   const [recipes, setRecipes] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const searchInputRef = useRef(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const route = useRoute();
 
   // State for selected filter
@@ -153,6 +156,15 @@ const Search = () => {
     setSelectedFilter(value);
     // You can add further logic here based on the selected filter
   };
+  useFocusEffect(
+    useCallback(() => {
+      // Reset the state when the screen is focused
+      return () => {
+        setSearchText("");
+        setSelectedButton("button1");
+      };
+    }, [])
+  );
 
   useEffect(() => {
     if (isDropdownOpen && searchInputRef.current) {
@@ -184,9 +196,9 @@ const Search = () => {
   const filterData = (data) => {
     let filteredData = data;
     console.log(data);
-    if (searchQuery) {
+    if (searchText) {
       filteredData = filteredData.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item.name.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
@@ -415,8 +427,8 @@ const Search = () => {
           placeholder="Search items"
           placeholderTextColor={"white"}
           style={styles.searchText}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
+          value={searchText}
+          onChangeText={setSearchText}
         />
         <TouchableOpacity onPress={() => setIsDropdownOpen(!isDropdownOpen)}>
           <Ionicons
