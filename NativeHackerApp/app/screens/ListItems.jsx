@@ -30,6 +30,7 @@ export default function ListItems() {
           name={item.name}
           expiryDate={item.expiryDate}
           itemsOnSale={item.itemsOnSale}
+          price={item.price}
         />
       );
 
