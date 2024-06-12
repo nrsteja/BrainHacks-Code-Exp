@@ -126,67 +126,283 @@ export const ALLITEMS = [
   {
     id: 1,
     name: "White Bread",
-    quantity: 1,
-    daysLeft: "3 days",
-    daysLeftNumber: 3,
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
     emoji: "🍞",
   },
   {
     id: 2,
     name: "Eggs",
-    quantity: 2,
-    daysLeft: "2 days",
-    daysLeftNumber: 2,
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
     emoji: "🥚",
   },
   {
     id: 3,
     name: "Almonds",
-    quantity: 1,
-    daysLeft: "14 days",
-    daysLeftNumber: 14,
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
     emoji: "🌰",
   },
   {
     id: 4,
     name: "Spinach",
-    quantity: 1,
-    daysLeft: "5 days",
-    daysLeftNumber: 5,
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
     emoji: "🌿",
   },
   {
     id: 5,
     name: "Cabbage",
-    quantity: 2,
-    daysLeft: "5 days",
-    daysLeftNumber: 5,
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
     emoji: "🥬",
   },
   {
     id: 6,
     name: "Bananas",
-    quantity: 6,
-    daysLeft: "2 days",
-    daysLeftNumber: 2,
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
     emoji: "🍌",
   },
   {
     id: 7,
     name: "Fresh Orange Juice",
-    quantity: 2,
-    daysLeft: "14 days",
-    daysLeftNumber: 14,
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
     emoji: "🧃",
   },
   {
     id: 8,
     name: "Milk",
-    quantity: 3,
-    daysLeft: "7 days",
-    daysLeftNumber: 7,
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
     emoji: "🥛",
   },
+  {
+    id: 9,
+    name: "Cheese",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🧀"
+  },
+  {
+    id: 10,
+    name: "Carrots",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🥕"
+  },
+  {
+    id: 11,
+    name: "Tomatoes",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🍅"
+  },
+  {
+    id: 12,
+    name: "Lettuce",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🥬"
+  },
+  {
+    id: 13,
+    name: "Chicken Breast",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🍗"
+  },
+  {
+    id: 14,
+    name: "Yogurt",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🥣"
+  },
+  {
+    id: 15,
+    name: "Potatoes",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🥔"
+  },
+  {
+    id: 16,
+    name: "Bell Peppers",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🌶️"
+  },
+  {
+    id: 17,
+    name: "Blueberries",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🫐"
+  },
+  {
+    id: 18,
+    name: "Broccoli",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🥦"
+  },
+  {
+    id: 19,
+    name: "Peanut Butter",
+    get quantity() {
+      return Math.floor(Math.random() * 5) + 1; // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🥜"
+  },
+  {
+    id: 20,
+    name: "Cucumber",
+    get quantity() {
+      return Math.floor(Math.random() * 5); // Random number between 1 and 10
+    },
+    get daysLeftNumber() {
+      return Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+    },
+    get daysLeft() {
+      return `${this.daysLeftNumber} days`;
+    },
+    emoji: "🥒"
+  }
 ];
 
 

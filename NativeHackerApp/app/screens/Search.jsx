@@ -152,12 +152,11 @@ const Search = () => {
 
   const generateItemsArray = (newItems) => {
     const itemsArray = newItems.reduce((accumulator, currentItem) => {
-      if (currentItem.item1 && typeof currentItem.item1 === "object") {
-        accumulator.push(currentItem.item1);
-      }
-      if (currentItem.item2 && typeof currentItem.item2 === "object") {
-        accumulator.push(currentItem.item2);
-      }
+      currentItem.items.forEach((item) => {
+        if (item && typeof item === "object") {
+          accumulator.push(item);
+        }
+      });
       return accumulator;
     }, []);
 
@@ -213,28 +212,27 @@ const Search = () => {
       id: id++,
       name: s.name,
       location: s.vicinity,
-      itemsOnSale: Math.floor(Math.random() * 2) + 1,
+      itemsOnSale: Math.floor(Math.random() * 4) + 2,
     }));
   
     setPromos(newPromos);
   
-    const newItems = newPromos.map((item) => ({
-      item1: [
-        item.name,
-        item.location,
-        ALLITEMS[Math.floor(Math.random() * ALLITEMS.length)],
-        parseFloat((Math.floor(Math.random() * 50) * 0.1).toFixed(1))
-      ],
-      item2:
-        item.itemsOnSale > 1
-          ? [
-              item.name,
-              item.location,
-              ALLITEMS[Math.floor(Math.random() * ALLITEMS.length)],
-              parseFloat((Math.floor(Math.random() * 50) * 0.1).toFixed(1))
-            ]
-          : 0,
-    }));
+    const newItems = newPromos.map((item) => {
+      let items = [];
+
+      for (let i = 0; i < item.itemsOnSale; i++) {
+        items.push([
+          item.name,
+          item.location,
+          ALLITEMS[Math.floor(Math.random() * ALLITEMS.length)],
+          parseFloat((Math.floor(Math.random() * 50) * 0.1).toFixed(1))
+        ]);
+      }
+    
+      return {
+        items: items
+      };
+    });
   
     const appendItems = generateItemsArray(newItems);
   
