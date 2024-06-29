@@ -1,5 +1,8 @@
 # BrainHacks-Code-Exp
 
+### Video Walkthrough
+https://youtu.be/hyBbfs9dUL4
+
 ### Prerequisites
 - Ensure you have [Node.js](https://nodejs.org/) installed.
 
@@ -24,3 +27,4 @@ and checking if some version (in my case 10.2.3) is there.<br>
 Ensure both your phone and laptop are connected to the same Wi-Fi network.<br>
 Like React.js, real-time updates are enabled. Any changes you make will automatically be reflected in the app.<br>
 You can also run a web version or an emulator. Refer to the terminal output for available options.
+
